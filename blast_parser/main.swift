@@ -7,6 +7,10 @@
 
 import Foundation
 
+// column to extract
+let columnToRead = 10
+
+// main
 let arguments = Console.getArgs()
 
 guard arguments.count == 2 else {
@@ -21,7 +25,7 @@ guard let contents = parser.read() else {
     exit(-1)
 }
 
-let taxids = parser.parse(contents: contents, column: 10)
+let taxids = parser.parse(contents: contents, column: columnToRead)
 
 for taxid in taxids {
     Console.writeToStdOut("\(taxid)\n")
