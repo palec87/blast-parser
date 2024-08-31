@@ -9,14 +9,11 @@ import Foundation
 
 // Heavily borrowed from Martin R's answer at:
 // https://stackoverflow.com/questions/24581517/read-a-file-url-line-by-line-in-swift
-final class DatabaseStream {
-    let url:URL
-    var filehandle:FileHandle!
+final class DatabaseStream : DataStream {
     var buffer:Data
     var delimiter:Data
     var isEOF = false
     let encoding:String.Encoding
-    let bufferSize:Int
     
     enum DSError: Error {
         case delimiterError
@@ -28,14 +25,13 @@ final class DatabaseStream {
           blockSize:Int = 4096,
           encoding:String.Encoding = .utf8) throws {
         do {
-            self.url = url
-            self.filehandle = try FileHandle(forReadingFrom: url)
             guard let dataDelimiter = delimiter.data(using: encoding)
                 else { throw DSError.delimiterError }
             self.delimiter = dataDelimiter
             self.encoding = encoding
-            self.bufferSize = blockSize
-            self.buffer = Data()
+            buffer = Data()
+            super.init(url: url, blockSize: blockSize)
+            filehandle = try FileHandle(forReadingFrom: url)
         }
         
         catch {
@@ -78,16 +74,6 @@ final class DatabaseStream {
         filehandle.seek(toFileOffset: 0)
         buffer.count = 0
         isEOF = false
-    }
-    
-    func close() {
-        do {
-            try filehandle?.close()
-        }
-        
-        catch {
-            Console.writeToStdErr("Unable to close file at \(url.path)")
-        }
     }
 }
 
