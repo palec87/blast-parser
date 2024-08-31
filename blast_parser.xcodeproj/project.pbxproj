@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84162ED62C83732800ED0B5E /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 84162ED52C83732800ED0B5E /* ArgumentParser */; };
+		84162EDB2C83756200ED0B5E /* BlastParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84162EDA2C83756200ED0B5E /* BlastParser.swift */; };
 		842DD5312C8303F80028D7DE /* DataStreamWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842DD5302C8303F80028D7DE /* DataStreamWriter.swift */; };
 		842DD5332C8338540028D7DE /* DataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842DD5322C8338540028D7DE /* DataStream.swift */; };
-		8483F1542C4096410075794B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F1532C4096410075794B /* main.swift */; };
 		8483F15B2C409B860075794B /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F15A2C409B860075794B /* Console.swift */; };
 		8483F15D2C40A1CC0075794B /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F15C2C40A1CC0075794B /* Parser.swift */; };
 		8483F15E2C40AA270075794B /* blast_parser in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8483F1502C4096410075794B /* blast_parser */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -39,10 +40,12 @@
 		84162ECE2C83544B00ED0B5E /* arm64-apple-macos.swiftdoc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "arm64-apple-macos.swiftdoc"; sourceTree = "<group>"; };
 		84162ECF2C83544B00ED0B5E /* arm64-apple-macos.swiftmodule */ = {isa = PBXFileReference; lastKnownFileType = file; path = "arm64-apple-macos.swiftmodule"; sourceTree = "<group>"; };
 		84162ED12C83544B00ED0B5E /* blast_parser */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = blast_parser; sourceTree = "<group>"; };
+		84162ED72C83738A00ED0B5E /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		84162ED82C83747F00ED0B5E /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		84162EDA2C83756200ED0B5E /* BlastParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlastParser.swift; sourceTree = "<group>"; };
 		842DD5302C8303F80028D7DE /* DataStreamWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStreamWriter.swift; sourceTree = "<group>"; };
 		842DD5322C8338540028D7DE /* DataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStream.swift; sourceTree = "<group>"; };
 		8483F1502C4096410075794B /* blast_parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = blast_parser; sourceTree = BUILT_PRODUCTS_DIR; };
-		8483F1532C4096410075794B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		8483F15A2C409B860075794B /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
 		8483F15C2C40A1CC0075794B /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		8483F1632C40C24D0075794B /* Column.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
@@ -57,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84162ED62C83732800ED0B5E /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,7 +123,7 @@
 		8483F1522C4096410075794B /* blast_parser */ = {
 			isa = PBXGroup;
 			children = (
-				8483F1532C4096410075794B /* main.swift */,
+				84162EDA2C83756200ED0B5E /* BlastParser.swift */,
 				84CCF9C42C826D4B00034B4B /* Database.swift */,
 				842DD5322C8338540028D7DE /* DataStream.swift */,
 				84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */,
@@ -134,7 +138,9 @@
 		84CCF9C72C826D9B00034B4B /* Auxiliary */ = {
 			isa = PBXGroup;
 			children = (
+				84162ED72C83738A00ED0B5E /* Readme.md */,
 				8483F15A2C409B860075794B /* Console.swift */,
+				84162ED82C83747F00ED0B5E /* Package.swift */,
 			);
 			name = Auxiliary;
 			sourceTree = "<group>";
@@ -166,6 +172,9 @@
 			dependencies = (
 			);
 			name = blast_parser;
+			packageProductDependencies = (
+				84162ED52C83732800ED0B5E /* ArgumentParser */,
+			);
 			productName = blast_parser;
 			productReference = 8483F1502C4096410075794B /* blast_parser */;
 			productType = "com.apple.product-type.tool";
@@ -194,6 +203,9 @@
 				Base,
 			);
 			mainGroup = 8483F1472C4096410075794B;
+			packageReferences = (
+				84162ED42C83732800ED0B5E /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+			);
 			productRefGroup = 8483F1512C4096410075794B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -209,10 +221,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8483F15B2C409B860075794B /* Console.swift in Sources */,
-				8483F1542C4096410075794B /* main.swift in Sources */,
 				842DD5312C8303F80028D7DE /* DataStreamWriter.swift in Sources */,
 				8483F15D2C40A1CC0075794B /* Parser.swift in Sources */,
 				84A1B7CD2C7E1EF0006F2526 /* MatchedTaxID.swift in Sources */,
+				84162EDB2C83756200ED0B5E /* BlastParser.swift in Sources */,
 				84CCF9C32C82625C00034B4B /* Query.swift in Sources */,
 				84CCF9C52C826D4B00034B4B /* Database.swift in Sources */,
 				842DD5332C8338540028D7DE /* DataStream.swift in Sources */,
@@ -386,6 +398,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		84162ED42C83732800ED0B5E /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		84162ED52C83732800ED0B5E /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84162ED42C83732800ED0B5E /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8483F1482C4096410075794B /* Project object */;
 }
