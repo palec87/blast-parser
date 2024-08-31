@@ -19,7 +19,7 @@ struct BlastParser: ParsableCommand {
     static let configuration = CommandConfiguration(
             abstract: "Imports an NCBI ranked taxonomy dump file an exports it into a PostGresSQL database",
             usage: """
-                blast_parser [OPTIONS] <input-file>
+                blast_parser <input-file> [OPTIONS] 
                 """)
     
     mutating func run() throws {
