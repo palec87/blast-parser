@@ -10,7 +10,7 @@ import Foundation
 final class Database {
     let readStream:DatabaseStream
     let writeStream:DatabaseWriter
-    let blockSize = 250 * 4096 // buffer size of 1 MB
+    let blockSize = 4096
     
     init(path:String, outputPath:String) {
         let url = URL(fileURLWithPath: path)
@@ -47,7 +47,7 @@ final class Database {
     
     private func parseLine(line:String) -> String {
         var filteredLine = line.replacingOccurrences(of: "\t", with: "")
-        filteredLine = filteredLine.replacingOccurrences(of: "|", with: "\t")
+        filteredLine = filteredLine.replacingOccurrences(of: "|", with: ",")
         return filteredLine
     }
 }
