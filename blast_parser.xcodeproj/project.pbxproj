@@ -34,6 +34,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		84162ECB2C83544B00ED0B5E /* arm64-apple-macos.swiftsourceinfo */ = {isa = PBXFileReference; lastKnownFileType = file; path = "arm64-apple-macos.swiftsourceinfo"; sourceTree = "<group>"; };
+		84162ECD2C83544B00ED0B5E /* arm64-apple-macos.abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "arm64-apple-macos.abi.json"; sourceTree = "<group>"; };
+		84162ECE2C83544B00ED0B5E /* arm64-apple-macos.swiftdoc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "arm64-apple-macos.swiftdoc"; sourceTree = "<group>"; };
+		84162ECF2C83544B00ED0B5E /* arm64-apple-macos.swiftmodule */ = {isa = PBXFileReference; lastKnownFileType = file; path = "arm64-apple-macos.swiftmodule"; sourceTree = "<group>"; };
+		84162ED12C83544B00ED0B5E /* blast_parser */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = blast_parser; sourceTree = "<group>"; };
 		842DD5302C8303F80028D7DE /* DataStreamWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStreamWriter.swift; sourceTree = "<group>"; };
 		842DD5322C8338540028D7DE /* DataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStream.swift; sourceTree = "<group>"; };
 		8483F1502C4096410075794B /* blast_parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = blast_parser; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +63,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		84162ECC2C83544B00ED0B5E /* Project */ = {
+			isa = PBXGroup;
+			children = (
+				84162ECB2C83544B00ED0B5E /* arm64-apple-macos.swiftsourceinfo */,
+			);
+			path = Project;
+			sourceTree = "<group>";
+		};
+		84162ED02C83544B00ED0B5E /* blast_parser.swiftmodule */ = {
+			isa = PBXGroup;
+			children = (
+				84162ECC2C83544B00ED0B5E /* Project */,
+				84162ECD2C83544B00ED0B5E /* arm64-apple-macos.abi.json */,
+				84162ECE2C83544B00ED0B5E /* arm64-apple-macos.swiftdoc */,
+				84162ECF2C83544B00ED0B5E /* arm64-apple-macos.swiftmodule */,
+			);
+			path = blast_parser.swiftmodule;
+			sourceTree = "<group>";
+		};
+		84162ED22C83544B00ED0B5E /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				84162ED02C83544B00ED0B5E /* blast_parser.swiftmodule */,
+				84162ED12C83544B00ED0B5E /* blast_parser */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		84162ED32C83544B00ED0B5E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				84162ED22C83544B00ED0B5E /* Debug */,
+			);
+			name = Products;
+			path = blast_parser/Products;
+			sourceTree = SOURCE_ROOT;
+		};
 		8483F1472C4096410075794B = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +125,7 @@
 				84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */,
 				842DD5302C8303F80028D7DE /* DataStreamWriter.swift */,
 				84CCF9C72C826D9B00034B4B /* Auxiliary */,
+				84162ED32C83544B00ED0B5E /* Products */,
 				84CCF9C82C826DD400034B4B /* Unimplemented */,
 			);
 			path = blast_parser;
