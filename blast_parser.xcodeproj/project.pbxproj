@@ -24,7 +24,7 @@
 		8483F14E2C4096410075794B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
-			dstPath = /Volumes/Vertical;
+			dstPath = /opt/jvbioinformatics/bin;
 			dstSubfolderSpec = 0;
 			files = (
 				8483F15E2C40AA270075794B /* blast_parser in CopyFiles */,
