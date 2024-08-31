@@ -1,5 +1,5 @@
 //
-//  DatabaseWriter.swift
+//  DataStreamWriter.swift
 //  blast_parser
 //
 //  Created by João Varela on 31/08/2024.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-enum DatabaseWriterError: Error {
+enum DataStreamWriterError: Error {
     case writeError(String)
 }
 
-extension DatabaseWriterError: LocalizedError {
+extension DataStreamWriterError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .writeError(let path):
@@ -21,22 +21,18 @@ extension DatabaseWriterError: LocalizedError {
     }
 }
 
-final class DatabaseWriter {
-    let url:URL
-    var filehandle:FileHandle!
+final class DataStreamWriter : DataStream {
     var lines = [String]()
-    let bufferSize:Int
     var count = 0
     
     /// Must be paired with a call to close()
-    init(url:URL, blockSize:Int = 4096) throws {
-        self.url = url
+    override init(url:URL, blockSize:Int = 4096) throws {
         let filemanager = FileManager.default
         // NOTE: this will overwite the previous contents of an existing file
         guard filemanager.createFile(atPath: url.path, contents: nil)
-            else { throw DatabaseWriterError.writeError(url.path) }
-        self.filehandle = try FileHandle(forWritingTo: url)
-        self.bufferSize = blockSize
+            else { throw DataStreamWriterError.writeError(url.path) }
+        try super.init(url: url, blockSize: blockSize)
+        filehandle = try FileHandle(forWritingTo: url)
     }
     
     func write(line:String) {
@@ -59,19 +55,5 @@ final class DatabaseWriter {
         filehandle.write(stringToWrite)
         count = 0
         lines = [String]()
-    }
-    
-    func close() {
-        if count > 0 {
-            writeToFile()
-        }
-        
-        do {
-            try filehandle?.close()
-        }
-        
-        catch {
-            Console.writeToStdErr("Unable to close file at \(url.path)")
-        }
     }
 }

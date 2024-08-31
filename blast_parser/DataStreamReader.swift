@@ -1,5 +1,5 @@
 //
-//  DatabaseStream.swift
+//  DataStreamReader.swift
 //  blast_parser
 //
 //  Created by João Varela on 30/08/2024.
@@ -7,18 +7,18 @@
 
 import Foundation
 
+enum DataStreamReaderError: Error {
+    case delimiterError
+    case readError
+}
+
 // Heavily borrowed from Martin R's answer at:
 // https://stackoverflow.com/questions/24581517/read-a-file-url-line-by-line-in-swift
-final class DatabaseStream : DataStream {
+final class DataStreamReader : DataStream {
     var buffer:Data
     var delimiter:Data
     var isEOF = false
     let encoding:String.Encoding
-    
-    enum DSError: Error {
-        case delimiterError
-        case readError
-    }
     
     /// Must be paired with a call to close()
     init(url:URL, delimiter:String = "\n",
@@ -26,16 +26,16 @@ final class DatabaseStream : DataStream {
           encoding:String.Encoding = .utf8) throws {
         do {
             guard let dataDelimiter = delimiter.data(using: encoding)
-                else { throw DSError.delimiterError }
+                else { throw DataStreamReaderError.delimiterError }
             self.delimiter = dataDelimiter
             self.encoding = encoding
             buffer = Data()
-            super.init(url: url, blockSize: blockSize)
+            try super.init(url: url, blockSize: blockSize)
             filehandle = try FileHandle(forReadingFrom: url)
         }
         
         catch {
-            throw DSError.readError
+            throw DataStreamReaderError.readError
         }
     }
     
@@ -77,7 +77,7 @@ final class DatabaseStream : DataStream {
     }
 }
 
-extension DatabaseStream : Sequence {
+extension DataStreamReader : Sequence {
     func makeIterator() -> AnyIterator<String> {
         return AnyIterator {
             return self.nextLine()

@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		842DD5312C8303F80028D7DE /* DatabaseWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842DD5302C8303F80028D7DE /* DatabaseWriter.swift */; };
+		842DD5312C8303F80028D7DE /* DataStreamWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842DD5302C8303F80028D7DE /* DataStreamWriter.swift */; };
+		842DD5332C8338540028D7DE /* DataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842DD5322C8338540028D7DE /* DataStream.swift */; };
 		8483F1542C4096410075794B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F1532C4096410075794B /* main.swift */; };
 		8483F15B2C409B860075794B /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F15A2C409B860075794B /* Console.swift */; };
 		8483F15D2C40A1CC0075794B /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F15C2C40A1CC0075794B /* Parser.swift */; };
@@ -16,7 +17,7 @@
 		84A1B7CD2C7E1EF0006F2526 /* MatchedTaxID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A1B7CC2C7E1EF0006F2526 /* MatchedTaxID.swift */; };
 		84CCF9C32C82625C00034B4B /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CCF9C22C82625C00034B4B /* Query.swift */; };
 		84CCF9C52C826D4B00034B4B /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CCF9C42C826D4B00034B4B /* Database.swift */; };
-		84CCF9CA2C827EEA00034B4B /* DatabaseStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CCF9C92C827EEA00034B4B /* DatabaseStream.swift */; };
+		84CCF9CA2C827EEA00034B4B /* DataStreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,7 +34,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		842DD5302C8303F80028D7DE /* DatabaseWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseWriter.swift; sourceTree = "<group>"; };
+		842DD5302C8303F80028D7DE /* DataStreamWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStreamWriter.swift; sourceTree = "<group>"; };
+		842DD5322C8338540028D7DE /* DataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStream.swift; sourceTree = "<group>"; };
 		8483F1502C4096410075794B /* blast_parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = blast_parser; sourceTree = BUILT_PRODUCTS_DIR; };
 		8483F1532C4096410075794B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		8483F15A2C409B860075794B /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
@@ -42,7 +44,7 @@
 		84A1B7CC2C7E1EF0006F2526 /* MatchedTaxID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchedTaxID.swift; sourceTree = "<group>"; };
 		84CCF9C22C82625C00034B4B /* Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		84CCF9C42C826D4B00034B4B /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		84CCF9C92C827EEA00034B4B /* DatabaseStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseStream.swift; sourceTree = "<group>"; };
+		84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStreamReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,8 +79,9 @@
 			children = (
 				8483F1532C4096410075794B /* main.swift */,
 				84CCF9C42C826D4B00034B4B /* Database.swift */,
-				84CCF9C92C827EEA00034B4B /* DatabaseStream.swift */,
-				842DD5302C8303F80028D7DE /* DatabaseWriter.swift */,
+				842DD5322C8338540028D7DE /* DataStream.swift */,
+				84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */,
+				842DD5302C8303F80028D7DE /* DataStreamWriter.swift */,
 				84CCF9C72C826D9B00034B4B /* Auxiliary */,
 				84CCF9C82C826DD400034B4B /* Unimplemented */,
 			);
@@ -164,13 +167,14 @@
 			files = (
 				8483F15B2C409B860075794B /* Console.swift in Sources */,
 				8483F1542C4096410075794B /* main.swift in Sources */,
-				842DD5312C8303F80028D7DE /* DatabaseWriter.swift in Sources */,
+				842DD5312C8303F80028D7DE /* DataStreamWriter.swift in Sources */,
 				8483F15D2C40A1CC0075794B /* Parser.swift in Sources */,
 				84A1B7CD2C7E1EF0006F2526 /* MatchedTaxID.swift in Sources */,
 				84CCF9C32C82625C00034B4B /* Query.swift in Sources */,
 				84CCF9C52C826D4B00034B4B /* Database.swift in Sources */,
+				842DD5332C8338540028D7DE /* DataStream.swift in Sources */,
 				8483F1642C40C24D0075794B /* Column.swift in Sources */,
-				84CCF9CA2C827EEA00034B4B /* DatabaseStream.swift in Sources */,
+				84CCF9CA2C827EEA00034B4B /* DataStreamReader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

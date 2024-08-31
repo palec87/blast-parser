@@ -8,24 +8,23 @@
 import Foundation
 
 final class Database {
-    let readStream:DatabaseStream
-    let writeStream:DatabaseWriter
-    let blockSize = 4096
+    let readStream:DataStreamReader
+    let writeStream:DataStreamWriter
     
     init(path:String, outputPath:String) {
         let url = URL(fileURLWithPath: path)
         let outURL = URL(fileURLWithPath: outputPath)
         do {
-            self.readStream = try DatabaseStream(url: url, blockSize: blockSize)
-            self.writeStream = try DatabaseWriter(url: outURL, blockSize: blockSize)
+            self.readStream = try DataStreamReader(url: url)
+            self.writeStream = try DataStreamWriter(url: outURL)
         }
         
-        catch DatabaseStream.DSError.delimiterError {
+        catch DataStreamReaderError.delimiterError {
             Console.writeToStdErr("Unable to use delimiter for file at \(url.path)")
             exit(1)
         }
         
-        catch DatabaseStream.DSError.readError {
+        catch DataStreamReaderError.readError {
             Console.writeToStdErr("Unable to read file at \(url.path)")
             exit(2)
         }
