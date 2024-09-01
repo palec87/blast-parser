@@ -11,6 +11,8 @@
 		84162EDB2C83756200ED0B5E /* BlastParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84162EDA2C83756200ED0B5E /* BlastParser.swift */; };
 		842DD5312C8303F80028D7DE /* DataStreamWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842DD5302C8303F80028D7DE /* DataStreamWriter.swift */; };
 		842DD5332C8338540028D7DE /* DataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842DD5322C8338540028D7DE /* DataStream.swift */; };
+		8462AC672C84A73D00104505 /* libpq.c in Sources */ = {isa = PBXBuildFile; fileRef = 8462AC662C84A73D00104505 /* libpq.c */; };
+		8462AC692C84A80400104505 /* SQLDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8462AC682C84A80400104505 /* SQLDatabase.swift */; };
 		8483F15B2C409B860075794B /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F15A2C409B860075794B /* Console.swift */; };
 		8483F15D2C40A1CC0075794B /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F15C2C40A1CC0075794B /* Parser.swift */; };
 		8483F15E2C40AA270075794B /* blast_parser in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8483F1502C4096410075794B /* blast_parser */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -45,6 +47,10 @@
 		84162EDA2C83756200ED0B5E /* BlastParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlastParser.swift; sourceTree = "<group>"; };
 		842DD5302C8303F80028D7DE /* DataStreamWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStreamWriter.swift; sourceTree = "<group>"; };
 		842DD5322C8338540028D7DE /* DataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStream.swift; sourceTree = "<group>"; };
+		8462AC642C84A73D00104505 /* blast_parser-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "blast_parser-Bridging-Header.h"; sourceTree = "<group>"; };
+		8462AC652C84A73D00104505 /* libpq.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libpq.h; path = libpq/libpq.h; sourceTree = "<group>"; };
+		8462AC662C84A73D00104505 /* libpq.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = libpq.c; path = libpq/libpq.c; sourceTree = "<group>"; };
+		8462AC682C84A80400104505 /* SQLDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLDatabase.swift; sourceTree = "<group>"; };
 		8483F1502C4096410075794B /* blast_parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = blast_parser; sourceTree = BUILT_PRODUCTS_DIR; };
 		8483F15A2C409B860075794B /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
 		8483F15C2C40A1CC0075794B /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
@@ -128,6 +134,7 @@
 				842DD5322C8338540028D7DE /* DataStream.swift */,
 				84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */,
 				842DD5302C8303F80028D7DE /* DataStreamWriter.swift */,
+				8462AC682C84A80400104505 /* SQLDatabase.swift */,
 				84CCF9C72C826D9B00034B4B /* Auxiliary */,
 				84162ED32C83544B00ED0B5E /* Products */,
 				84CCF9C82C826DD400034B4B /* Unimplemented */,
@@ -141,6 +148,9 @@
 				84162ED72C83738A00ED0B5E /* Readme.md */,
 				8483F15A2C409B860075794B /* Console.swift */,
 				84162ED82C83747F00ED0B5E /* Package.swift */,
+				8462AC642C84A73D00104505 /* blast_parser-Bridging-Header.h */,
+				8462AC652C84A73D00104505 /* libpq.h */,
+				8462AC662C84A73D00104505 /* libpq.c */,
 			);
 			name = Auxiliary;
 			sourceTree = "<group>";
@@ -191,6 +201,7 @@
 				TargetAttributes = {
 					8483F14F2C4096410075794B = {
 						CreatedOnToolsVersion = 15.4;
+						LastSwiftMigration = 1540;
 					};
 				};
 			};
@@ -224,6 +235,8 @@
 				842DD5312C8303F80028D7DE /* DataStreamWriter.swift in Sources */,
 				8483F15D2C40A1CC0075794B /* Parser.swift in Sources */,
 				84A1B7CD2C7E1EF0006F2526 /* MatchedTaxID.swift in Sources */,
+				8462AC672C84A73D00104505 /* libpq.c in Sources */,
+				8462AC692C84A80400104505 /* SQLDatabase.swift in Sources */,
 				84162EDB2C83756200ED0B5E /* BlastParser.swift in Sources */,
 				84CCF9C32C82625C00034B4B /* Query.swift in Sources */,
 				84CCF9C52C826D4B00034B4B /* Database.swift in Sources */,
@@ -357,10 +370,13 @@
 		8483F1582C4096410075794B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U57H83X6M8;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "blast_parser/blast_parser-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -368,10 +384,12 @@
 		8483F1592C4096410075794B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U57H83X6M8;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "blast_parser/blast_parser-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

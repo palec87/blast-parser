@@ -38,6 +38,8 @@ struct BlastParser: ParsableCommand {
         
         let database = Database(path: inputFile, outputPath: outputPath)
         database.parse()
+        
+        _ = SQLDatabase()
     }
 }
 
