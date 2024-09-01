@@ -8,7 +8,7 @@
 import Foundation
 
 final class SQLDatabase {
-    init() {
-        createDatabase()
+    init(database:String, table:String?) {
+        createDatabase(database, table ?? "taxonomy")
     }
 }

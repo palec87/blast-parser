@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 
-void createDatabase(void);
+void createDatabase(const char *database,
+                    const char *table);
 
 #endif /* libpq_h */

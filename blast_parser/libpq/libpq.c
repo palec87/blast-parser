@@ -7,7 +7,8 @@
 
 #include "libpq.h"
 
-
-void createDatabase(void) {
-    printf("Create database");
+void createDatabase(const char *database,
+                    const char *table) {
+    printf("Create database %s", database);
+    printf(" with table %s", table);
 }

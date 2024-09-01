@@ -9,37 +9,84 @@ import Foundation
 import ArgumentParser
 
 @main
+
+// root command
 struct BlastParser: ParsableCommand {
-    @Argument(help: "Path to rankedtaxonomy.dmp file to be imported.")
-    var inputFile: String
-    @Option(name: [.short, .customLong("output")],
-            help: "Path to the output CSV file, which will be overwritten if it already exists.")
-    var outputFile: String? = nil
+static let configuration = CommandConfiguration(
+    abstract: """
+        Imports an NCBI ranked taxonomy dump file and exports it into a PostGresSQL \
+        database and then retrieves and parses the taxonomy information to populate \
+        the BLAST results with the respective taxa.
+        """,
+        version: "0.1",
+        subcommands: [Import.self, Export.self],
+        defaultSubcommand: Import.self
+    )
+}
+
+// common options
+struct Options:ParsableArguments {
+}
+
+extension BlastParser {
+    struct Import: ParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Imports an NCBI ranked taxonomy dump file into a CSV file.",
+            aliases: ["imp"]
+        )
+        
+        @OptionGroup var options: Options
+        
+        @Option(name: [.short, .customLong("input")],
+                    help: "Path to rankedtaxonomy.dmp file to be imported.")
+        var inputFile:String
+        
+        @Option(name: [.short, .customLong("output")],
+                help: "Path to the output CSV file, which will be overwritten if it already exists.")
+        var outputFile: String? = nil
+        
+        mutating func run() throws {
+            let inputURL = URL(fileURLWithPath: inputFile)
+            guard FileManager.default.fileExists(atPath: inputFile) else {
+                throw RuntimeError("Input file at \(inputFile) not found.")
+            }
     
-    static let configuration = CommandConfiguration(
-            abstract: "Imports an NCBI ranked taxonomy dump file an exports it into a PostGresSQL database",
-            usage: """
-                blast_parser <input-file> [OPTIONS] 
-                """)
+            var outputPath = String()
+            if outputFile == nil {
+                let oldFilenameURL = inputURL.deletingPathExtension()
+                outputPath = oldFilenameURL.appendingPathExtension("csv").path
+            } else {
+                outputPath = outputFile!
+            }
     
-    mutating func run() throws {
-        let inputURL = URL(fileURLWithPath: inputFile)
-        guard FileManager.default.fileExists(atPath: inputFile) else {
-            throw RuntimeError("Input file at \(inputFile) not found.")
+            let database = Database(path: inputFile, outputPath: outputPath)
+            database.parse()
         }
+    }
+    
+    struct Export: ParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Exports the imported CSV file into a local PostGresSQL server.",
+            aliases: ["exp"]
+        )
         
-        var outputPath = String()
-        if outputFile == nil {
-            let oldFilenameURL = inputURL.deletingPathExtension()
-            outputPath = oldFilenameURL.appendingPathExtension("csv").path
-        } else {
-            outputPath = outputFile!
+        @OptionGroup var options: Options
+        
+        @Option(name: [.short, .customLong("input")],
+                    help: "Path to rankedtaxonomy.csv file to be imported.")
+        var inputFile:String
+        
+        @Option(name: [.short, .customLong("database")],
+                    help: "Name of the database to which rankedtaxonomy.csv file will be exported.")
+        var database:String
+        
+        @Option(name: [.short, .customLong("table")],
+                help: "Name of the table that will be created in the database. [OPTIONAL]")
+        var table:String?
+        
+        mutating func run() throws {
+            let database = SQLDatabase(database: database, table: table)
         }
-        
-        let database = Database(path: inputFile, outputPath: outputPath)
-        database.parse()
-        
-        _ = SQLDatabase()
     }
 }
 
