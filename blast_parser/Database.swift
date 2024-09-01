@@ -42,6 +42,7 @@ final class Database {
         
         readStream.close()
         writeStream.close()
+        Console.writeToStdOut("\nWritten all lines successfully. Bye!")
     }
     
     private func parseLine(line:String) -> String {

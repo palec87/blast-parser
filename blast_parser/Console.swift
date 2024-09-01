@@ -19,17 +19,16 @@ class Console {
         return CommandLine.arguments
     }
     
-    //FIXME: Uninplemented
-    static func printHelp() {
-        writeToStdOut("Help")
-    }
-    
     static func writeToStdErr(_ message:String) {
         FileHandle.standardError.write("\(message)\n")
     }
     
     static func writeToStdOut(_ message:String) {
         FileHandle.standardOutput.write("\(message)\n")
+    }
+    
+    static func writeToStdOutInPlace(_ message:String) {
+        FileHandle.standardOutput.write("\(message)\r")
     }
 }
 

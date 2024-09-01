@@ -24,6 +24,7 @@ extension DataStreamWriterError: LocalizedError {
 final class DataStreamWriter : DataStream {
     var lines = [String]()
     var count = 0
+    var totalCount = 0
     
     /// Must be paired with a call to close()
     override init(url:URL, blockSize:Int = 4096) throws {
@@ -53,7 +54,9 @@ final class DataStreamWriter : DataStream {
         }
         stringToWrite += terminatedLine
         filehandle.write(stringToWrite)
+        totalCount += count;
         count = 0
         lines = [String]()
+        Console.writeToStdOutInPlace("Written \(totalCount) lines...")
     }
 }
