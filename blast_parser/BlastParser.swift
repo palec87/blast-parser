@@ -77,7 +77,7 @@ extension BlastParser {
         var inputFile:String
         
         @Option(name: [.short, .customLong("database")],
-                    help: "Name of the database to which rankedtaxonomy.csv file will be exported.")
+                    help: "Name of the database to which rankedtaxonomy.csv file will be exported. IMPORTANT NOTE: If you choose the name of a preexisting database, the latter will be OVERWRITTEN!")
         var database:String
         
         @Option(name: [.short, .customLong("table")],
@@ -86,6 +86,7 @@ extension BlastParser {
         
         mutating func run() throws {
             let database = SQLDatabase(database: database, table: table)
+            database.CreateDatabase()
         }
     }
 }

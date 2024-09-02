@@ -1,13 +1,5 @@
 # Old Main
 
-//
-//  main.swift
-//  blast_parser
-//
-//  Created by João Varela on 11/07/2024.
-//
-
-import Foundation
 
 // column to extract
 let columnToRead = 10
@@ -17,6 +9,23 @@ let columnToRead = 10
 //let path = "/Users/admin/Documents/Development/Bioinformatics/ncbi/queries/NEC_13_00001_t.txt"
 let databasePath = "/Users/admin/Documents/Development/Bioinformatics/ncbi/db/new_taxdump/rankedlineage.dmp"
 let outputFilePath = "/Users/admin/Documents/Development/Bioinformatics/ncbi/db/new_taxdump/rankedlineage.csv"
+
+rankedlineage.dmp
+-----------------
+Select ancestor names for well-established taxonomic ranks (species, genus, family, order, class, phylum, kingdom, superkingdom) file fields:
+
+        tax_id                                  -- node id
+        tax_name                                -- scientific name of the organism
+        species                                 -- name of a species (coincide with organism name for species-level nodes)
+    genus                    -- genus name when available
+    family                    -- family name when available
+    order                    -- order name when available
+    class                    -- class name when available
+    phylum                    -- phylum name when available
+    kingdom                    -- kingdom name when available
+    superkingdom                -- superkingdom (domain) name when available
+
+
 
 (base) ➜  ~ psql -d taxonomy_ncbi -U test
 psql (16.4 (Postgres.app))

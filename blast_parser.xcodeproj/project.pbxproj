@@ -11,6 +11,8 @@
 		84162EDB2C83756200ED0B5E /* BlastParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84162EDA2C83756200ED0B5E /* BlastParser.swift */; };
 		842DD5312C8303F80028D7DE /* DataStreamWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842DD5302C8303F80028D7DE /* DataStreamWriter.swift */; };
 		842DD5332C8338540028D7DE /* DataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842DD5322C8338540028D7DE /* DataStream.swift */; };
+		842F06C22C85124000C3E681 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = 842F06C12C85124000C3E681 /* string.c */; };
+		842F06C62C865A4A00C3E681 /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 842F06C52C865A4A00C3E681 /* parser.c */; };
 		8462AC692C84A80400104505 /* SQLDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8462AC682C84A80400104505 /* SQLDatabase.swift */; };
 		8483F15B2C409B860075794B /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F15A2C409B860075794B /* Console.swift */; };
 		8483F15D2C40A1CC0075794B /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8483F15C2C40A1CC0075794B /* Parser.swift */; };
@@ -45,6 +47,7 @@
 		84DEEAB02C84D17B00722A66 /* libpq.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 84DEEA922C84D0F000722A66 /* libpq.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84DEEAB12C84D17C00722A66 /* libssl.3.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 84DEEA932C84D0F000722A66 /* libssl.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84DEEAB22C84D17D00722A66 /* libssl.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 84DEEA942C84D0F000722A66 /* libssl.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		84DEEAB52C84F70F00722A66 /* connect.c in Sources */ = {isa = PBXBuildFile; fileRef = 84DEEAB42C84F70F00722A66 /* connect.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -93,6 +96,10 @@
 		84162EDA2C83756200ED0B5E /* BlastParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlastParser.swift; sourceTree = "<group>"; };
 		842DD5302C8303F80028D7DE /* DataStreamWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStreamWriter.swift; sourceTree = "<group>"; };
 		842DD5322C8338540028D7DE /* DataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStream.swift; sourceTree = "<group>"; };
+		842F06C02C85124000C3E681 /* string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
+		842F06C12C85124000C3E681 /* string.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = string.c; sourceTree = "<group>"; };
+		842F06C42C865A4A00C3E681 /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
+		842F06C52C865A4A00C3E681 /* parser.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = parser.c; sourceTree = "<group>"; };
 		8462AC642C84A73D00104505 /* blast_parser-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "blast_parser-Bridging-Header.h"; sourceTree = "<group>"; };
 		8462AC682C84A80400104505 /* SQLDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLDatabase.swift; sourceTree = "<group>"; };
 		8483F1502C4096410075794B /* blast_parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = blast_parser; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -985,7 +992,9 @@
 		84DEEA932C84D0F000722A66 /* libssl.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.3.dylib; sourceTree = "<group>"; };
 		84DEEA942C84D0F000722A66 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.dylib; sourceTree = "<group>"; };
 		84DEEA962C84D0F000722A66 /* libpq-bp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "libpq-bp.c"; sourceTree = "<group>"; };
-		84DEEA972C84D0F000722A66 /* libpq-bp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "libpq-bp.h"; sourceTree = "<group>"; };
+		84DEEAB32C84F70F00722A66 /* connect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = connect.h; sourceTree = "<group>"; };
+		84DEEAB42C84F70F00722A66 /* connect.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = connect.c; sourceTree = "<group>"; };
+		84DEEAB72C84F7B700722A66 /* libpq-bp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "libpq-bp.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1048,6 +1057,15 @@
 			name = Products;
 			path = blast_parser/Products;
 			sourceTree = SOURCE_ROOT;
+		};
+		842F06C32C85125300C3E681 /* aux */ = {
+			isa = PBXGroup;
+			children = (
+				842F06C02C85124000C3E681 /* string.h */,
+				842F06C12C85124000C3E681 /* string.c */,
+			);
+			name = aux;
+			sourceTree = "<group>";
 		};
 		8483F1472C4096410075794B = {
 			isa = PBXGroup;
@@ -2372,8 +2390,13 @@
 			children = (
 				84DEEA882C84D0F000722A66 /* include */,
 				84DEEA952C84D0F000722A66 /* lib */,
+				84DEEAB72C84F7B700722A66 /* libpq-bp.h */,
 				84DEEA962C84D0F000722A66 /* libpq-bp.c */,
-				84DEEA972C84D0F000722A66 /* libpq-bp.h */,
+				84DEEAB32C84F70F00722A66 /* connect.h */,
+				84DEEAB42C84F70F00722A66 /* connect.c */,
+				842F06C42C865A4A00C3E681 /* parser.h */,
+				842F06C52C865A4A00C3E681 /* parser.c */,
+				842F06C32C85125300C3E681 /* aux */,
 			);
 			path = libpq;
 			sourceTree = "<group>";
@@ -2446,15 +2469,18 @@
 			files = (
 				84DEEAA52C84D0F000722A66 /* libpq-bp.c in Sources */,
 				8483F15B2C409B860075794B /* Console.swift in Sources */,
+				84DEEAB52C84F70F00722A66 /* connect.c in Sources */,
 				842DD5312C8303F80028D7DE /* DataStreamWriter.swift in Sources */,
 				8483F15D2C40A1CC0075794B /* Parser.swift in Sources */,
 				84A1B7CD2C7E1EF0006F2526 /* MatchedTaxID.swift in Sources */,
 				8462AC692C84A80400104505 /* SQLDatabase.swift in Sources */,
 				84162EDB2C83756200ED0B5E /* BlastParser.swift in Sources */,
+				842F06C22C85124000C3E681 /* string.c in Sources */,
 				84CCF9C32C82625C00034B4B /* Query.swift in Sources */,
 				84CCF9C52C826D4B00034B4B /* Database.swift in Sources */,
 				842DD5332C8338540028D7DE /* DataStream.swift in Sources */,
 				8483F1642C40C24D0075794B /* Column.swift in Sources */,
+				842F06C62C865A4A00C3E681 /* parser.c in Sources */,
 				84CCF9CA2C827EEA00034B4B /* DataStreamReader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
