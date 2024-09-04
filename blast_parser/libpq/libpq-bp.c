@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #include "libpq-bp.h"
 #include "connect.h"
@@ -17,12 +18,39 @@ size_t bufferSize = maxBufferSize;
 
 #pragma mark **** private functions ****
 
+void PSDBegin(const char* database) {
+    PSDConnectToDB(database);
+}
+
+void PSDBeginWithDefaultDB(void) {
+    PSDConnectToMainDB();
+}
+
+void PSDEnd(void) {
+    PSDCloseConnectionToDB();
+}
+
+void PSDCreateDB(const char *database) {
+    size_t maxLength = bufferSize - 1;
+    char command[bufferSize];
+    const char *fmt = "CREATE DATABASE %s;";
+    int charNumber = snprintf(command, maxLength, fmt, database);
+    
+    if (charNumber < 1) {
+        PSDHandleFatalError();
+    } else {
+        PSDExecute(command);
+    }
+}
+
 void PSDCreateDatabase(const char *database,
                        const char *table,
                        const char *columns) {
-    PSDConnectToDB(database);
     if (table != NULL && columns != NULL) {
+        PSDCreateDB(database);
         PSDCreateTable(table, columns);
+    } else {
+        fprintf(stderr, "%s", "Either the name of the table or columns was NULL.");
     }
 }
 
@@ -36,7 +64,6 @@ void PSDDeleteDatabase(const char *database) {
         if (charNumber < 1) {
             PSDHandleFatalError();
         } else {
-            PSDConnectToMainDB();
             PSDExecute(command);
         }
     } else {
@@ -47,6 +74,7 @@ void PSDDeleteDatabase(const char *database) {
 
 void PSDCreateTable(const char *table,
                     const char *columns) {
+    
     size_t maxLength = bufferSize - 1;
     char command[bufferSize];
     const char *fmt = "CREATE TABLE %s {%s};";

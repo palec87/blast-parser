@@ -10,9 +10,11 @@
 
 #include <stdbool.h>
 
-#pragma mark **** private constants ****
-#define maxBufferSize 1001
-#define mainDB "postgres"
+void PSDBegin(const char *database);
+void PSDBeginWithDefaultDB(void);
+void PSDEnd(void);
+
+void PSDCreateDB(const char *database);
 
 // table can be NULL
 void PSDCreateDatabase(const char *database,

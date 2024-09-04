@@ -13,6 +13,9 @@
 #include <stdio.h>
 #include "libpq-fe.h"
 
+#define maxBufferSize 1001
+#define mainDB "postgres"
+
 void PSDConnectToMainDB(void);
 void PSDConnectToDB(const char *database);
 void PSDCloseConnectionToDB(void);

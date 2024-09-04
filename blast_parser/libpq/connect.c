@@ -7,11 +7,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include <string.h>
 #include "connect.h"
 
 #pragma mark **** private vars ****
 static PGconn *sConn = NULL;
+
 
 #pragma mark **** Connection to the database ****
 void PSDConnectToMainDB(void) {
@@ -19,8 +21,7 @@ void PSDConnectToMainDB(void) {
 }
 
 // NOTE: It must be paired with a PSDCloseConnection()
-void PSDConnectToDB(const char *database)
-{
+void PSDConnectToDB(const char *database) {
     const size_t bufferSize = 80;
     char conninfo[bufferSize];
     int charNumber = snprintf(conninfo, bufferSize - 1, "dbname = %s", database);
@@ -41,17 +42,15 @@ void PSDConnectToDB(const char *database)
 
 // NOTE: It must be paired with a PSDConnectToDB()
 void PSDCloseConnectionToDB(void) {
-    if (sConn == NULL) {
-        fprintf(stderr, "ERROR: No valid conntection was found. Please call PSDConnectToDB() first.");
-        PSDHandleFatalError();
+    if (sConn != NULL) {
+        PQfinish(sConn);
+        sConn = NULL;
     }
-    
-    PQfinish(sConn);
-    sConn = NULL;
 }
 
 #pragma mark **** Execution ****
 void PSDExecute(const char *command) {
+    assert(sConn != NULL);
     PGresult *result = PQexec(sConn, command);
     ExecStatusType status = PQresultStatus(result);
     
@@ -66,6 +65,7 @@ void PSDExecute(const char *command) {
 }
 
 PGresult* PSDExecuteWithResult(const char *command) {
+    assert(sConn != NULL);
     PGresult *result = PQexec(sConn, command);
     ExecStatusType status = PQresultStatus(result);
     

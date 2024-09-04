@@ -29,9 +29,11 @@ final class SQLDatabase {
     }
     
     func CreateDatabase() {
+        PSDBeginWithDefaultDB();
         if PSDDoesExist(database) == true {
             PSDDeleteDatabase(database)
         }
         PSDCreateDatabase(database, table ?? "taxonomy", columns)
+        PSDEnd();
     }
 }
