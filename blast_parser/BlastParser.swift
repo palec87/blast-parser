@@ -13,11 +13,12 @@ import ArgumentParser
 // root command
 struct BlastParser: ParsableCommand {
 static let configuration = CommandConfiguration(
-    abstract: """
-        Imports an NCBI ranked taxonomy dump file and exports it into a PostGresSQL \
-        database and then retrieves and parses the taxonomy information to populate \
-        the BLAST results with the respective taxa.
-        """,
+        abstract: """
+            Imports an NCBI ranked taxonomy dump file and exports it into a PostGresSQL \
+            database and then retrieves and parses the taxonomy information to populate \
+            the BLAST results with the respective taxa.
+            """,
+        usage: "blast_parser <subcommand>",
         version: "0.1",
         subcommands: [Import.self, Export.self],
         defaultSubcommand: Import.self
