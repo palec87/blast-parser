@@ -48,6 +48,7 @@ void PSDCreateDatabase(const char *database,
                        const char *columns) {
     if (table != NULL && columns != NULL) {
         PSDCreateDB(database);
+        PSDConnectToDB(database);
         PSDCreateTable(table, columns);
     } else {
         fprintf(stderr, "%s", "Either the name of the table or columns was NULL.");
@@ -77,7 +78,7 @@ void PSDCreateTable(const char *table,
     
     size_t maxLength = bufferSize - 1;
     char command[bufferSize];
-    const char *fmt = "CREATE TABLE %s {%s};";
+    const char *fmt = "CREATE TABLE %s (%s);";
     int charNumber = snprintf(command, maxLength, fmt, table, columns);
     
     if (charNumber < 1) {
