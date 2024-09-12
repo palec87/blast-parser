@@ -16,6 +16,7 @@
 #define maxBufferSize 1001
 #define mainDB "postgres"
 
+const char* PSDGetCurrentDB(void);
 void PSDConnectToMainDB(void);
 void PSDConnectToDB(const char *database);
 void PSDCloseConnectionToDB(void);
