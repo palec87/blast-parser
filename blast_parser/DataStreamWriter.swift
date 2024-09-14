@@ -55,6 +55,7 @@ final class DataStreamWriter : DataStream {
             numberOfLines += 1
         }
         stringToWrite += terminatedLine
+        numberOfLines += 1
         filehandle.write(stringToWrite)
         totalCharacterCount += count;
         count = 0
