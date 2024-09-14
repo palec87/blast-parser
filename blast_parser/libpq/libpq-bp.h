@@ -28,4 +28,7 @@ void PSDCreateTable(const char *table,
 
 bool PSDDoesExist(const char *database);
 
+void PSDCopyToDB(const char *table,
+                 const char* pathToCSVFile);
+
 #endif /* libpq_h */

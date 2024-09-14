@@ -12,15 +12,16 @@ final class SQLDatabase {
     let table:String?
     let columns = """
             tax_id int PRIMARY KEY NOT NULL,
-            tax_name varchar(50) NOT NULL,
-            species varchar(50),
-            genus varchar(50),
-            family varchar(50),
-            "order" varchar(50),
-            "class" varchar(50),
-            phylum varchar(50),
-            kingdom varchar(50),
-            superkingdom varchar(50)
+            tax_name varchar(255) NOT NULL,
+            species varchar(100),
+            genus varchar(100),
+            family varchar(100),
+            "order" varchar(100),
+            "class" varchar(100),
+            phylum varchar(100),
+            kingdom varchar(100),
+            superkingdom varchar(100),
+            comments varchar(50)
         """
     
     init(database:String, table:String?) {
@@ -33,7 +34,16 @@ final class SQLDatabase {
         if PSDDoesExist(database) == true {
             PSDDeleteDatabase(database)
         }
-        PSDCreateDatabase(database, table ?? "taxonomy", columns)
-        PSDEnd();
+        // This method swicthes automatically to the newly created db
+        // to create the requested table
+        let table = self.table ?? "taxonomy"
+        PSDCreateDatabase(database, table, columns)
+        Console.writeToStdOut("Database \"\(database)\" and table \"\(table)\" created successfully.")
+    }
+    
+    func ImportDatabase(pathToCSVFile:String) {
+        let table = self.table ?? "taxonomy"
+        PSDCopyToDB(table, pathToCSVFile)
+        Console.writeToStdOut("Table \"\(table)\" exported successfully.")
     }
 }

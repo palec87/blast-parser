@@ -88,6 +88,7 @@ extension BlastParser {
         mutating func run() throws {
             let database = SQLDatabase(database: database, table: table)
             database.CreateDatabase()
+            database.ImportDatabase(pathToCSVFile: inputFile)
         }
     }
 }

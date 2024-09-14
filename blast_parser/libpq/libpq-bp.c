@@ -17,7 +17,7 @@
 size_t bufferSize = maxBufferSize;
 
 #pragma mark **** private functions ****
-
+#pragma mark **** connect / disconnect ****
 void PSDBegin(const char* database) {
     PSDConnectToDB(database);
 }
@@ -30,6 +30,7 @@ void PSDEnd(void) {
     PSDCloseConnectionToDB();
 }
 
+#pragma mark **** create / delete db, table ****
 void PSDCreateDB(const char *database) {
     size_t maxLength = bufferSize - 1;
     char command[bufferSize];
@@ -90,9 +91,9 @@ void PSDCreateTable(const char *table,
 
 bool PSDDoesExist(const char *database) {
     const char *fmt = "select exists("
-                          "SELECT datname "
-                          "FROM pg_catalog.pg_database "
-                          "WHERE datname = '%s');";
+                      "SELECT datname "
+                      "FROM pg_catalog.pg_database "
+                      "WHERE datname = '%s');";
     size_t maxLength = bufferSize - 1;
     char command[bufferSize];
     int charNumber = snprintf(command, maxLength, fmt, database);
@@ -101,4 +102,16 @@ bool PSDDoesExist(const char *database) {
     }
     PGresult *result = PSDExecuteWithResult(command);
     return PSDParseBool(result);
+}
+
+#pragma mark **** import to db ****
+void PSDCopyToDB(const char *table, const char* pathToCSVFile) {
+    const char *fmt = "COPY %s FROM '%s' WITH (FORMAT CSV)";
+    size_t maxLength = bufferSize - 1;
+    char command[bufferSize];
+    int charNumber = snprintf(command, maxLength, fmt, table, pathToCSVFile);
+    if (charNumber < 1) {
+        PSDHandleFatalError();
+    }
+    PSDExecute(command);
 }
