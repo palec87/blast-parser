@@ -39,7 +39,7 @@ extension BlastParser {
         @OptionGroup var options: Options
         
         @Option(name: [.short, .customLong("input")],
-                    help: "Path to rankedtaxonomy.dmp file to be imported.")
+                    help: "Path to rankedlineage.dmp file to be imported.")
         var inputFile:String
         
         @Option(name: [.short, .customLong("output")],
@@ -74,11 +74,11 @@ extension BlastParser {
         @OptionGroup var options: Options
         
         @Option(name: [.short, .customLong("input")],
-                    help: "Path to rankedtaxonomy.csv file to be imported.")
+                    help: "Path to rankedlineage.csv file to be imported.")
         var inputFile:String
         
         @Option(name: [.short, .customLong("database")],
-                    help: "Name of the database to which rankedtaxonomy.csv file will be exported. IMPORTANT NOTE: If you choose the name of a preexisting database, the latter will be OVERWRITTEN!")
+                    help: "Name of the database to which rankedlineage.csv file will be exported. IMPORTANT NOTE: If you choose the name of a preexisting database, the latter will be OVERWRITTEN!")
         var database:String
         
         @Option(name: [.short, .customLong("table")],

@@ -16,8 +16,8 @@ final class SQLDatabase {
             species varchar(50),
             genus varchar(50),
             family varchar(50),
-            order varchar(50),
-            class varchar(50),
+            "order" varchar(50),
+            "class" varchar(50),
             phylum varchar(50),
             kingdom varchar(50),
             superkingdom varchar(50)

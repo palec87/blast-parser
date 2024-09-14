@@ -14,6 +14,13 @@
 #pragma mark **** private vars ****
 static PGconn *sConn = NULL;
 
+#pragma mark **** private functions ****
+void PSDConnectToDBPv(const char *conninfo);
+
+const char* PSDGetCurrentDB(void) {
+    if (sConn == NULL) {return NULL;}
+    return PQdb(sConn);
+}
 
 #pragma mark **** Connection to the database ****
 void PSDConnectToMainDB(void) {
@@ -26,17 +33,24 @@ void PSDConnectToDB(const char *database) {
     char conninfo[bufferSize];
     int charNumber = snprintf(conninfo, bufferSize - 1, "dbname = %s", database);
     if (sConn == NULL && charNumber > 9) {
-        /* Make a connection to the database */
-        sConn = PQconnectdb(conninfo);
-
-        /* Check to see that the backend connection was successfully made */
-        if (PQstatus(sConn) != CONNECTION_OK) {
-            fprintf(stderr, "%s", PQerrorMessage(sConn));
-            PSDHandleFatalError();
+        PSDConnectToDBPv(conninfo);
+    } else {
+        if (strcmp(PSDGetCurrentDB(), database) != 0) {
+            PSDCloseConnectionToDB();
+            PSDConnectToDBPv(conninfo);
         }
-        
-        /* Set always-secure search path, so malicious users can't take control. */
-        PSDExecute("SELECT pg_catalog.set_config('search_path', '', false)");
+    }
+}
+
+/// Private method
+void PSDConnectToDBPv(const char *conninfo) {
+    /* Make a connection to the database */
+    sConn = PQconnectdb(conninfo);
+
+    /* Check to see that the backend connection was successfully made */
+    if (PQstatus(sConn) != CONNECTION_OK) {
+        fprintf(stderr, "%s", PQerrorMessage(sConn));
+        PSDHandleFatalError();
     }
 }
 
