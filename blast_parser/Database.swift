@@ -47,6 +47,7 @@ final class Database {
     
     private func parseLine(line:String) -> String {
         var filteredLine = line.replacingOccurrences(of: "\t", with: "")
+        filteredLine = filteredLine.replacingOccurrences(of: ",", with: " ")
         filteredLine = filteredLine.replacingOccurrences(of: "|", with: ",")
         return filteredLine
     }
