@@ -2,3 +2,6 @@ Build
 db
 .DS_Store
 blast_parser.xcodeproj/project.xcworkspace/xcuserdata/jcsvarela.xcuserdatad/UserInterfaceState.xcuserstate
+blast_parser/Products/Debug
+blast_parser/libpq/include.zip
+blast_parser/libpq/lib.zip
