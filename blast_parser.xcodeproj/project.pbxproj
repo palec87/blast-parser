@@ -26,9 +26,9 @@
 		84CCF9C32C82625C00034B4B /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CCF9C22C82625C00034B4B /* Query.swift */; };
 		84CCF9C52C826D4B00034B4B /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CCF9C42C826D4B00034B4B /* Database.swift */; };
 		84CCF9CA2C827EEA00034B4B /* DataStreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */; };
+		84E7FA942C96F68D003AEA9F /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 84E7FA932C96F68D003AEA9F /* ArgumentParser */; };
 		F01403282C956BCB008B63E4 /* libcrypto.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F014E8702C956AD0008B63E4 /* libcrypto.3.dylib */; };
 		F014032A2C956BCB008B63E4 /* libssl.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F014E8732C956AD0008B63E4 /* libssl.3.dylib */; };
-		F03BC7252C9581E1004A22D9 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = F03BC7242C9581E1004A22D9 /* ArgumentParser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -2439,6 +2439,7 @@
 		84CCF9C22C82625C00034B4B /* Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		84CCF9C42C826D4B00034B4B /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStreamReader.swift; sourceTree = "<group>"; };
+		84E7FA922C96F5F0003AEA9F /* swift-argument-parser-main */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "swift-argument-parser-main"; path = "../swift-argument-parser-main"; sourceTree = "<group>"; };
 		F01400002C956AD0008B63E4 /* TLSv1_method.3ssl */ = {isa = PBXFileReference; lastKnownFileType = text; path = TLSv1_method.3ssl; sourceTree = "<group>"; };
 		F01400012C956AD0008B63E4 /* TLSv1_server_method.3ssl */ = {isa = PBXFileReference; lastKnownFileType = text; path = TLSv1_server_method.3ssl; sourceTree = "<group>"; };
 		F01400022C956AD0008B63E4 /* TS_ACCURACY_dup.3ssl */ = {isa = PBXFileReference; lastKnownFileType = text; path = TS_ACCURACY_dup.3ssl; sourceTree = "<group>"; };
@@ -9432,7 +9433,7 @@
 			files = (
 				848FE5522C86B17D003A0C05 /* libpgtypes.3.dylib in Frameworks */,
 				848FE5502C86B17D003A0C05 /* libecpg.6.dylib in Frameworks */,
-				F03BC7252C9581E1004A22D9 /* ArgumentParser in Frameworks */,
+				84E7FA942C96F68D003AEA9F /* ArgumentParser in Frameworks */,
 				848FE54E2C86B17D003A0C05 /* libecpg_compat.3.dylib in Frameworks */,
 				F014032A2C956BCB008B63E4 /* libssl.3.dylib in Frameworks */,
 				F01403282C956BCB008B63E4 /* libcrypto.3.dylib in Frameworks */,
@@ -12368,6 +12369,7 @@
 		848FE54D2C86B17D003A0C05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84E7FA922C96F5F0003AEA9F /* swift-argument-parser-main */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -19650,7 +19652,7 @@
 			);
 			name = blast_parser;
 			packageProductDependencies = (
-				F03BC7242C9581E1004A22D9 /* ArgumentParser */,
+				84E7FA932C96F68D003AEA9F /* ArgumentParser */,
 			);
 			productName = blast_parser;
 			productReference = 8483F1502C4096410075794B /* blast_parser */;
@@ -19927,7 +19929,7 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F03BC7242C9581E1004A22D9 /* ArgumentParser */ = {
+		84E7FA932C96F68D003AEA9F /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ArgumentParser;
 		};
