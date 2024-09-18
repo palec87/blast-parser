@@ -8,6 +8,14 @@
 import Foundation
 
 struct Rank: RawRepresentable {
+    // variants of ranks can be numbered, for instance, D1,
+    // D2 and D3 before or after the main rank, i.e., D
+    enum VariantPosition {
+        case none
+        case before
+        case after
+    }
+    
     static let ranks = ["Unclassified",
                         "Root",
                         "Domain",
@@ -23,8 +31,10 @@ struct Rank: RawRepresentable {
     typealias RawValue = Int
     var rawValue:Int
     var variant:Int = 0
+    var variantPosition = VariantPosition.none
     var abbreviation:String = ""
     var rank:String = ""
+    var name:String = ""
     
     init?(rawValue:Int) {
         self.rawValue = rawValue
@@ -63,11 +73,15 @@ struct Rank: RawRepresentable {
 
 extension Rank: Equatable {
     static func == (lhs:Rank, rhs:Rank) -> Bool {
-        return lhs.rawValue == rhs.rawValue && lhs.variant == rhs.variant
+        return lhs.rawValue == rhs.rawValue &&
+                lhs.variant == rhs.variant &&
+                lhs.variantPosition == rhs.variantPosition
     }
     
     static func != (lhs:Rank, rhs:Rank) -> Bool {
-        return lhs.rawValue != rhs.rawValue || lhs.variant != rhs.variant
+        return lhs.rawValue != rhs.rawValue ||
+                lhs.variant != rhs.variant ||
+                lhs.variantPosition != rhs.variantPosition
     }
 }
 
