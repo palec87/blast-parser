@@ -86,5 +86,26 @@ extension Rank: Equatable {
 }
 
 struct Hierarchy {
+    private var ranks = [Rank]()
     
+    /// init with an Unclassified rank
+    init() {
+        if let rank = Rank(rawValue: 0) {
+            ranks.append(rank)
+        }
+    }
+    
+    func getRanks() -> String {
+        var rankString = String()
+        
+        for rank in ranks {
+            rankString += "\(rank.abbreviation): \(rank.name); "
+        }
+        
+        return rankString
+    }
+    
+    mutating func reset(ranks:[Rank]) {
+        self.ranks = ranks
+    }
 }

@@ -14,7 +14,7 @@ struct ReportLine {
     var ranking:String = ""
     var taxID:Int = 0
     var taxon:String = ""
-    var hierarchy:String = ""
+    var hierarchy = Hierarchy()
     
     init() {}
 }
@@ -23,6 +23,7 @@ class ReportParser {
     let path:String
     let readStream:DataStreamReader
     var lines = [ReportLine]()
+    var bins = [Hierarchy]()
     
     init?(path: String) {
         do {
@@ -55,7 +56,9 @@ class ReportParser {
     }
     
     private func parseRankings() {
-        
+        for line in lines {
+            
+        }
     }
     
     private func sort() {
