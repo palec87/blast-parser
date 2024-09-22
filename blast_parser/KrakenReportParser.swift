@@ -8,13 +8,14 @@
 import Foundation
 
 struct ReportLine {
+    var lineNumber:Int = 0
     var percentage:Float = 0.0
     var reads:Int = 0
     var assignedReads:Int = 0
-    var ranking:String = ""
+    var rank:Rank!
+    var hierarchy:Hierarchy!
     var taxID:Int = 0
-    var taxon:String = ""
-    var hierarchy = Hierarchy()
+    var taxonName:String = ""
     
     init() {}
 }
@@ -23,7 +24,6 @@ class ReportParser {
     let path:String
     let readStream:DataStreamReader
     var lines = [ReportLine]()
-    var bins = [Hierarchy]()
     
     init?(path: String) {
         do {
@@ -38,26 +38,37 @@ class ReportParser {
         }
     }
     
-    func parse() {
+    func parse() throws {
+        var i = 0
         for line in readStream {
             let items = line.components(separatedBy: "\t")
             guard items.count == 6 else { continue }
             var reportLine = ReportLine()
+            reportLine.lineNumber = i
             reportLine.percentage = Float(items[0]) ?? 0.0
             reportLine.reads = Int(items[1]) ?? 0
             reportLine.assignedReads = Int(items[2]) ?? 0
-            reportLine.ranking = items[3]
             reportLine.taxID = Int(items[4]) ?? 0
-            reportLine.taxon = items[5].trimmingCharacters(in: .whitespaces)
+            reportLine.taxonName = items[5].trimmingCharacters(in: .whitespaces)
+            reportLine.rank = try parseRank(line: reportLine, abbreviation: items[3])
+            reportLine.hierarchy = Hierarchy.current
             lines.append(reportLine)
+            i += 1
         }
-        parseRankings()
         sort()
     }
     
-    private func parseRankings() {
-        for line in lines {
-            
+    private func parseRank(line:ReportLine, abbreviation:String) throws -> Rank  {
+        // default rank is "U" or "Unclassified"
+        switch abbreviation {
+        case "U":
+            return Rank.unclassified()
+        case "R":
+            return Rank.root()
+        case "D":
+            return Rank.domain(line: line)
+        default:
+            return try Rank.rank(abbreviation: abbreviation, name: line.taxonName)
         }
     }
     
