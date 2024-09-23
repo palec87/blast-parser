@@ -20,6 +20,10 @@ struct ReportLine {
     init() {}
 }
 
+enum ReportParserError: Error {
+    case invalidRank(line: Int, taxon:String)
+}
+
 class ReportParser {
     let path:String
     let readStream:DataStreamReader
@@ -68,7 +72,15 @@ class ReportParser {
         case "D":
             return Rank.domain(line: line)
         default:
-            return try Rank.rank(abbreviation: abbreviation, name: line.taxonName)
+            do {
+                return try Rank.rank(abbreviation: abbreviation,
+                                     name: line.taxonName)
+            }
+            
+            catch {
+                throw ReportParserError.invalidRank(line: line.lineNumber,
+                                                    taxon: line.taxonName)
+            }
         }
     }
     
