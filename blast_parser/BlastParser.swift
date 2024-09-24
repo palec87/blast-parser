@@ -20,7 +20,7 @@ static let configuration = CommandConfiguration(
             """,
         usage: "blast_parser <subcommand>",
         version: "0.1",
-        subcommands: [Import.self, Export.self],
+        subcommands: [Import.self, Export.self, Parse.self],
         defaultSubcommand: Import.self
     )
 }
@@ -89,6 +89,41 @@ extension BlastParser {
             let database = SQLDatabase(database: database, table: table)
             database.CreateDatabase()
             database.ImportDatabase(pathToCSVFile: inputFile)
+        }
+    }
+    
+    struct Parse: ParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Parses a Kraken2 counts report to determine which sequences should be validated by BLASTN.",
+            aliases: ["prs"]
+        )
+        
+        @OptionGroup var options: Options
+        
+        @Option(name: [.short, .customLong("report")],
+                help: "Path to Kraken2 counts report to be parsed.")
+        var report:String
+        
+        @Option(name: [.short, .customLong("classification")],
+                help: "Path to the Kraken2 taxonomic assignment file.")
+        var classification:String
+        
+        @Option(name: [.short, .customLong("sequences")],
+                help: "Path to the sample sequences file.")
+        var sequences:String
+        
+        @Option(name: [.short, .customLong("output")],
+                help: "Name of the output file. [OPTIONAL]")
+        var outputFile:String?
+        
+        mutating func run() throws {
+            guard let parser = KrakenParser(report: report,
+                                            classification: classification,
+                                            sequences: sequences) else {
+                throw KrakenParserError.invalidFile
+            }
+            
+            try parser.parseReport()
         }
     }
 }
