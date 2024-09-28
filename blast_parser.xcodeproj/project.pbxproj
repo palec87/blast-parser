@@ -9472,15 +9472,10 @@
 			children = (
 				848F00D12C86BA34003A0C05 /* blast_parser.entitlements */,
 				84162EDA2C83756200ED0B5E /* BlastParser.swift */,
-				84CCF9C42C826D4B00034B4B /* Database.swift */,
-				842DD5322C8338540028D7DE /* DataStream.swift */,
-				84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */,
-				842DD5302C8303F80028D7DE /* DataStreamWriter.swift */,
-				8462AC682C84A80400104505 /* SQLDatabase.swift */,
-				8483F15C2C40A1CC0075794B /* KrakenParser.swift */,
-				847E82B72C98F1E700B3C1E0 /* KrakenRank.swift */,
-				848DEF762CA0C653006433BB /* KrakenHierarchy.swift */,
-				84E55E012C9799C300A92C9A /* KrakenReportParser.swift */,
+				8483F15A2C409B860075794B /* Console.swift */,
+				84AF867E2CA8197E00986EB4 /* TaxonomyDB */,
+				84AF867D2CA8195700986EB4 /* KrakenParser */,
+				84AF867C2CA8188000986EB4 /* DataStream */,
 				84CCF9C72C826D9B00034B4B /* Auxiliary */,
 				84CCF9C82C826DD400034B4B /* Unimplemented */,
 			);
@@ -12384,11 +12379,40 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		84AF867C2CA8188000986EB4 /* DataStream */ = {
+			isa = PBXGroup;
+			children = (
+				842DD5322C8338540028D7DE /* DataStream.swift */,
+				84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */,
+				842DD5302C8303F80028D7DE /* DataStreamWriter.swift */,
+			);
+			path = DataStream;
+			sourceTree = "<group>";
+		};
+		84AF867D2CA8195700986EB4 /* KrakenParser */ = {
+			isa = PBXGroup;
+			children = (
+				8483F15C2C40A1CC0075794B /* KrakenParser.swift */,
+				847E82B72C98F1E700B3C1E0 /* KrakenRank.swift */,
+				848DEF762CA0C653006433BB /* KrakenHierarchy.swift */,
+				84E55E012C9799C300A92C9A /* KrakenReportParser.swift */,
+			);
+			path = KrakenParser;
+			sourceTree = "<group>";
+		};
+		84AF867E2CA8197E00986EB4 /* TaxonomyDB */ = {
+			isa = PBXGroup;
+			children = (
+				84CCF9C42C826D4B00034B4B /* Database.swift */,
+				8462AC682C84A80400104505 /* SQLDatabase.swift */,
+			);
+			path = TaxonomyDB;
+			sourceTree = "<group>";
+		};
 		84CCF9C72C826D9B00034B4B /* Auxiliary */ = {
 			isa = PBXGroup;
 			children = (
 				84162ED72C83738A00ED0B5E /* Readme.md */,
-				8483F15A2C409B860075794B /* Console.swift */,
 				8462AC642C84A73D00104505 /* blast_parser-Bridging-Header.h */,
 				848F00C92C86B557003A0C05 /* libpq-bp.h */,
 				848F00C82C86B557003A0C05 /* libpq-bp.c */,
