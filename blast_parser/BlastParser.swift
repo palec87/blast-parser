@@ -67,7 +67,7 @@ extension BlastParser {
     
     struct Export: ParsableCommand {
         static let configuration = CommandConfiguration(
-            abstract: "Exports the imported CSV file into a local PostGresSQL server.",
+            abstract: "Exports the imported CSV file into a local PostGresSQL database.",
             aliases: ["exp"]
         )
         
