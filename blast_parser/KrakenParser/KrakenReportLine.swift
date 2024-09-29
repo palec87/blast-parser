@@ -15,11 +15,13 @@ struct ReportLine {
     var rank:Rank!
     var hierarchy:Hierarchy!
     var taxID:Int = 0
-    var taxonName:String = ""
     
     init() {}
     
     func getLine() -> String {
-        return ""
+        var result = "\(lineNumber)\t\(percentage)\t\(reads)\t\(assignedReads)\t"
+        result += "\(rank.abbreviation)\t\(rank.taxonName)\t"
+        result += "\(hierarchy.getRanks())"
+        return result
     }
 }

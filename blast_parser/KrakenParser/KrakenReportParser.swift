@@ -41,8 +41,11 @@ class ReportParser {
             reportLine.reads = Int(items[1]) ?? 0
             reportLine.assignedReads = Int(items[2]) ?? 0
             reportLine.taxID = Int(items[4]) ?? 0
-            reportLine.taxonName = items[5].trimmingCharacters(in: .whitespaces)
-            reportLine.rank = try parseRank(line: reportLine, abbreviation: items[3])
+            let taxonName = items[5].trimmingCharacters(in: .whitespaces)
+            reportLine.rank = try parseRank(lineNumber:i,
+                                            taxID: reportLine.taxID,
+                                            abbreviation: items[3],
+                                            name: taxonName)
             reportLine.hierarchy = Hierarchy.current
             lines.append(reportLine)
             i += 1
@@ -54,7 +57,10 @@ class ReportParser {
     ///     - line: the line being parsed of the Kraken2 report
     ///     - abbreviation: the abbreviation of the rank (e.g., "U" for "Unclassified")
     /// - Returns: A Rank object describing the taxonomic rank and name
-    private func parseRank(line:ReportLine, abbreviation:String) throws -> Rank  {
+    private func parseRank(lineNumber:Int,
+                           taxID:Int,
+                           abbreviation:String,
+                           name:String) throws -> Rank  {
         // default rank is "U" or "Unclassified"
         switch abbreviation {
         case "U":
@@ -62,16 +68,16 @@ class ReportParser {
         case "R":
             return Rank.root()
         case "D":
-            return Rank.domain(line: line)
+            return Rank.domain(taxID: taxID, name: name)
         default:
             do {
                 return try Rank.rank(abbreviation: abbreviation,
-                                     name: line.taxonName)
+                                     name: name)
             }
             
             catch {
-                throw ReportParserError.invalidRank(line: line.lineNumber,
-                                                    taxon: line.taxonName)
+                throw ReportParserError.invalidRank(line: lineNumber,
+                                                    taxon: name)
             }
         }
     }

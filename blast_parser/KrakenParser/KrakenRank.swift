@@ -114,9 +114,9 @@ struct Rank: RawRepresentable {
     /// domains as mentioned above.
     ///
     /// Known limitation: it does not handle non-celullar entities such as viruses
-    static func domain(line:ReportLine) -> Rank {
+    static func domain(taxID:Int, name:String) -> Rank {
         var rank = Rank(rawValue: 2)!
-        switch line.taxID {
+        switch taxID {
         // handle "true" domains as defined in Rank, assuming that the tax IDs are
         // 2 for "Archaea", 3 for "Bacteria" and 4 for "Eukaryota".
         case 2, 3, 4:
@@ -138,7 +138,7 @@ struct Rank: RawRepresentable {
             }
             rank.variant = count + 1
         }
-        rank.taxonName = line.taxonName
+        rank.taxonName = name
         Hierarchy.current.addRank(rank)
         return rank
     }
