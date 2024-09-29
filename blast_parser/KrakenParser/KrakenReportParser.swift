@@ -42,6 +42,7 @@ class ReportParser {
         }
     }
     
+    /// Main method to parse a Kraken2 report
     func parse() throws {
         var i = 0
         for line in readStream {
@@ -62,6 +63,11 @@ class ReportParser {
         sort()
     }
     
+    /// Parses a line and its abbreviation
+    /// - Parameters:
+    ///     - line: the line being parsed of the Kraken2 report
+    ///     - abbreviation: the abbreviation of the rank (e.g., "U" for "Unclassified")
+    /// - Returns: A Rank object describing the taxonomic rank and name
     private func parseRank(line:ReportLine, abbreviation:String) throws -> Rank  {
         // default rank is "U" or "Unclassified"
         switch abbreviation {
