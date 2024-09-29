@@ -54,7 +54,7 @@ struct Hierarchy {
         var rankString = String()
         
         for rank in ranks {
-            rankString += "\(rank.abbreviation): \(rank.taxonName); "
+            rankString += "\(rank.abbreviation):\(rank.taxonName);"
         }
         
         return rankString
