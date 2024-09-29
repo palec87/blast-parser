@@ -48,7 +48,7 @@ struct Rank: RawRepresentable {
     /// Initializer - use an abbreviation to initialize a Rank object
     ///
     /// Pass one of the values in the `abbreviations` array into rank.
-    /// This initializer also accepts abbrevations containing a number (e.g., D2).
+    /// This initializer also accepts abbreviations containing a number (e.g., D2).
     /// In the latter case, the abbreviation and the number are used to initialize
     /// the `abbreviation` and `variant` instance variables, respectively.
     ///
