@@ -86,7 +86,6 @@ struct Rank: RawRepresentable {
     /// It does not add an "Unclassified" rank to the Hierarchy.current because
     /// it assumes that the first line is always such a rank, which is the
     /// default when a Hierachy object is initialized
-    ///
     static func unclassified() -> Rank {
         var rank = Rank(rawValue: 0)!
         rank.variant = 0

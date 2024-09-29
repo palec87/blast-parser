@@ -124,6 +124,7 @@ extension BlastParser {
             }
             
             try parser.parseReport()
+            try parser.print(to: outputFile)
         }
     }
 }

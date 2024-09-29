@@ -7,19 +7,6 @@
 
 import Foundation
 
-struct ReportLine {
-    var lineNumber:Int = 0
-    var percentage:Float = 0.0
-    var reads:Int = 0
-    var assignedReads:Int = 0
-    var rank:Rank!
-    var hierarchy:Hierarchy!
-    var taxID:Int = 0
-    var taxonName:String = ""
-    
-    init() {}
-}
-
 enum ReportParserError: Error {
     case invalidRank(line: Int, taxon:String)
 }
@@ -60,7 +47,6 @@ class ReportParser {
             lines.append(reportLine)
             i += 1
         }
-        sort()
     }
     
     /// Parses a line and its abbreviation
@@ -88,10 +74,6 @@ class ReportParser {
                                                     taxon: line.taxonName)
             }
         }
-    }
-    
-    private func sort() {
-        
     }
 }
 

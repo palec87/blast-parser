@@ -9,6 +9,7 @@ import Foundation
 
 enum KrakenParserError: Error {
     case invalidFile
+    case invalidOutputFile
     case unknown
 }
 
@@ -16,6 +17,7 @@ class KrakenParser {
     let classification:String
     let sequences:String
     let reportParser:ReportParser
+    var outputURL:URL?
     
     init?(report: String, classification: String, sequences: String) {
         self.classification = classification
@@ -41,6 +43,20 @@ class KrakenParser {
             Console.writeToStdErr("Unknown error while trying to parse Kraken2 counts report.")
             throw KrakenParserError.unknown
         }
+    }
+    
+    func print(to path:String?) throws {
+        if path == nil {
+            let reportURL = URL(fileURLWithPath: reportParser.path, isDirectory: false)
+            let directoryURL = reportURL.deletingLastPathComponent()
+            outputURL = reportURL.appending(component: "kraken2-parsed-output.txt")
+        } else {
+            outputURL = URL(fileURLWithPath: path!, isDirectory: false)
+        }
+        
+        guard let url = outputURL else { throw KrakenParserError.invalidOutputFile }
+        let writer = try DataStreamWriter(url: url)
+        
     }
 }
 
