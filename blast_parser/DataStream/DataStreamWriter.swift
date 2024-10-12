@@ -30,7 +30,7 @@ final class DataStreamWriter : DataStream {
     /// Must be paired with a call to close()
     override init(url:URL, blockSize:Int = 4096) throws {
         let filemanager = FileManager.default
-        // NOTE: this will overwite the previous contents of an existing file
+        // NOTE: this will overwrite the previous contents of an existing file
         guard filemanager.createFile(atPath: url.path, contents: nil)
             else { throw DataStreamWriterError.writeError(url.path) }
         try super.init(url: url, blockSize: blockSize)
