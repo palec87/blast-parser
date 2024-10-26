@@ -21,7 +21,7 @@ extension DataStreamWriterError: LocalizedError {
     }
 }
 
-final class DataStreamWriter : DataStream {
+final class DataStreamWriter: DataStream {
     var lines = [String]()
     var count = 0
     var totalCharacterCount = 0
