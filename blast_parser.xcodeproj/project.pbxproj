@@ -36,8 +36,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		84162ED72C83738A00ED0B5E /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		84162ED72C83738A00ED0B5E /* Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Notes.md; sourceTree = "<group>"; };
 		84162EDA2C83756200ED0B5E /* BlastParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlastParser.swift; sourceTree = "<group>"; };
+		84270DF82CC708010035161A /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		842DD5302C8303F80028D7DE /* DataStreamWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStreamWriter.swift; sourceTree = "<group>"; };
 		842DD5322C8338540028D7DE /* DataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStream.swift; sourceTree = "<group>"; };
 		8462AC642C84A73D00104505 /* blast_parser-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "blast_parser-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -9472,6 +9473,7 @@
 		8483F1522C4096410075794B /* blast_parser */ = {
 			isa = PBXGroup;
 			children = (
+				84270DF82CC708010035161A /* Readme.md */,
 				848F00D12C86BA34003A0C05 /* blast_parser.entitlements */,
 				84162EDA2C83756200ED0B5E /* BlastParser.swift */,
 				8483F15A2C409B860075794B /* Console.swift */,
@@ -12415,7 +12417,7 @@
 		84CCF9C72C826D9B00034B4B /* Auxiliary */ = {
 			isa = PBXGroup;
 			children = (
-				84162ED72C83738A00ED0B5E /* Readme.md */,
+				84162ED72C83738A00ED0B5E /* Notes.md */,
 				8462AC642C84A73D00104505 /* blast_parser-Bridging-Header.h */,
 				848F00C92C86B557003A0C05 /* libpq-bp.h */,
 				848F00C82C86B557003A0C05 /* libpq-bp.c */,
