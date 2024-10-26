@@ -33,6 +33,7 @@ extension BlastParser {
     struct Import: ParsableCommand {
         static let configuration = CommandConfiguration(
             abstract: "Imports an NCBI ranked taxonomy dump file into a CSV file.",
+            usage: "blast_parser import --input <input> [--output <output>]",
             aliases: ["imp"]
         )
         
@@ -68,6 +69,7 @@ extension BlastParser {
     struct Export: ParsableCommand {
         static let configuration = CommandConfiguration(
             abstract: "Exports the imported CSV file into a local PostGresSQL database.",
+            usage: "blast_parser export --input <input> --database <database> [--table <table>]",
             aliases: ["exp"]
         )
         
@@ -95,6 +97,7 @@ extension BlastParser {
     struct Parse: ParsableCommand {
         static let configuration = CommandConfiguration(
             abstract: "Parses a Kraken2 counts report to determine which sequences should be validated by BLASTN.",
+            usage: "blast_parser parse --report <report> --classification <classification> --sequences <sequences> [--output <output>]",
             aliases: ["prs"]
         )
         
