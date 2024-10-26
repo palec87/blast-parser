@@ -31,18 +31,19 @@ class KrakenReportParser {
     
     /// Main method to parse a Kraken2 report
     func parse() throws {
-        var i = 0
+        var i = 1
         for line in readStream {
             let items = line.components(separatedBy: "\t")
             guard items.count == 6 else { continue }
             var reportLine = ReportLine()
             reportLine.lineNumber = i
-            reportLine.percentage = Float(items[0]) ?? 0.0
+            let percentageString = items[0].trimmingCharacters(in: .whitespaces)
+            reportLine.percentage = Float(percentageString) ?? 0.0
             reportLine.reads = Int(items[1]) ?? 0
             reportLine.assignedReads = Int(items[2]) ?? 0
             reportLine.taxID = Int(items[4]) ?? 0
             let taxonName = items[5].trimmingCharacters(in: .whitespaces)
-            reportLine.rank = try parseRank(lineNumber:i,
+            reportLine.rank = try parseRank(lineNumber: i,
                                             taxID: reportLine.taxID,
                                             abbreviation: items[3],
                                             name: taxonName)
