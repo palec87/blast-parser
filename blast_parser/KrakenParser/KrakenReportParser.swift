@@ -11,7 +11,7 @@ enum ReportParserError: Error {
     case invalidRank(line: Int, taxon:String)
 }
 
-class ReportParser {
+class KrakenReportParser {
     let path:String
     let readStream:DataStreamReader
     var lines = [ReportLine]()

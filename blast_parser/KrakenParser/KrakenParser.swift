@@ -16,14 +16,14 @@ enum KrakenParserError: Error {
 class KrakenParser {
     let classification:String
     let sequences:String
-    let reportParser:ReportParser
+    let reportParser:KrakenReportParser
     var outputURL:URL?
     
     init?(report: String, classification: String, sequences: String) {
         self.classification = classification
         self.sequences = sequences
         
-        guard let parser = ReportParser(path: report)
+        guard let parser = KrakenReportParser(path: report)
             else { return nil }
         
         self.reportParser = parser
