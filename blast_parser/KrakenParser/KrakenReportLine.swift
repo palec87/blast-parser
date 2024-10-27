@@ -20,7 +20,7 @@ struct KrakenReportLine {
     
     func getLine() -> String {
         var result = "\(lineNumber)\t\(percentage)\t\(reads)\t\(assignedReads)\t"
-        result += "\(rank.abbreviation)\t\(rank.taxonName)\t"
+        result += "\(rank.abbreviation)\t\(rank.variant)\t\(rank.taxonName)\t"
         result += "\(hierarchy.getRanks())"
         return result
     }

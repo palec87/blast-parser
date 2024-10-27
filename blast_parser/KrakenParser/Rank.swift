@@ -133,7 +133,7 @@ struct Rank: RawRepresentable {
                 }
                 i -= 1
             }
-            rank.variant = count + 1
+            rank.variant = count
         }
         rank.taxonName = name
         return rank
