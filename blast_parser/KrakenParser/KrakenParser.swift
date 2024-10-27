@@ -49,7 +49,7 @@ class KrakenParser {
         if path == nil {
             let reportURL = URL(fileURLWithPath: reportParser.path, isDirectory: false)
             let directoryURL = reportURL.deletingLastPathComponent()
-            outputURL = directoryURL.appending(component: "kraken2-parsed-output.txt")
+            outputURL = directoryURL.appending(component: "kraken2-parsed-output.tsv")
         } else {
             outputURL = URL(fileURLWithPath: path!, isDirectory: false)
         }
