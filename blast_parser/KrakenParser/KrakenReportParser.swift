@@ -87,6 +87,10 @@ class KrakenReportParser {
         }
     }
     
+    /// Parses a line to update the rank Hierarchy object
+    /// - Parameters:
+    ///     - line: the line being parsed of the Kraken2 report
+    ///     - rank: the rank to be added to the Hierarchy object
     private func parseHierarchy(lineNumber:Int,
                                 rank:Rank) throws {
         switch rank.abbreviation {
