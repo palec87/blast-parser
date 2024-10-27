@@ -7,30 +7,6 @@
 
 import Foundation
 
-struct KrakenASVBinArray {
-    private var bins = [KrakenASVBin]()
-    
-    func append(asv:KrakenASV) {
-        if var bin = match(asv: asv) {
-            bin.append(asv: asv)
-        } else {
-            let isClassified = asv.taxonomy.taxID != 0
-            var bin = KrakenASVBin(isClassified: isClassified,
-                                   taxonomy: asv.taxonomy)
-            bin.append(asv: asv)
-        }
-    }
-    
-    private func match(asv:KrakenASV) -> KrakenASVBin? {
-        for bin in bins {
-            if asv.taxonomy == bin.taxonomy {
-                return bin
-            }
-        }
-        return nil
-    }
-}
-
 enum KrakenASVError: Error {
     case invalidTaxonomy
 }
@@ -53,7 +29,7 @@ class KrakenASVParser {
         }
     }
     
-    func parse() -> Bool {
+    func parse() {
         var i = 1
         for line in readStream {
             do {
@@ -73,7 +49,10 @@ class KrakenASVParser {
             }
             i += 1
         }
-        return true
+    }
+    
+    func print(sequencesPerBin:Int = 10) {
+        
     }
 }
 
