@@ -8,8 +8,6 @@
 import Foundation
 
 struct Hierarchy {
-    static var current = Hierarchy()
-    
     private var ranks = [Rank]()
     
     var firstRank:Rank? {
@@ -60,7 +58,7 @@ struct Hierarchy {
         return rankString
     }
     
-    mutating func reset(ranks:[Rank]) {
-        self.ranks = ranks
+    mutating func reset() {
+        self.ranks = [Rank]()
     }
 }

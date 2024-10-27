@@ -9452,6 +9452,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8463FE0F2CCE5CEC000208EF /* Auxiliary */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Auxiliary;
+			sourceTree = "<group>";
+		};
 		8483F1472C4096410075794B = {
 			isa = PBXGroup;
 			children = (
@@ -9479,7 +9486,8 @@
 				84AF867E2CA8197E00986EB4 /* TaxonomyDB */,
 				84AF867D2CA8195700986EB4 /* KrakenParser */,
 				84AF867C2CA8188000986EB4 /* DataStream */,
-				84CCF9C72C826D9B00034B4B /* Auxiliary */,
+				84CCF9C72C826D9B00034B4B /* PostGresSQL */,
+				8463FE0F2CCE5CEC000208EF /* Auxiliary */,
 				84CCF9C82C826DD400034B4B /* Unimplemented */,
 			);
 			path = blast_parser;
@@ -12412,7 +12420,7 @@
 			path = TaxonomyDB;
 			sourceTree = "<group>";
 		};
-		84CCF9C72C826D9B00034B4B /* Auxiliary */ = {
+		84CCF9C72C826D9B00034B4B /* PostGresSQL */ = {
 			isa = PBXGroup;
 			children = (
 				84162ED72C83738A00ED0B5E /* Notes.md */,
@@ -12428,7 +12436,7 @@
 				848FE54C2C86B0D7003A0C05 /* libpq */,
 				848F00C42C86B210003A0C05 /* openssl@3 */,
 			);
-			name = Auxiliary;
+			name = PostGresSQL;
 			sourceTree = "<group>";
 		};
 		84CCF9C82C826DD400034B4B /* Unimplemented */ = {

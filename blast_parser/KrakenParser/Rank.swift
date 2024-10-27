@@ -27,7 +27,7 @@ struct Rank: RawRepresentable {
     
     typealias RawValue = Int
     var rawValue:Int
-    var variant:Int?
+    var variant = 0
     var abbreviation:String = ""
     var rank:String = ""
     var taxonName:String = ""
@@ -88,7 +88,6 @@ struct Rank: RawRepresentable {
     /// default when a Hierachy object is initialized
     static func unclassified() -> Rank {
         var rank = Rank(rawValue: 0)!
-        rank.variant = 0
         rank.taxonName = rank.rank
         return rank
     }
@@ -96,9 +95,7 @@ struct Rank: RawRepresentable {
     /// Returns a root Rank object
     static func root() -> Rank {
         var rank = Rank(rawValue: 1)!
-        rank.variant = 0
         rank.taxonName = rank.rank
-        Hierarchy.current.addRank(rank)
         return rank
     }
     
@@ -114,20 +111,20 @@ struct Rank: RawRepresentable {
     /// domains as mentioned above.
     ///
     /// Known limitation: it does not handle non-celullar entities such as viruses
-    static func domain(taxID:Int, name:String) -> Rank {
+    static func domain(taxID:Int, name:String, hierarchy:Hierarchy) -> Rank {
         var rank = Rank(rawValue: 2)!
         switch taxID {
         // handle "true" domains as defined in Rank, assuming that the tax IDs are
         // 2 for "Archaea", 3 for "Bacteria" and 4 for "Eukaryota".
         case 2, 3, 4:
-            rank.variant = 0
         // handle cases where Kraken2 classifies a taxon as "D"
         // without being a "true" domain adding a variant
+            break
         default:
-            var i = Hierarchy.current.lastRankIndex
+            var i = hierarchy.lastRankIndex
             var count = 0
             while i >= 0 {
-                if let currentRank = Hierarchy.current.getRank(index: i) {
+                if let currentRank = hierarchy.getRank(index: i) {
                     if currentRank.rawValue == rank.rawValue {
                         count += 1
                     } else {
@@ -139,26 +136,13 @@ struct Rank: RawRepresentable {
             rank.variant = count + 1
         }
         rank.taxonName = name
-        Hierarchy.current.addRank(rank)
         return rank
     }
     
-    static func rank(abbreviation:String, name:String) throws -> Rank {
+    static func rank(abbreviation:String,
+                     name:String) throws -> Rank {
         guard var rank = Rank(rankCodeString: abbreviation)
             else { throw RankError.invalid }
-        guard let lastRank = Hierarchy.current.lastRank
-            else { throw RankError.invalidHierarchy }
-        
-        if rank < lastRank {
-            Hierarchy.current.addRank(rank)
-        } else if rank == lastRank {
-            Hierarchy.current.dropLastRank()
-            Hierarchy.current.addRank(rank)
-        } else {
-            Hierarchy.current.equalizeWithParent(of: rank)
-            Hierarchy.current.addRank(rank)
-        }
-        
         rank.taxonName = name
         return rank
     }
@@ -180,8 +164,8 @@ extension Rank: Comparable {
     static func < (lhs:Rank, rhs:Rank) -> Bool {
         if lhs.rawValue > rhs.rawValue {
             return true
-        } else if let left = lhs.variant, let right = rhs.variant {
-            return left > right
+        } else if lhs.variant > rhs.variant {
+            return true
         }
         return false
     }
@@ -189,8 +173,8 @@ extension Rank: Comparable {
     static func > (lhs:Rank, rhs:Rank) -> Bool {
         if lhs.rawValue < rhs.rawValue {
             return true
-        } else if let left = lhs.variant, let right = rhs.variant  {
-            return left < right
+        } else if lhs.variant < rhs.variant  {
+            return true
         }
         return false
     }
