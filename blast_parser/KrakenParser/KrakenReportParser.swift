@@ -101,16 +101,14 @@ class KrakenReportParser {
                                                     taxon: rank.taxonName)
             }
             
-            if rank.variant == 0 {
-                if previous > rank {
-                    hierarchy.addRank(rank)
-                } else if previous == rank {
-                    hierarchy.dropLastRank()
-                    hierarchy.addRank(rank)
-                } else {
-                    hierarchy.equalizeWithParent(of: rank)
-                    hierarchy.addRank(rank)
-                }
+            if previous > rank {
+                hierarchy.addRank(rank)
+            } else if previous == rank {
+                hierarchy.dropLastRank()
+                hierarchy.addRank(rank)
+            } else {
+                hierarchy.equalizeWithParent(of: rank)
+                hierarchy.addRank(rank)
             }
         }
     }

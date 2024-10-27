@@ -164,8 +164,8 @@ extension Rank: Comparable {
     static func < (lhs:Rank, rhs:Rank) -> Bool {
         if lhs.rawValue > rhs.rawValue {
             return true
-        } else if lhs.variant > rhs.variant {
-            return true
+        } else if lhs.rawValue == rhs.rawValue {
+            return lhs.variant > rhs.variant
         }
         return false
     }
@@ -173,8 +173,8 @@ extension Rank: Comparable {
     static func > (lhs:Rank, rhs:Rank) -> Bool {
         if lhs.rawValue < rhs.rawValue {
             return true
-        } else if lhs.variant < rhs.variant  {
-            return true
+        } else if lhs.rawValue == rhs.rawValue {
+            return lhs.variant < rhs.variant
         }
         return false
     }

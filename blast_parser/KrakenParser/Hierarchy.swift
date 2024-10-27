@@ -52,7 +52,9 @@ struct Hierarchy {
         var rankString = String()
         
         for rank in ranks {
-            rankString += "\(rank.abbreviation):\(rank.taxonName);"
+            if rank.variant == 0 {
+                rankString += "\(rank.abbreviation):\(rank.taxonName);"
+            }
         }
         
         return rankString
