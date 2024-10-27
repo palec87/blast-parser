@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ReportLine {
+struct KrakenReportLine {
     var lineNumber = 0
     var percentage = 0.0
     var reads = 0

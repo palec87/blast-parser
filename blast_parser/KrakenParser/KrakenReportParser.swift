@@ -14,7 +14,7 @@ enum ReportParserError: Error {
 class KrakenReportParser {
     let path:String
     let readStream:DataStreamReader
-    var lines = [ReportLine]()
+    var lines = [KrakenReportLine]()
     var hierarchy = Hierarchy()
     
     init?(path: String) {
@@ -36,7 +36,7 @@ class KrakenReportParser {
         for line in readStream {
             let items = line.components(separatedBy: "\t")
             guard items.count == 6 else { continue }
-            var reportLine = ReportLine()
+            var reportLine = KrakenReportLine()
             reportLine.lineNumber = i
             let percentageString = items[0].trimmingCharacters(in: .whitespaces)
             reportLine.percentage = Double(percentageString) ?? 0.0
