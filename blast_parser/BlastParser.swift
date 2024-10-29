@@ -127,7 +127,9 @@ extension BlastParser {
             }
             
             try parser.parseReport()
-            try parser.print(to: outputFile)
+            try parser.printReport(to: outputFile)
+            parser.parseASVs()
+            try parser.printParsedClassification()
         }
     }
 }

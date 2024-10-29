@@ -11,6 +11,10 @@ struct KrakenASV {
     let sequenceID:String
     let sequenceSize:Int
     let taxonomy:KrakenASVTaxonomy
+    
+    var description:String {
+        return "\(sequenceID)\t\(sequenceSize)\t\(taxonomy.taxID)\t\(taxonomy.taxon)"
+    }
 }
 
 extension KrakenASV: Equatable {
@@ -26,5 +30,15 @@ extension KrakenASV: Equatable {
             return true
         }
         return lhs.sequenceID != rhs.sequenceID
+    }
+}
+
+extension KrakenASV: Comparable {
+    static func > (lhs:KrakenASV, rhs:KrakenASV) -> Bool {
+        return lhs.sequenceSize > rhs.sequenceSize
+    }
+    
+    static func < (lhs:KrakenASV, rhs:KrakenASV) -> Bool {
+        return lhs.sequenceSize < rhs.sequenceSize
     }
 }

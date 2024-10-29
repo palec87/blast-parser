@@ -50,9 +50,5 @@ class KrakenASVParser {
             i += 1
         }
     }
-    
-    func print(sequencesPerBin:Int = 10) {
-        
-    }
 }
 

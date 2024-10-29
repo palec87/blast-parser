@@ -10,10 +10,6 @@ import Foundation
 struct KrakenASVBinArray {
     private var bins = [KrakenASVBin]()
     
-    var count:Int {
-        return bins.count
-    }
-    
     func append(asv:KrakenASV) {
         if var bin = match(asv: asv) {
             bin.append(asv: asv)
@@ -23,6 +19,14 @@ struct KrakenASVBinArray {
                                    taxonomy: asv.taxonomy)
             bin.append(asv: asv)
         }
+    }
+    
+    func getASVs(sequencesPerBin:Int = 10) -> [KrakenASV] {
+        var result = [KrakenASV]()
+        for var bin in bins {
+            result += bin.asvs(sequencesToReturn: sequencesPerBin)
+        }
+        return result
     }
     
     private func match(asv:KrakenASV) -> KrakenASVBin? {
