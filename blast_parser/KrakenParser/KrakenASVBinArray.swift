@@ -10,20 +10,21 @@ import Foundation
 struct KrakenASVBinArray {
     private var bins = [KrakenASVBin]()
     
-    func append(asv:KrakenASV) {
-        if var bin = match(asv: asv) {
+    mutating func append(asv:KrakenASV) {
+        if let bin = match(asv: asv) {
             bin.append(asv: asv)
         } else {
             let isClassified = asv.taxonomy.taxID != 0
-            var bin = KrakenASVBin(isClassified: isClassified,
+            let bin = KrakenASVBin(isClassified: isClassified,
                                    taxonomy: asv.taxonomy)
             bin.append(asv: asv)
+            bins.append(bin)
         }
     }
     
     func getASVs(sequencesPerBin:Int = 10) -> [KrakenASV] {
         var result = [KrakenASV]()
-        for var bin in bins {
+        for bin in bins {
             result += bin.asvs(sequencesToReturn: sequencesPerBin)
         }
         return result

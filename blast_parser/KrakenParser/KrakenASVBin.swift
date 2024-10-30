@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct KrakenASVBin {
+class KrakenASVBin {
     let isClassified:Bool
     let taxonomy:KrakenASVTaxonomy
     private var asvs = [KrakenASV]()
@@ -25,11 +25,11 @@ struct KrakenASVBin {
         }
     }
     
-    mutating func append(asv:KrakenASV) {
+    func append(asv:KrakenASV) {
         asvs.append(asv)
     }
     
-    mutating func asvs(sequencesToReturn:Int = 10) -> [KrakenASV] {
+    func asvs(sequencesToReturn:Int = 10) -> [KrakenASV] {
         // sort asvs by descending sequence size
         asvs.sort(by: >)
         // return the first sequencesToReturn
