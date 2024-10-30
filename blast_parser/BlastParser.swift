@@ -97,7 +97,7 @@ extension BlastParser {
     struct Parse: ParsableCommand {
         static let configuration = CommandConfiguration(
             abstract: "Parses a Kraken2 counts report to determine which sequences should be validated by BLASTN.",
-            usage: "blast_parser parse --report <report> --classification <classification> --sequences <sequences> [--output <output>]",
+            usage: "blast_parser parse --report <report> --classification <classification> --sequences <sequences> [--output <output>] [--max-sequences-per-bin <max-sequences-per-bin>]",
             aliases: ["prs"]
         )
         
@@ -119,11 +119,19 @@ extension BlastParser {
                 help: "Name of the output file. [OPTIONAL]")
         var outputFile:String?
         
+        @Option(name: [.short, .customLong("max-sequences-per-bin")],
+                help: "Maximum number of sequences per bin. [OPTIONAL, default = 10]")
+        var maxSequencesPerBin:Int?
+        
         mutating func run() throws {
             guard let parser = KrakenParser(report: report,
                                             classification: classification,
                                             sequences: sequences) else {
                 throw KrakenParserError.invalidFile
+            }
+            
+            if let sequencesPerBin = maxSequencesPerBin {
+                parser.sequencesPerBin = sequencesPerBin
             }
             
             try parser.parseReport()

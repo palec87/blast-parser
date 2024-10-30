@@ -20,7 +20,7 @@ class KrakenParser {
     let asvParser:KrakenASVParser
     let defaultReportFilename = "kraken2-parsed-output.tsv"
     let defaultClassificationFilename = "kraken2-parsed-classification.tsv"
-    let sequencesPerBin = 10
+    var sequencesPerBin = 10
     var outputURL:URL?
     
     init?(report: String, classification: String, sequences: String) {

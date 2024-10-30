@@ -18,6 +18,8 @@ cd "$sequences_dir"
   -r "$report_f" \
   -c "$classification_f" \
   -s "$sequences_f" \
-  -o "$output_f"
+  -o "$output_f" \
+  -m 20
+
 
 
