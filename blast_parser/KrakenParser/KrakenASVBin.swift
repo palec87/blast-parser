@@ -11,9 +11,20 @@ class KrakenASVBin {
     let isClassified:Bool
     let taxonomy:KrakenASVTaxonomy
     private var asvs = [KrakenASV]()
+    private var _readCount = 0
     
-    var count:Int {
-        return asvs.count
+    var readCount:Int {
+        get {
+            return _readCount
+        }
+        
+        set {
+            guard _readCount == 0 else { return }
+            _readCount = newValue
+            for var asv in asvs {
+                asv.readCount = newValue
+            }
+        }
     }
     
     init(isClassified: Bool, taxonomy:KrakenASVTaxonomy) {
@@ -44,6 +55,16 @@ extension KrakenASVBin: Equatable {
     
     static func != (lhs:KrakenASVBin, rhs:KrakenASVBin) -> Bool {
         return lhs.taxonomy != rhs.taxonomy
+    }
+}
+
+extension KrakenASVBin: Comparable {
+    static func > (lhs:KrakenASVBin, rhs:KrakenASVBin) -> Bool {
+        return lhs.readCount > rhs.readCount
+    }
+    
+    static func < (lhs:KrakenASVBin, rhs:KrakenASVBin) -> Bool {
+        return lhs.readCount < rhs.readCount
     }
 }
 

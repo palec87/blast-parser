@@ -50,5 +50,17 @@ class KrakenASVParser {
             i += 1
         }
     }
+    
+    func parseReadCounts(reportParser:KrakenReportParser) {
+        for line in reportParser.lines {
+            if let bin = binArray.match(taxID: line.taxID) {
+                bin.readCount = line.assignedReads
+            }
+        }
+    }
+    
+    func sort() {
+        binArray.sort()
+    }
 }
 

@@ -25,3 +25,23 @@ struct KrakenReportLine {
         return result
     }
 }
+
+extension KrakenReportLine: Equatable {
+    static func == (lhs:KrakenReportLine, rhs:KrakenReportLine) -> Bool {
+        return lhs.assignedReads == rhs.assignedReads
+    }
+    
+    static func != (lhs:KrakenReportLine, rhs:KrakenReportLine) -> Bool {
+        return lhs.assignedReads != rhs.assignedReads
+    }
+}
+
+extension KrakenReportLine: Comparable {
+    static func > (lhs:KrakenReportLine, rhs:KrakenReportLine) -> Bool {
+        return lhs.assignedReads > rhs.assignedReads
+    }
+    
+    static func < (lhs:KrakenReportLine, rhs:KrakenReportLine) -> Bool {
+        return lhs.assignedReads < rhs.assignedReads
+    }
+}

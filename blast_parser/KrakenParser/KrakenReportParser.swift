@@ -55,6 +55,11 @@ class KrakenReportParser {
         }
     }
     
+    /// Sort the taxa by decreasing assigned counts
+    func sort() {
+        lines.sort(by: >)
+    }
+    
     /// Parses a line and its abbreviation
     /// - Parameters:
     ///     - line: the line being parsed of the Kraken2 report
