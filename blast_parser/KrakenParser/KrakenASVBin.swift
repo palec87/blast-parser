@@ -32,10 +32,18 @@ class KrakenASVBin {
     func asvs(sequencesToReturn:Int = 10) -> [KrakenASV] {
         // sort asvs by descending sequence size
         asvs.sort(by: >)
-        // return the first sequencesToReturn
-        var result = Array(asvs.prefix(sequencesToReturn))
-        let count = asvs.count
+        
+        // return the first sequencesToReturn but remove duplicates
+        var result = [KrakenASV]()
+        for asv in asvs {
+            if result.contains(asv) == false {
+                result.append(asv)
+                guard result.count < sequencesToReturn else { break }
+            }
+        }
+        
         // hack to mutate a struct by using indices
+        let count = asvs.count
         for index in result.indices {
             result[index].readCount = count
         }
