@@ -34,15 +34,6 @@ struct KrakenASVBinArray {
         bins.sort(by: >)
     }
     
-    func match(taxID:Int) -> KrakenASVBin? {
-        for bin in bins {
-            if bin.taxonomy.taxID == taxID {
-                return bin
-            }
-        }
-        return nil
-    }
-    
     private func match(asv:KrakenASV) -> KrakenASVBin? {
         for bin in bins {
             if asv.taxonomy == bin.taxonomy {

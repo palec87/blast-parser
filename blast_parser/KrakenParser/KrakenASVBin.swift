@@ -11,20 +11,9 @@ class KrakenASVBin {
     let isClassified:Bool
     let taxonomy:KrakenASVTaxonomy
     private var asvs = [KrakenASV]()
-    private var _readCount = 0
     
     var readCount:Int {
-        get {
-            return _readCount
-        }
-        
-        set {
-            guard _readCount == 0 else { return }
-            _readCount = newValue
-            for var asv in asvs {
-                asv.readCount = newValue
-            }
-        }
+        return asvs.count
     }
     
     init(isClassified: Bool, taxonomy:KrakenASVTaxonomy) {
@@ -44,7 +33,13 @@ class KrakenASVBin {
         // sort asvs by descending sequence size
         asvs.sort(by: >)
         // return the first sequencesToReturn
-        return Array(asvs.prefix(sequencesToReturn))
+        var result = Array(asvs.prefix(sequencesToReturn))
+        let count = asvs.count
+        // hack to mutate a struct by using indices
+        for index in result.indices {
+            result[index].readCount = count
+        }
+        return result
     }
 }
 

@@ -56,8 +56,6 @@ class KrakenParser {
     func parseASVs() {
         reportParser.sort()
         asvParser.parse()
-        asvParser.parseReadCounts(reportParser: reportParser)
-        asvParser.sort()
     }
     
     func printReport(to path:String? = nil) throws {
