@@ -10,6 +10,7 @@ import Foundation
 enum KrakenParserError: Error {
     case invalidFile
     case invalidOutputFile
+    case invalidASVs
     case unknown
 }
 
@@ -24,6 +25,7 @@ class KrakenParser {
     let defaultSequenceFilename = "kraken2-parsed-sequences.fasta"
     var sequencesPerBin = 10
     var outputURL:URL?
+    var asvs:[KrakenASV]?
     
     init?(report: String, classification: String, sequences: String) {
         self.classification = classification
@@ -62,25 +64,16 @@ class KrakenParser {
     func parseASVs() {
         reportParser.sort()
         asvParser.parse()
-        sequenceParser.asvs = asvParser.binArray.getASVs(sequencesPerBin: sequencesPerBin)
+        asvs = asvParser.binArray.getASVs(sequencesPerBin: sequencesPerBin)
     }
     
-    func parseSequences() {
-        sequenceParser.parse()
+    func parseSequences() throws {
+        guard let asvs = self.asvs else { throw KrakenParserError.invalidASVs }
+        sequenceParser.parse(asvs: asvs)
     }
     
     func printReport(to path:String? = nil) throws {
-        if path == nil {
-            let reportURL = URL(fileURLWithPath: reportParser.path,
-                                isDirectory: false)
-            let directoryURL = reportURL.deletingLastPathComponent()
-            outputURL = directoryURL.appending(component: defaultReportFilename)
-        } else {
-            outputURL = URL(fileURLWithPath: path!, isDirectory: false)
-        }
-        
-        guard let url = outputURL else { throw KrakenParserError.invalidOutputFile }
-        let writer = try DataStreamWriter(url: url)
+        let writer = try getWriter(to:path, filename: defaultReportFilename)
         
         for line in reportParser.lines {
             writer.write(line: line.getLine())
@@ -88,40 +81,34 @@ class KrakenParser {
     }
     
     func printParsedClassification(to path:String? = nil) throws {
-        if path == nil {
-            let reportURL = URL(fileURLWithPath: reportParser.path,
-                                isDirectory: false)
-            let directoryURL = reportURL.deletingLastPathComponent()
-            outputURL = directoryURL.appending(component: defaultClassificationFilename)
-        } else {
-            outputURL = URL(fileURLWithPath: path!, isDirectory: false)
-        }
-        
-        guard let url = outputURL else { throw KrakenParserError.invalidOutputFile }
-        let writer = try DataStreamWriter(url: url)
-        
-        for asv in sequenceParser.asvs {
+        let writer = try getWriter(to:path, filename: defaultClassificationFilename)
+        guard let asvs = self.asvs else { throw KrakenParserError.invalidASVs }
+        for asv in asvs {
             writer.write(line: asv.description)
         }
     }
     
     func printParsedSequences(to path:String? = nil) throws {
-        if path == nil {
-            let reportURL = URL(fileURLWithPath: reportParser.path,
-                                isDirectory: false)
-            let directoryURL = reportURL.deletingLastPathComponent()
-            outputURL = directoryURL.appending(component: defaultSequenceFilename)
-        } else {
-            outputURL = URL(fileURLWithPath: path!, isDirectory: false)
-        }
-        
-        guard let url = outputURL else { throw KrakenParserError.invalidOutputFile }
-        let writer = try DataStreamWriter(url: url)
+        let writer = try getWriter(to:path, filename: defaultSequenceFilename)
         
         for sequence in sequenceParser.sequences {
             writer.write(line: ">" + sequence.sequenceID)
             writer.write(line: sequence.sequence)
         }
+    }
+    
+    private func getWriter(to path:String?, filename:String) throws -> DataStreamWriter {
+        if path == nil {
+            let reportURL = URL(fileURLWithPath: reportParser.path,
+                                isDirectory: false)
+            let directoryURL = reportURL.deletingLastPathComponent()
+            outputURL = directoryURL.appending(component: filename)
+        } else {
+            outputURL = URL(fileURLWithPath: path!, isDirectory: false)
+        }
+        
+        guard let url = outputURL else { throw KrakenParserError.invalidOutputFile }
+        return try DataStreamWriter(url: url)
     }
 }
 

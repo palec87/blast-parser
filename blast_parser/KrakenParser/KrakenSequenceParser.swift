@@ -7,15 +7,19 @@
 
 import Foundation
 
-struct KrakenSequence {
+class KrakenSequence {
     let sequenceID:String
-    let sequence:String
+    var sequence:String
+    
+    init(sequenceID: String, sequence: String = String()) {
+        self.sequenceID = sequenceID
+        self.sequence = sequence
+    }
 }
 
 class KrakenSequenceParser {
     let path:String
     let readStream:DataStreamReader
-    var asvs:[KrakenASV]!
     var sequences = [KrakenSequence]()
     
     init?(path:String) {
@@ -31,36 +35,39 @@ class KrakenSequenceParser {
         }
     }
     
-    func parse() {
+    func parse(asvs:[KrakenASV]) {
+        getSequenceIDs(asvs: asvs)
         var sequenceID = String()
-        var sequence = String()
         for line in readStream {
             if line.firstIndex(of: ">") != nil {
                 sequenceID = line.replacingOccurrences(of: ">", with: "")
                 sequenceID = sequenceID.trimmingCharacters(in: .whitespacesAndNewlines)
             } else {
-                guard match(sequenceID: sequenceID) else { continue }
-                sequence = line.trimmingCharacters(in: .newlines)
-                let sequenceObj = KrakenSequence(sequenceID: sequenceID,
-                                                 sequence: sequence)
-                sequences.append(sequenceObj)
-                guard asvs.count > 0 else { break }
+                if let sequenceObj = match(sequenceID: sequenceID) {
+                    sequenceObj.sequence = line.trimmingCharacters(in: .newlines)
+                    sequences.append(sequenceObj)
+                }
             }
         }
     }
     
-    private func match(sequenceID:String) -> Bool {
-        var found = false
+    /// Method needed to preserve the order of the ASVs
+    private func getSequenceIDs(asvs:[KrakenASV]) {
         for asv in asvs {
-            if asv.sequenceID == sequenceID {
-                found = true; break
+            sequences.append(KrakenSequence(sequenceID: asv.sequenceID))
+        }
+    }
+    
+    private func match(sequenceID:String) -> KrakenSequence? {
+        for sequence in sequences {
+            if sequence.sequenceID == sequenceID {
+                if sequence.sequence.isEmpty {
+                    return sequence
+                } else {
+                    return nil
+                }
             }
         }
-        
-        // prevent the addition of duplicates, making also the search faster
-        if found {
-            asvs.removeAll(where: {$0.sequenceID == sequenceID})
-        }
-        return found
+        return nil
     }
 }
