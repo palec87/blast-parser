@@ -18,8 +18,10 @@ class KrakenParser {
     let sequences:String
     let reportParser:KrakenReportParser
     let asvParser:KrakenASVParser
+    let sequenceParser:KrakenSequenceParser
     let defaultReportFilename = "kraken2-parsed-output.tsv"
     let defaultClassificationFilename = "kraken2-parsed-classification.tsv"
+    let defaultSequenceFilename = "kraken2-parsed-sequences.fasta"
     var sequencesPerBin = 10
     var outputURL:URL?
     
@@ -33,8 +35,12 @@ class KrakenParser {
         guard let asvParser = KrakenASVParser(path: classification)
             else { return nil }
         
+        guard let sequenceParser = KrakenSequenceParser(path: sequences)
+            else { return nil }
+        
         self.reportParser = reportParser
         self.asvParser = asvParser
+        self.sequenceParser = sequenceParser
     }
     
     func parseReport() throws {
@@ -56,6 +62,11 @@ class KrakenParser {
     func parseASVs() {
         reportParser.sort()
         asvParser.parse()
+        sequenceParser.asvs = asvParser.binArray.getASVs(sequencesPerBin: sequencesPerBin)
+    }
+    
+    func parseSequences() {
+        sequenceParser.parse()
     }
     
     func printReport(to path:String? = nil) throws {
@@ -78,9 +89,9 @@ class KrakenParser {
     
     func printParsedClassification(to path:String? = nil) throws {
         if path == nil {
-            let classificationURL = URL(fileURLWithPath: reportParser.path,
-                                        isDirectory: false)
-            let directoryURL = classificationURL.deletingLastPathComponent()
+            let reportURL = URL(fileURLWithPath: reportParser.path,
+                                isDirectory: false)
+            let directoryURL = reportURL.deletingLastPathComponent()
             outputURL = directoryURL.appending(component: defaultClassificationFilename)
         } else {
             outputURL = URL(fileURLWithPath: path!, isDirectory: false)
@@ -89,8 +100,27 @@ class KrakenParser {
         guard let url = outputURL else { throw KrakenParserError.invalidOutputFile }
         let writer = try DataStreamWriter(url: url)
         
-        for asv in asvParser.binArray.getASVs(sequencesPerBin: sequencesPerBin) {
+        for asv in sequenceParser.asvs {
             writer.write(line: asv.description)
+        }
+    }
+    
+    func printParsedSequences(to path:String? = nil) throws {
+        if path == nil {
+            let reportURL = URL(fileURLWithPath: reportParser.path,
+                                isDirectory: false)
+            let directoryURL = reportURL.deletingLastPathComponent()
+            outputURL = directoryURL.appending(component: defaultSequenceFilename)
+        } else {
+            outputURL = URL(fileURLWithPath: path!, isDirectory: false)
+        }
+        
+        guard let url = outputURL else { throw KrakenParserError.invalidOutputFile }
+        let writer = try DataStreamWriter(url: url)
+        
+        for sequence in sequenceParser.sequences {
+            writer.write(line: ">" + sequence.sequenceID)
+            writer.write(line: sequence.sequence)
         }
     }
 }

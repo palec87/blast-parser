@@ -138,6 +138,8 @@ extension BlastParser {
             try parser.printReport(to: outputFile)
             parser.parseASVs()
             try parser.printParsedClassification()
+            parser.parseSequences()
+            try parser.printParsedSequences()
         }
     }
 }
