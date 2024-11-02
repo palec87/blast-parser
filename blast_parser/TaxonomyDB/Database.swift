@@ -39,9 +39,7 @@ final class Database {
         for line in readStream {
             writeStream.write(line: parseLine(line: line))
         }
-        
-        readStream.close()
-        writeStream.close()
+
         Console.writeToStdOut("\nWritten all lines successfully. Bye!")
     }
     

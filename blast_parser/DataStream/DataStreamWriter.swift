@@ -37,6 +37,12 @@ final class DataStreamWriter: DataStream {
         filehandle = try FileHandle(forWritingTo: url)
     }
     
+    deinit {
+        if lines.isEmpty == false {
+            writeToFile()
+        }
+    }
+    
     func write(line:String) {
         let terminatedLine = line + "\n"
         count += terminatedLine.count
@@ -54,8 +60,12 @@ final class DataStreamWriter: DataStream {
             stringToWrite += line
             numberOfLines += 1
         }
-        stringToWrite += terminatedLine
-        numberOfLines += 1
+        
+        if stringToWrite.isEmpty == false {
+            stringToWrite += terminatedLine
+            numberOfLines += 1
+        }
+        
         filehandle.write(stringToWrite)
         totalCharacterCount += count;
         count = 0

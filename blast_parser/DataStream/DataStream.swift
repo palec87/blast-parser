@@ -17,6 +17,10 @@ class DataStream {
         self.bufferSize = blockSize
     }
     
+    deinit {
+        close()
+    }
+    
     func close() {
         do {
             try filehandle?.close()
