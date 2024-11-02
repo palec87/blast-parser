@@ -38,6 +38,8 @@ class KrakenSequenceParser {
     func parse(asvs:[KrakenASV]) {
         getSequenceIDs(asvs: asvs)
         var sequenceID = String()
+        let count = sequences.count
+        var sequenceCount = 0
         for line in readStream {
             if line.firstIndex(of: ">") != nil {
                 sequenceID = line.replacingOccurrences(of: ">", with: "")
@@ -45,7 +47,10 @@ class KrakenSequenceParser {
             } else {
                 if let sequenceObj = match(sequenceID: sequenceID) {
                     sequenceObj.sequence = line.trimmingCharacters(in: .newlines)
-                    sequences.append(sequenceObj)
+                    sequenceCount += 1
+                    if sequenceCount == count {
+                        break
+                    }
                 }
             }
         }

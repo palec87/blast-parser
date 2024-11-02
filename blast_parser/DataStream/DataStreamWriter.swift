@@ -63,7 +63,6 @@ final class DataStreamWriter: DataStream {
         
         if stringToWrite.isEmpty == false {
             stringToWrite += terminatedLine
-            numberOfLines += 1
         }
         
         filehandle.write(stringToWrite)
