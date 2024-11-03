@@ -9467,6 +9467,7 @@
 		8463FE0F2CCE5CEC000208EF /* Auxiliary */ = {
 			isa = PBXGroup;
 			children = (
+				8483F15A2C409B860075794B /* Console.swift */,
 			);
 			path = Auxiliary;
 			sourceTree = "<group>";
@@ -9494,7 +9495,6 @@
 				84270DF82CC708010035161A /* Readme.md */,
 				848F00D12C86BA34003A0C05 /* blast_parser.entitlements */,
 				84162EDA2C83756200ED0B5E /* BlastParser.swift */,
-				8483F15A2C409B860075794B /* Console.swift */,
 				84AF867E2CA8197E00986EB4 /* TaxonomyDB */,
 				84AF867D2CA8195700986EB4 /* KrakenParser */,
 				84AF867C2CA8188000986EB4 /* DataStream */,
