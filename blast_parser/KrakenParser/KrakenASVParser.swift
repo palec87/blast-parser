@@ -11,23 +11,8 @@ enum KrakenASVError: Error {
     case invalidTaxonomy
 }
 
-class KrakenASVParser {
-    let path:String
-    let readStream:DataStreamReader
+final class KrakenASVParser: FileParser {
     var binArray = KrakenASVBinArray()
-    
-    init?(path: String) {
-        do {
-            self.path = path
-            let url = URL(fileURLWithPath: path)
-            self.readStream = try DataStreamReader(url: url)
-        }
-        
-        catch {
-            Console.writeToStdErr("Unable to read the classification file at \(path)")
-            return nil
-        }
-    }
     
     func parse() {
         var i = 1

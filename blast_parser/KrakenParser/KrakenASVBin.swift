@@ -7,7 +7,7 @@
 
 import Foundation
 
-class KrakenASVBin {
+final class KrakenASVBin {
     let isClassified:Bool
     let taxonomy:KrakenASVTaxonomy
     private var asvs = [KrakenASV]()

@@ -11,24 +11,9 @@ enum ReportParserError: Error {
     case invalidRank(line: Int, taxon:String)
 }
 
-class KrakenReportParser {
-    let path:String
-    let readStream:DataStreamReader
+class KrakenReportParser: FileParser {
     var lines = [KrakenReportLine]()
     var hierarchy = Hierarchy()
-    
-    init?(path: String) {
-        do {
-            self.path = path
-            let url = URL(fileURLWithPath: path)
-            self.readStream = try DataStreamReader(url: url)
-        }
-        
-        catch {
-            Console.writeToStdErr("Unable to read the report file at \(path)")
-            return nil
-        }
-    }
     
     /// Main method to parse a Kraken2 report
     func parse() throws {

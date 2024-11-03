@@ -7,7 +7,7 @@
 
 import Foundation
 
-class KrakenSequence {
+final class KrakenSequence {
     let sequenceID:String
     var sequence:String
     
@@ -17,23 +17,8 @@ class KrakenSequence {
     }
 }
 
-class KrakenSequenceParser {
-    let path:String
-    let readStream:DataStreamReader
+final class KrakenSequenceParser: FileParser {
     var sequences = [KrakenSequence]()
-    
-    init?(path:String) {
-        do {
-            self.path = path
-            let url = URL(fileURLWithPath: path)
-            self.readStream = try DataStreamReader(url: url)
-        }
-        
-        catch {
-            Console.writeToStdErr("Unable to read the sequences file at \(path)")
-            return nil
-        }
-    }
     
     func parse(asvs:[KrakenASV]) {
         getSequenceIDs(asvs: asvs)

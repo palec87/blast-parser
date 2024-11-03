@@ -14,7 +14,7 @@ enum KrakenParserError: Error {
     case unknown
 }
 
-class KrakenParser {
+final class KrakenParser {
     let classification:String
     let sequences:String
     let reportParser:KrakenReportParser
