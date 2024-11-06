@@ -8,12 +8,6 @@
 import Foundation
 
 struct BlastHitBin {
-    enum SortCriterion {
-        case identity
-        case eValue
-        case bitScore
-    }
-    
     var hits:[BlastHit]
     
     var bestHit:BlastHit? {
@@ -21,26 +15,26 @@ struct BlastHitBin {
         return hits[0]
     }
     
-    mutating func sort(criterion:SortCriterion) {
-        switch criterion {
-        case .identity:
-            hits.sort(by: sortByIdentity)
-        case .eValue:
-            hits.sort(by: sortByEValue)
-        case .bitScore:
-            hits.sort(by: sortByBitScore)
+    /// assumes that hits are already sorted
+    /// using sort(criterion:)
+    var bestHitsPerTaxID:[BlastHit]? {
+        var bestHits = [BlastHit]()
+        var currentTaxID = -1
+        for hit in hits {
+            if hit.taxID != currentTaxID {
+                bestHits.append(hit)
+                currentTaxID = hit.taxID
+            }
+        }
+        
+        if bestHits.isEmpty {
+            return nil
+        } else {
+            return bestHits
         }
     }
     
-    func sortByIdentity(_ lhs:BlastHit,_ rhs:BlastHit) -> Bool {
-        lhs.percentageIdentity > rhs.percentageIdentity
-    }
-    
-    func sortByEValue(_ lhs:BlastHit,_ rhs:BlastHit) -> Bool {
-        lhs.eValue < rhs.eValue
-    }
-    
-    func sortByBitScore(_ lhs:BlastHit,_ rhs:BlastHit) -> Bool {
-        lhs.bitscore > rhs.bitscore
+    mutating func sort(criterion:BlastHit.SortCriterion) {
+        hits.sort(criterion: criterion)
     }
 }
