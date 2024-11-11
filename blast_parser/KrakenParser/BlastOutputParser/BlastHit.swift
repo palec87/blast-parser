@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BlastHit {
+struct BlastHit: CustomStringConvertible {
     enum SortCriterion {
         case identity
         case eValue
@@ -23,6 +23,17 @@ struct BlastHit {
     let taxID:Int
     let scientificName:String
     let kingdom:String
+    
+    var description:String {
+        return """
+                    \(subjectSequenceID)\t\
+                    \(percentageIdentity)\t\
+                    \(bitscore)\t\
+                    \(eValue)\t\
+                    \(taxID)\t\
+                    \(scientificName)
+               """
+    }
 }
 
 extension BlastHit {

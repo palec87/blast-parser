@@ -10,12 +10,13 @@ import Foundation
 struct BlastHitBin {
     var hits:[BlastHit]
     
-    var bestHit:BlastHit? {
+    var sequenceID:String? {
         guard hits.isEmpty == false else { return nil }
-        return hits[0]
+        return hits[0].querySequenceID
     }
     
-    /// assumes that hits are already sorted
+    /// Returns the best hits per taxon
+    /// NOTE: assumes that hits are already sorted
     /// using sort(criterion:)
     var bestHitsPerTaxID:[BlastHit]? {
         var bestHits = [BlastHit]()
@@ -32,6 +33,20 @@ struct BlastHitBin {
         } else {
             return bestHits
         }
+    }
+    
+    /// Returns a `hitNumber` of best hits regardless of the taxon
+    /// NOTE: assumes that hits are already sorted
+    func bestHits(_ hitNumber:Int = 1) -> [BlastHit]? {
+        guard self.hits.isEmpty == false else { return nil }
+        var hits = [BlastHit]()
+        var i = 0
+        for hit in self.hits {
+            hits.append(hit)
+            i += 1
+            guard i < hitNumber else { break }
+        }
+        return hits
     }
     
     mutating func sort(criterion:BlastHit.SortCriterion) {

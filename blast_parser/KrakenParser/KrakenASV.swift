@@ -7,14 +7,20 @@
 
 import Foundation
 
-struct KrakenASV {
+struct KrakenASV: CustomStringConvertible {
     let sequenceID:String
     let sequenceSize:Int
     var readCount = 0
     let taxonomy:KrakenASVTaxonomy
     
     var description:String {
-        return "\(sequenceID)\t\(sequenceSize)\t\(readCount)\t\(taxonomy.taxID)\t\(taxonomy.taxon)"
+        return """
+                    \(sequenceID)\t\
+                    \(sequenceSize)\t\
+                    \(readCount)\t\
+                    \(taxonomy.taxID)\t\
+                    \(taxonomy.taxon)
+               """
     }
 }
 

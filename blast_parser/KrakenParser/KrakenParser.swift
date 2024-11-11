@@ -24,7 +24,6 @@ final class KrakenParser {
     let defaultClassificationFilename = "kraken2-parsed-classification.tsv"
     let defaultSequenceFilename = "kraken2-parsed-sequences.fasta"
     var sequencesPerBin = 10
-    var outputURL:URL?
     var asvs:[KrakenASV]?
     
     init?(report: String, classification: String, sequences: String) {
@@ -73,42 +72,33 @@ final class KrakenParser {
     }
     
     func printReport(to path:String? = nil) throws {
-        let writer = try getWriter(to:path, filename: defaultReportFilename)
-        
+        let writer = FileWriter(path: path ?? reportParser.path,
+                                filename: defaultReportFilename)
+        let dataWriter = try writer.makeDataWriter()
         for line in reportParser.lines {
-            writer.write(line: line.getLine())
+            dataWriter.write(line: line.getLine())
         }
     }
     
     func printParsedClassification(to path:String? = nil) throws {
-        let writer = try getWriter(to:path, filename: defaultClassificationFilename)
         guard let asvs = self.asvs else { throw KrakenParserError.invalidASVs }
+        
+        let writer = FileWriter(path: path ?? reportParser.path,
+                                filename: defaultClassificationFilename)
+        let dataWriter = try writer.makeDataWriter()
         for asv in asvs {
-            writer.write(line: asv.description)
+            dataWriter.write(line: asv.description)
         }
     }
     
     func printParsedSequences(to path:String? = nil) throws {
-        let writer = try getWriter(to:path, filename: defaultSequenceFilename)
-        
+        let writer = FileWriter(path: path ?? reportParser.path,
+                                filename: defaultSequenceFilename)
+        let dataWriter = try writer.makeDataWriter()
         for sequence in sequenceParser.sequences {
-            writer.write(line: ">" + sequence.sequenceID)
-            writer.write(line: sequence.sequence)
+            dataWriter.write(line: ">" + sequence.sequenceID)
+            dataWriter.write(line: sequence.sequence)
         }
-    }
-    
-    private func getWriter(to path:String?, filename:String) throws -> DataStreamWriter {
-        if path == nil {
-            let reportURL = URL(fileURLWithPath: reportParser.path,
-                                isDirectory: false)
-            let directoryURL = reportURL.deletingLastPathComponent()
-            outputURL = directoryURL.appending(component: filename)
-        } else {
-            outputURL = URL(fileURLWithPath: path!, isDirectory: false)
-        }
-        
-        guard let url = outputURL else { throw KrakenParserError.invalidOutputFile }
-        return try DataStreamWriter(url: url)
     }
 }
 

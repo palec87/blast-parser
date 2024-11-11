@@ -7,9 +7,13 @@
 
 import Foundation
 
-struct BlastASV {
+struct BlastASV: CustomStringConvertible {
     let asv:KrakenASV
     let hit:BlastHit
+    
+    var description:String {
+        return "\(asv)\t\(hit)"
+    }
 }
 
 final class BlastOutputParser: FileParser {
@@ -17,6 +21,8 @@ final class BlastOutputParser: FileParser {
     var hits = [BlastHit]()
     var bins = [BlastHitBin]()
     var blastASVs = [BlastASV]()
+    var hitsPerASV = 1
+    let defaultReportFilename:String = "blast-report.tsv"
     
     init?(path:String, parsedClassification: String) {
         guard let asvsParser = KrakenASVParser(path: parsedClassification)
@@ -29,6 +35,15 @@ final class BlastOutputParser: FileParser {
         try parseBlastOutput()
         parseBins(criterion: criterion)
         merge()
+    }
+    
+    func print(to path:String? = nil) throws {
+        let writer = FileWriter(path: path ?? asvsParser.path,
+                                filename: defaultReportFilename)
+        let dataWriter = try writer.makeDataWriter()
+        for blastASV in blastASVs {
+            dataWriter.write(line: blastASV.description)
+        }
     }
     
     /// Assumes a BLASTn output table with 19 columns as follows:
@@ -90,10 +105,47 @@ final class BlastOutputParser: FileParser {
         hits = [BlastHit]()
     }
     
-    /// Merge Kraken ASVs with BLASTn best hit of each bin
+    /// Merge Kraken ASVs with BLASTn best hit(s) of each bin
+    /// depending upon the `hitsPerASV` instance variable
     private func merge() {
+        guard hits.isEmpty == false else {
+            Console.writeToStdErr("ERROR: Unable to merge BLAST hits with the ASVs table because no BLAST hits were found.")
+            return
+        }
+        
         asvsParser.parse()
         let asvs = asvsParser.binArray.getASVs()
         
+        guard asvs.isEmpty == false else {
+            Console.writeToStdErr("ERROR: Unable to merge BLAST hits with the ASVs table because no ASVs were found.")
+            return
+        }
+        
+        // We get the current ìndex to make the search faster in the ASVs table
+        // and avoid searching the same hits all over again for each ASV as we
+        // assume that the BLAST hits are in the same order than the ASV table
+        // regarding the query sequence IDs
+        var index = bins.startIndex
+        for asv in asvs {
+            guard index < bins.endIndex else { break }
+            let bin = bins[index]
+            guard var queryID = bin.sequenceID else { continue }
+            if queryID == asv.sequenceID {
+                // retrieve the best hit(s)
+                guard let bestHits = bin.bestHits(hitsPerASV) else { continue }
+                for hit in bestHits {
+                    let blastASV = BlastASV(asv: asv, hit: hit)
+                    blastASVs.append(blastASV)
+                }
+            }
+            
+            // ignore the following hits with the same sequenceID
+            repeat {
+                index = bins.index(after: index)
+                if let seqID = bins[index].sequenceID {
+                    queryID = seqID
+                }
+            } while queryID == asv.sequenceID && index < bins.endIndex
+        }
     }
 }
