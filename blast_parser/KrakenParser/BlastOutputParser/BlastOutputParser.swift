@@ -33,7 +33,7 @@ final class BlastOutputParser: FileParser {
     
     func parse(criterion:BlastHit.SortCriterion = .bitScore) throws {
         try parseBlastOutput()
-        parseBins(criterion: criterion)
+        try parseBins(criterion: criterion)
         merge()
     }
     
@@ -88,21 +88,22 @@ final class BlastOutputParser: FileParser {
     
     /// Parses the BLASTn output into bins with the same sequenceID
     /// Assumes the hits are sorted by their sequenceIDs
-    private func parseBins(criterion:BlastHit.SortCriterion) {
+    private func parseBins(criterion:BlastHit.SortCriterion) throws {
         var previousID = String()
-        var binHits = [BlastHit]()
         for hit in hits {
-            if hit.querySequenceID == previousID {
-                binHits.append(hit)
-            } else {
-                var bin = BlastHitBin(hits: binHits)
+            if hit.querySequenceID != previousID {
+                let bin = BlastHitBin(hit: hit)
                 bin.sort(criterion: criterion)
                 bins.append(bin)
-                binHits = [BlastHit]()
                 previousID = hit.querySequenceID
+            } else {
+                if let previousBin = bins.last {
+                    previousBin.append(hit: hit)
+                } else {
+                    throw RuntimeError("ERROR: Unable to append BLAST hit to bin.")
+                }
             }
         }
-        hits = [BlastHit]()
     }
     
     /// Merge Kraken ASVs with BLASTn best hit(s) of each bin

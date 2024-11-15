@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct BlastHitBin {
-    var hits:[BlastHit]
+class BlastHitBin {
+    private var hits = [BlastHit]()
     
     var sequenceID:String? {
         guard hits.isEmpty == false else { return nil }
@@ -35,6 +35,14 @@ struct BlastHitBin {
         }
     }
     
+    init(hit:BlastHit) {
+        hits.append(hit)
+    }
+    
+    func append(hit:BlastHit) {
+        hits.append(hit)
+    }
+    
     /// Returns a `hitNumber` of best hits regardless of the taxon
     /// NOTE: assumes that hits are already sorted
     func bestHits(_ hitNumber:Int = 1) -> [BlastHit]? {
@@ -49,7 +57,7 @@ struct BlastHitBin {
         return hits
     }
     
-    mutating func sort(criterion:BlastHit.SortCriterion) {
+    func sort(criterion:BlastHit.SortCriterion) {
         hits.sort(criterion: criterion)
     }
 }
