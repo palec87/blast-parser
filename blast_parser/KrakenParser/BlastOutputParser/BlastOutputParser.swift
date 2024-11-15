@@ -46,7 +46,7 @@ final class BlastOutputParser: FileParser {
         }
     }
     
-    /// Assumes a BLASTn output table with 19 columns as follows:
+    /// Assumes a BLASTn output table with 13 columns as follows:
     /// A: qseqid = Query Seq-id (ID of your sequence)
     /// B: pident = Percentage of identical matches
     /// C: length = Alignment length
@@ -63,7 +63,7 @@ final class BlastOutputParser: FileParser {
     private func parseBlastOutput() throws {
         for line in readStream {
             let items = line.components(separatedBy: "\t")
-            guard items.count == 13 else { throw KrakenParserError.invalidFile }
+            guard items.count == 13 else { throw ParserError.invalidFile }
             let qSeqID = items[0].trimmingCharacters(in: .whitespaces)
             let sSeqID = items[7].trimmingCharacters(in: .whitespaces)
             let pIdentity = Double(items[1].trimmingCharacters(in: .whitespaces)) ?? 0.0

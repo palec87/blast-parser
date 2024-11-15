@@ -8,10 +8,10 @@
 import Foundation
 
 struct BlastHit: CustomStringConvertible {
-    enum SortCriterion {
-        case identity
-        case eValue
-        case bitScore
+    enum SortCriterion:String {
+        case identity = "pident"
+        case eValue = "evalue"
+        case bitScore = "bitscore"
     }
     
     let querySequenceID:String

@@ -7,13 +7,6 @@
 
 import Foundation
 
-enum KrakenParserError: Error {
-    case invalidFile
-    case invalidOutputFile
-    case invalidASVs
-    case unknown
-}
-
 final class KrakenParser {
     let classification:String
     let sequences:String
@@ -51,12 +44,12 @@ final class KrakenParser {
         
         catch ReportParserError.invalidRank(let line, let taxon) {
             Console.writeToStdErr("Invalid rank at \(line): \(taxon)")
-            throw KrakenParserError.invalidFile
+            throw ParserError.invalidFile
         }
         
         catch {
             Console.writeToStdErr("Unknown error while trying to parse Kraken2 counts report.")
-            throw KrakenParserError.unknown
+            throw ParserError.unknown
         }
     }
     
@@ -67,7 +60,7 @@ final class KrakenParser {
     }
     
     func parseSequences() throws {
-        guard let asvs = self.asvs else { throw KrakenParserError.invalidASVs }
+        guard let asvs = self.asvs else { throw ParserError.invalidASVs }
         sequenceParser.parse(asvs: asvs)
     }
     
@@ -81,7 +74,7 @@ final class KrakenParser {
     }
     
     func printParsedClassification(to path:String? = nil) throws {
-        guard let asvs = self.asvs else { throw KrakenParserError.invalidASVs }
+        guard let asvs = self.asvs else { throw ParserError.invalidASVs }
         
         let writer = FileWriter(path: path ?? reportParser.path,
                                 filename: defaultClassificationFilename)

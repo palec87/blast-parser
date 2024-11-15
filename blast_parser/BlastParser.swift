@@ -19,8 +19,8 @@ static let configuration = CommandConfiguration(
             the BLAST results with the respective taxa.
             """,
         usage: "blast_parser <subcommand>",
-        version: "0.1",
-        subcommands: [Import.self, Export.self, Parse.self],
+        version: "0.2.0",
+        subcommands: [Import.self, Export.self, Parse.self, Merge.self],
         defaultSubcommand: Import.self
     )
 }
@@ -127,7 +127,7 @@ extension BlastParser {
             guard let parser = KrakenParser(report: report,
                                             classification: classification,
                                             sequences: sequences) else {
-                throw KrakenParserError.invalidFile
+                throw ParserError.invalidFile
             }
             
             if let sequencesPerBin = maxSequencesPerBin {
