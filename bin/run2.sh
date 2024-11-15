@@ -7,7 +7,7 @@ root_dir=$(echo "$scripts_dir" | rev | cut -d'/' -f4- | rev)
 blast_parser="${scripts_dir}/blast_parser"
 sequences_dir="${root_dir}/18S-Nanopore/Sequences/ALL_02_120824"
 asvs_f="ALL_02_120824_parsed.tsv"
-blasthits_f="blast.tsv"
+blasthits_f="blast2.tsv"
 
 cd "$sequences_dir"
 
