@@ -142,13 +142,71 @@ extension BlastParser {
             try parser.printParsedSequences()
         }
     }
+    
+    struct Merge: ParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Merges a Kraken2 counts report with the best hits of a BLAST search.",
+            usage: "blast_parser merge --asvs <asvs> --blasthits <blasthits> [--output <output>] [--hits-per-asv <hits-per-asv>] [--sort <sort>]",
+            aliases: ["mrg"]
+        )
+        
+        @OptionGroup var options: Options
+        
+        @Option(name: [.short, .customLong("asvs")],
+                help: "Path to the Kraken2 counts output file of the parse subcommand.")
+        var asvs:String
+        
+        @Option(name: [.short, .customLong("blasthits")],
+                help: "Path to the BLAST output file using a 13 columns format with following order: qsedid pident length evalue bitscore score nident saccver stitle qcovs staxids sscinames sskingdoms.")
+        var blasthits:String
+        
+        @Option(name: [.short, .customLong("output")],
+                help: "Name of the output file. [OPTIONAL]")
+        var outputFile:String?
+        
+        @Option(name: [.short, .customLong("hits-per-asv")],
+                help: "Maximum number of sequences per bin. [OPTIONAL, default = 10]")
+        var hitsPerAsv:Int?
+        
+        @Option(name: [.short, .customLong("sort")],
+                help: "Sorting order of the output file, which can be either pident, bitscore or evalue. [OPTIONAL, default = bitscore]")
+        var sort:String?
+        
+        mutating func run() throws {
+            guard let parser = BlastOutputParser(path: blasthits,
+                                                 parsedClassification: asvs)
+            else {
+                throw RuntimeError("Could not find a valid Kraken2 counts file to be merged with the BLAST hits file.")
+            }
+            
+            if let sort = self.sort {
+                if let criterion = BlastHit.SortCriterion(rawValue: sort) {
+                    try parser.parse(criterion: criterion)
+                } else {
+                    throw RuntimeError("Wrong criterion for sorting the output file. Please use either pident, bitscore or evalue.")
+                }
+            } else {
+                try parser.parse()
+            }
+            
+            try parser.print(to: outputFile)
+        }
+    }
 }
 
+// MARK: Errors
 struct RuntimeError: Error, CustomStringConvertible {
     var description: String
     
     init(_ description: String) {
         self.description = description
     }
+}
+
+enum ParserError: Error {
+    case invalidFile
+    case invalidOutputFile
+    case invalidASVs
+    case unknown
 }
 
