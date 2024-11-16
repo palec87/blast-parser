@@ -37,7 +37,7 @@ final class KrakenTaxonomyParser: FileParser {
     func getTaxonomy(for asv:KrakenASV) -> String? {
         for line in lines {
             if asv.assignedReads == line.assignedReads
-                && asv.taxonomy.taxon == line.name {
+                && asv.taxonomy.taxon.lowercased() == line.name.lowercased() {
                 return line.taxonomy
             }
         }
