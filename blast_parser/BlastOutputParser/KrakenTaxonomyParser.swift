@@ -18,7 +18,6 @@ final class KrakenTaxonomyParser: FileParser {
     /// Parses the output file of the parse subcommand to retrieve
     /// the hierarchical taxonomic classification produced by Kraken2
     func parse() throws {
-        var lines = [KrakenTaxonomyLine]()
         for line in readStream {
             let items = line.components(separatedBy: "\t")
             guard items.count == 8 else {
