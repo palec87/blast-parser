@@ -16,6 +16,11 @@ struct KrakenASVTaxonomy {
         self.taxID = 0
     }
     
+    init (taxon:String, taxID:Int) {
+        self.taxon = taxon
+        self.taxID = taxID
+    }
+    
     init?(classification:String) {
         let items = classification.components(separatedBy: "(")
         guard items.count == 2 else { return nil }
