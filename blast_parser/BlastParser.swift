@@ -184,6 +184,10 @@ extension BlastParser {
                 throw RuntimeError("Could not find a valid Kraken2 counts file to be merged with the BLAST hits file.")
             }
             
+            if let hitsPerAsv = self.hitsPerAsv {
+                parser.hitsPerASV = hitsPerAsv
+            }
+            
             if let sort = self.sort {
                 if let criterion = BlastHit.SortCriterion(rawValue: sort) {
                     try parser.parse(criterion: criterion)
