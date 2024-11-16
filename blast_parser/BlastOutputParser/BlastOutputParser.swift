@@ -158,8 +158,6 @@ final class BlastOutputParser: FileParser {
             }
             
             if queryID == asv.sequenceID {
-                // get Kraken2 parsed hieararchical taxonomy, if any
-                
                 // retrieve the best hit(s)
                 guard let bestHits = bin.bestHits(hitsPerASV) else { continue }
                 for hit in bestHits {
