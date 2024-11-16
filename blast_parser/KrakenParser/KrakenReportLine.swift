@@ -19,6 +19,8 @@ struct KrakenReportLine {
     init() {}
     
     func getLine() -> String {
+        assert(rank != nil && hierarchy != nil,
+               "ERROR: Rank and hierarchy should not be nil")
         var result = "\(lineNumber)\t\(percentage)\t\(reads)\t\(assignedReads)\t"
         result += "\(rank.abbreviation)\t\(rank.variant)\t\(rank.taxonName)\t"
         result += "\(hierarchy.getRanks())"

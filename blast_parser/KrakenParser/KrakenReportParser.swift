@@ -11,7 +11,7 @@ enum ReportParserError: Error {
     case invalidRank(line: Int, taxon:String)
 }
 
-class KrakenReportParser: FileParser {
+final class KrakenReportParser: FileParser {
     var lines = [KrakenReportLine]()
     var hierarchy = Hierarchy()
     
@@ -20,7 +20,8 @@ class KrakenReportParser: FileParser {
         var i = 1
         for line in readStream {
             let items = line.components(separatedBy: "\t")
-            guard items.count == 6 else { continue }
+            guard items.count == 6 else
+                { throw RuntimeError("ERROR: Invalid Kraken2 report.") }
             var reportLine = KrakenReportLine()
             reportLine.lineNumber = i
             let percentageString = items[0].trimmingCharacters(in: .whitespaces)
