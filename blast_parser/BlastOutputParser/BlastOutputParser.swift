@@ -170,12 +170,12 @@ final class BlastOutputParser: FileParser {
             }
             
             // ignore the following hits with the same sequenceID
-            repeat {
-                index = bins.index(after: index)
+            while queryID == asv.sequenceID && index < bins.endIndex {
                 if let seqID = bins[index].sequenceID {
                     queryID = seqID
                 }
-            } while queryID == asv.sequenceID && index < bins.endIndex
+                index = bins.index(after: index)
+            }
         }
     }
 }
