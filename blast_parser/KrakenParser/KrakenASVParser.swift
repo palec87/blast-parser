@@ -19,7 +19,7 @@ final class KrakenASVParser: FileParser {
         for line in readStream {
             do {
                 let items = line.components(separatedBy: "\t")
-                guard items.count == 5 else { continue }
+                guard items.count == 5 else { throw KrakenASVError.invalidTaxonomy }
                 guard let taxonomy = KrakenASVTaxonomy(classification: items[2])
                     else { throw KrakenASVError.invalidTaxonomy }
                 let size = Int(items[3].trimmingCharacters(in: .whitespaces)) ?? 0

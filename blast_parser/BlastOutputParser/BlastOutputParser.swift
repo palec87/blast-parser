@@ -124,7 +124,7 @@ final class BlastOutputParser: FileParser {
         
         // We get the current ìndex to make the search faster in the ASVs table
         // and avoid searching the same hits all over again for each ASV as we
-        // assume that the BLAST hits are in the same order than the ASV table
+        // assume that the BLAST hits are in the same order as the ASV table
         // regarding the query sequence IDs
         var index = bins.startIndex
         for asv in asvs {
