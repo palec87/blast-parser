@@ -43,24 +43,23 @@ final class KrakenParser {
         }
         
         catch ReportParserError.invalidRank(let line, let taxon) {
-            Console.writeToStdErr("Invalid rank at \(line): \(taxon)")
-            throw ParserError.invalidFile
+            throw RuntimeError("ERROR: Invalid rank at \(line): \(taxon)")
         }
         
         catch {
-            Console.writeToStdErr("Unknown error while trying to parse Kraken2 counts report.")
-            throw ParserError.unknown
+            throw RuntimeError("ERROR: Unknown error while trying to parse Kraken2 counts report.")
         }
     }
     
-    func parseASVs() {
+    func parseASVs() throws {
         reportParser.sort()
-        asvParser.parse()
+        try asvParser.parse()
         asvs = asvParser.binArray.getASVs(sequencesPerBin: sequencesPerBin)
     }
     
     func parseSequences() throws {
-        guard let asvs = self.asvs else { throw ParserError.invalidASVs }
+        guard let asvs = self.asvs
+            else { throw RuntimeError("ERROR: Invalid ASV file.") }
         sequenceParser.parse(asvs: asvs)
     }
     
@@ -74,7 +73,8 @@ final class KrakenParser {
     }
     
     func printParsedClassification(to path:String? = nil) throws {
-        guard let asvs = self.asvs else { throw ParserError.invalidASVs }
+        guard let asvs = self.asvs
+            else { throw RuntimeError("ERROR: Invalid ASV file.")}
         
         let writer = FileWriter(path: path ?? reportParser.path,
                                 filename: defaultClassificationFilename)

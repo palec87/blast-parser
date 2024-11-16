@@ -45,7 +45,7 @@ final class KrakenASVBin {
         // hack to mutate a struct by using indices
         let count = asvs.count
         for index in result.indices {
-            result[index].readCount = count
+            result[index].assignedReads = count
         }
         return result
     }
