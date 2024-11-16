@@ -9,44 +9,36 @@ import Foundation
 
 struct BlastASV: CustomStringConvertible {
     let asv:KrakenASV
+    let taxonomy:String?
     let hit:BlastHit
     
+    init(asv: KrakenASV, taxonomy: String?, hit: BlastHit) {
+        self.asv = asv
+        self.taxonomy = taxonomy
+        self.hit = hit
+    }
+    
     var description:String {
-        return "\(asv)\t\(hit)"
+        if let taxonomy = self.taxonomy {
+            return "\(asv)\t\(taxonomy)\t\(hit)"
+        } else {
+            return "\(asv)\t\(hit)"
+        }
     }
 }
 
 final class BlastOutputParser: FileParser {
-    let asvsParser:KrakenASVParser
+    let asvsParser:KrakenParsedASVParser
+    var taxonomyParser:KrakenTaxonomyParser? = nil
     var hits = [BlastHit]()
     var bins = [BlastHitBin]()
     var blastASVs = [BlastASV]()
     var hitsPerASV = 1
     let defaultReportFilename:String = "blast-report.tsv"
     
-    init?(path:String, parsedClassification: String) {
-        guard let asvsParser = KrakenASVParser(path: parsedClassification)
-            else { return nil }
-        self.asvsParser = asvsParser
-        super.init(path: path)
-    }
-    
-    func parse(criterion:BlastHit.SortCriterion = .bitScore) throws {
-        try parseBlastOutput()
-        try parseBins(criterion: criterion)
-        merge()
-    }
-    
-    func print(to path:String? = nil) throws {
-        let writer = FileWriter(path: path ?? asvsParser.path,
-                                filename: defaultReportFilename)
-        let dataWriter = try writer.makeDataWriter()
-        for blastASV in blastASVs {
-            dataWriter.write(line: blastASV.description)
-        }
-    }
-    
-    /// Assumes a BLASTn output table with 13 columns as follows:
+    /// Initializer for a parser that will merge the output files of the parse
+    /// subcommand with the BLASTn output file which should have the following
+    /// 13 columns:
     /// A: qseqid = Query Seq-id (ID of your sequence)
     /// B: pident = Percentage of identical matches
     /// C: length = Alignment length
@@ -60,10 +52,43 @@ final class BlastOutputParser: FileParser {
     /// K: staxids = unique Subject Taxonomy ID(s), separated by a ';' (in numerical order)
     /// L: sscinames = unique Subject Scientific Name(s), separated by a ';'
     /// M: sskingdoms = unique Subject Super Kingdom(s), separated by a ';' (in alphabetical order)
+    /// - Parameters:
+    ///     - path: path to the BLASTn output file
+    ///     - asvs: path to parsed ASVs with taxonomic classification
+    ///     - taxonomy: path to the parsed Kraken2 count file (optional)
+    init?(path:String, asvs: String, taxonomy: String?) {
+        guard let asvsParser = KrakenParsedASVParser(path: asvs)
+            else { return nil }
+        
+        self.asvsParser = asvsParser
+        
+        if let taxonomy = taxonomy {
+            self.taxonomyParser = KrakenTaxonomyParser(path: taxonomy)
+        }
+        
+        super.init(path: path)
+    }
+    
+    func parse(criterion:BlastHit.SortCriterion = .bitScore) throws {
+        try parseBlastOutput()
+        try parseBins(criterion: criterion)
+        try merge()
+    }
+    
+    func print(to path:String? = nil) throws {
+        let writer = FileWriter(path: path ?? asvsParser.path,
+                                filename: defaultReportFilename)
+        let dataWriter = try writer.makeDataWriter()
+        for blastASV in blastASVs {
+            dataWriter.write(line: blastASV.description)
+        }
+    }
+    
     private func parseBlastOutput() throws {
         for line in readStream {
             let items = line.components(separatedBy: "\t")
-            guard items.count == 13 else { throw ParserError.invalidFile }
+            guard items.count == 13 else
+                { throw RuntimeError("ERROR: Invalid BLASTn output format.") }
             let qSeqID = items[0].trimmingCharacters(in: .whitespaces)
             let sSeqID = items[7].trimmingCharacters(in: .whitespaces)
             let pIdentity = Double(items[1].trimmingCharacters(in: .whitespaces)) ?? 0.0
@@ -108,19 +133,17 @@ final class BlastOutputParser: FileParser {
     
     /// Merge Kraken ASVs with BLASTn best hit(s) of each bin
     /// depending upon the `hitsPerASV` instance variable
-    private func merge() {
+    private func merge() throws {
         guard hits.isEmpty == false else {
-            Console.writeToStdErr("ERROR: Unable to merge BLAST hits with the ASVs table because no BLAST hits were found.")
-            return
+            throw RuntimeError("ERROR: Unable to merge BLAST hits with the ASVs table because no BLAST hits were found.")
         }
         
-        asvsParser.parse()
-        let asvs = asvsParser.binArray.getASVs()
-        
+        let asvs = try asvsParser.parse()
         guard asvs.isEmpty == false else {
-            Console.writeToStdErr("ERROR: Unable to merge BLAST hits with the ASVs table because no ASVs were found.")
-            return
+            throw RuntimeError("ERROR: Unable to merge BLAST hits with the ASVs table because no ASVs were found.")
         }
+        
+        try taxonomyParser?.parse()
         
         // We get the current ìndex to make the search faster in the ASVs table
         // and avoid searching the same hits all over again for each ASV as we
@@ -130,12 +153,20 @@ final class BlastOutputParser: FileParser {
         for asv in asvs {
             guard index < bins.endIndex else { break }
             let bin = bins[index]
-            guard var queryID = bin.sequenceID else { continue }
+            guard var queryID = bin.sequenceID else {
+                throw RuntimeError("ERROR: Unable to merge BLAST hits with the ASVs table because at least one BLAST hit does not have a sequence ID.")
+            }
+            
             if queryID == asv.sequenceID {
+                // get Kraken2 parsed hieararchical taxonomy, if any
+                
                 // retrieve the best hit(s)
                 guard let bestHits = bin.bestHits(hitsPerASV) else { continue }
                 for hit in bestHits {
-                    let blastASV = BlastASV(asv: asv, hit: hit)
+                    let taxonomy = taxonomyParser?.getTaxonomy(for: asv)
+                    let blastASV = BlastASV(asv: asv,
+                                            taxonomy: taxonomy,
+                                            hit: hit)
                     blastASVs.append(blastASV)
                 }
             }

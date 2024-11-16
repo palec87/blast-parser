@@ -7,13 +7,6 @@
 
 import Foundation
 
-extension FileHandle: @retroactive TextOutputStream {
-  public func write(_ string: String) {
-    let data = Data(string.utf8)
-    self.write(data)
-  }
-}
-
 class Console {
     static func getArgs() -> [String] {
         return CommandLine.arguments
@@ -29,6 +22,22 @@ class Console {
     
     static func writeToStdOutInPlace(_ message:String) {
         FileHandle.standardOutput.write("\(message)\r")
+    }
+}
+
+extension FileHandle: @retroactive TextOutputStream {
+  public func write(_ string: String) {
+    let data = Data(string.utf8)
+    self.write(data)
+  }
+}
+
+// MARK: Errors
+struct RuntimeError: Error, CustomStringConvertible {
+    var description: String
+    
+    init(_ description: String) {
+        self.description = description
     }
 }
 

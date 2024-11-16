@@ -127,7 +127,7 @@ extension BlastParser {
             guard let parser = KrakenParser(report: report,
                                             classification: classification,
                                             sequences: sequences) else {
-                throw ParserError.invalidFile
+                throw RuntimeError("ERROR: Invalid path to an input file.")
             }
             
             if let sequencesPerBin = maxSequencesPerBin {
@@ -146,7 +146,7 @@ extension BlastParser {
     struct Merge: ParsableCommand {
         static let configuration = CommandConfiguration(
             abstract: "Merges a Kraken2 counts report with the best hits of a BLAST search.",
-            usage: "blast_parser merge --asvs <asvs> --blasthits <blasthits> [--output <output>] [--hits-per-asv <hits-per-asv>] [--sort <sort>]",
+            usage: "blast_parser merge --asvs <asvs> --blasthits <blasthits> [--parsed-taxonomy <parsed-taxonomy>] [--output <output>] [--hits-per-asv <hits-per-asv>] [--sort <sort>]",
             aliases: ["mrg"]
         )
         
@@ -159,6 +159,10 @@ extension BlastParser {
         @Option(name: [.short, .customLong("blasthits")],
                 help: "Path to the BLAST output file using a 13 columns format with following order: qsedid pident length evalue bitscore score nident saccver stitle qcovs staxids sscinames sskingdoms.")
         var blasthits:String
+        
+        @Option(name: [.short, .customLong("parsed-taxonomy")],
+                help: "Path to the Kraken2 output file of the parse subcommand containing a parsed hierarchical taxonomy. [OPTIONAL]")
+        var parsedTaxonomy:String?
         
         @Option(name: [.short, .customLong("output")],
                 help: "Name of the output file. [OPTIONAL]")
@@ -174,7 +178,8 @@ extension BlastParser {
         
         mutating func run() throws {
             guard let parser = BlastOutputParser(path: blasthits,
-                                                 parsedClassification: asvs)
+                                                 asvs: asvs,
+                                                 taxonomy: parsedTaxonomy)
             else {
                 throw RuntimeError("Could not find a valid Kraken2 counts file to be merged with the BLAST hits file.")
             }
@@ -194,19 +199,4 @@ extension BlastParser {
     }
 }
 
-// MARK: Errors
-struct RuntimeError: Error, CustomStringConvertible {
-    var description: String
-    
-    init(_ description: String) {
-        self.description = description
-    }
-}
-
-enum ParserError: Error {
-    case invalidFile
-    case invalidOutputFile
-    case invalidASVs
-    case unknown
-}
 

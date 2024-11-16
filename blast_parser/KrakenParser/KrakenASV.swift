@@ -9,15 +9,15 @@ import Foundation
 
 struct KrakenASV: CustomStringConvertible {
     let sequenceID:String
-    let sequenceSize:Int
-    var readCount = 0
+    let length:Int
+    var assignedReads = 0
     let taxonomy:KrakenASVTaxonomy
     
     var description:String {
         return """
                     \(sequenceID)\t\
-                    \(sequenceSize)\t\
-                    \(readCount)\t\
+                    \(length)\t\
+                    \(assignedReads)\t\
                     \(taxonomy.taxID)\t\
                     \(taxonomy.taxon)
                """
@@ -26,14 +26,14 @@ struct KrakenASV: CustomStringConvertible {
 
 extension KrakenASV: Equatable {
     static func == (lhs:KrakenASV, rhs:KrakenASV) -> Bool {
-        if lhs.sequenceSize == rhs.sequenceSize {
+        if lhs.length == rhs.length {
             return lhs.sequenceID == rhs.sequenceID
         }
         return false
     }
     
     static func != (lhs:KrakenASV, rhs:KrakenASV) -> Bool {
-        if lhs.sequenceSize != rhs.sequenceSize {
+        if lhs.length != rhs.length {
             return true
         }
         return lhs.sequenceID != rhs.sequenceID
@@ -42,10 +42,10 @@ extension KrakenASV: Equatable {
 
 extension KrakenASV: Comparable {
     static func > (lhs:KrakenASV, rhs:KrakenASV) -> Bool {
-        return lhs.sequenceSize > rhs.sequenceSize
+        return lhs.length > rhs.length
     }
     
     static func < (lhs:KrakenASV, rhs:KrakenASV) -> Bool {
-        return lhs.sequenceSize < rhs.sequenceSize
+        return lhs.length < rhs.length
     }
 }
