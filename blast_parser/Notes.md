@@ -1,18 +1,12 @@
-# Old Main
+# Taxonomy PostgresSQL database
 
-
-// column to extract
-let columnToRead = 10
-
-// main
-//let arguments = Console.getArgs()
-//let path = "/Users/admin/Documents/Development/Bioinformatics/ncbi/queries/NEC_13_00001_t.txt"
-let databasePath = "/Users/admin/Documents/Development/Bioinformatics/ncbi/db/new_taxdump/rankedlineage.dmp"
-let outputFilePath = "/Users/admin/Documents/Development/Bioinformatics/ncbi/db/new_taxdump/rankedlineage.csv"
+The NCBI rankedlineage database dump file:
 
 rankedlineage.dmp
 -----------------
-Select ancestor names for well-established taxonomic ranks (species, genus, family, order, class, phylum, kingdom, superkingdom) file fields:
+
+The PostgresSQL database has only the major taxonomic ranks, namely species, genus, family, order, class, phylum, kingdom, superkingdom.
+Therefore, the database fields are:
 
     tax_id       -- node id
     tax_name     -- scientific name of the organism
@@ -26,8 +20,10 @@ Select ancestor names for well-established taxonomic ranks (species, genus, fami
     superkingdom -- superkingdom (domain) name when available
 
 
+## Common commands:
 
-(base) ➜  ~ psql -d taxonomy_ncbi -U test
+### connect to the database using psql
+(base) ➜  ~ psql -d taxonomy_ncbi -U *username*
 psql (16.4 (Postgres.app))
 Type "help" for help.
 
@@ -38,6 +34,7 @@ taxonomy_ncbi=> \d
  public | taxonomy | table | test
 (1 row)
 
+### delete a table
 taxonomy_ncbi=> DROP taxonomy;
 ERROR:  syntax error at or near "taxonomy"
 LINE 1: DROP taxonomy;
@@ -49,11 +46,14 @@ Did not find any relations.
 taxonomy_ncbi=> SELECT * FROM taxonomy_ncbi.pg_tables;
 ERROR:  relation "taxonomy_ncbi.pg_tables" does not exist
 LINE 1: SELECT * FROM taxonomy_ncbi.pg_tables;
-                      ^
+
+### connect back to the database
 taxonomy_ncbi=> \c taxonomy_ncbi
-You are now connected to database "taxonomy_ncbi" as user "test".
+You are now connected to database "taxonomy_ncbi" as user "*username*".
 taxonomy_ncbi=> \dt
 Did not find any relations.
+
+### list databases
 taxonomy_ncbi=> \l
                                                          List of databases
      Name      |  Owner   | Encoding | Locale Provider |   Collate   |    Ctype    | ICU Locale | ICU Rules |   Access privileges   
@@ -68,19 +68,7 @@ taxonomy_ncbi=> \l
                |          |          |                 |             |             |            |           | postgres=CTc/postgres
 (5 rows)
 
-taxonomy_ncbi=> SELECT ... FROM pg_database
-taxonomy_ncbi-> SELECT ... FROM pg_database;
-ERROR:  syntax error at or near ".."
-LINE 1: SELECT ... FROM pg_database
-               ^
-taxonomy_ncbi=> SELECT ... FROM pg_database;                                                                                                                                                                                                           ERROR:  syntax error at or near ".."
-LINE 1: SELECT ... FROM pg_database;
-               ^
-taxonomy_ncbi=> SELECT * FROM pg_database;
-taxonomy_ncbi=> SELECT datname fro, pg_database;
-ERROR:  column "datname" does not exist
-LINE 1: SELECT datname fro, pg_database;
-               ^
+
 taxonomy_ncbi=> SELECT * FROM pg_database;
 taxonomy_ncbi=> SELECT datname FROM pg_database;
     datname    
@@ -171,10 +159,10 @@ taxonomy_ncbi-> order by d.datname;
  template1     | admin,postgres,test
 (5 rows)
 
-counting the rows:
+###counting the rows:
 SELECT count(*) AS exact_count FROM public.taxonomy;
 
-make a query with a taxID:
+###make a query with a taxID:
 SELECT * from taxonomy where tax_id = 10;
 
 
