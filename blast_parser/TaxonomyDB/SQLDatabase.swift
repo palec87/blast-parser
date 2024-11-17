@@ -29,7 +29,7 @@ final class SQLDatabase {
         self.table = table
     }
     
-    func CreateDatabase() {
+    func createDatabase() {
         PSDBeginWithDefaultDB();
         if PSDDoesExist(database) == true {
             PSDDeleteDatabase(database)
@@ -41,7 +41,7 @@ final class SQLDatabase {
         Console.writeToStdOut("Database \"\(database)\" and table \"\(table)\" created successfully.")
     }
     
-    func ImportDatabase(pathToCSVFile:String) {
+    func importDatabase(pathToCSVFile:String) {
         let table = self.table ?? "taxonomy"
         PSDCopyToDB(table, pathToCSVFile)
         Console.writeToStdOut("Table \"\(table)\" exported successfully.")
