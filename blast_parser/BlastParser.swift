@@ -80,7 +80,7 @@ extension BlastParser {
         var inputFile:String
         
         @Option(name: [.short, .customLong("database")],
-                    help: "Name of the database to which rankedlineage.csv file will be exported. IMPORTANT NOTE: If you choose the name of a preexisting database, the latter will be OVERWRITTEN!")
+                    help: "Name of the database to which rankedlineage.csv file will be exported.")
         var database:String
         
         @Option(name: [.short, .customLong("table")],
