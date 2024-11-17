@@ -171,4 +171,10 @@ taxonomy_ncbi-> order by d.datname;
  template1     | admin,postgres,test
 (5 rows)
 
+counting the rows:
+SELECT count(*) AS exact_count FROM public.taxonomy;
+
+make a query with a taxID:
+SELECT * from taxonomy where tax_id = 10;
+
 
