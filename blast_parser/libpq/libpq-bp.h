@@ -9,6 +9,7 @@
 #define libpq_h
 
 #include <stdbool.h>
+#include "globals-bp.h"
 
 void PSDBegin(const char *database);
 void PSDBeginWithDefaultDB(void);
@@ -30,5 +31,9 @@ bool PSDDoesExist(const char *database);
 
 void PSDCopyToDB(const char *table,
                  const char* pathToCSVFile);
+
+void PSDQuery(const char *table,
+              const char *query,
+              char *result);
 
 #endif /* libpq_h */

@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include "libpq-fe.h"
 
-#define maxBufferSize 1001
 #define mainDB "postgres"
 
 const char* PSDGetCurrentDB(void);

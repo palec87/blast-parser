@@ -24,7 +24,7 @@ const char* PSDGetCurrentDB(void) {
 
 #pragma mark **** Connection to the database ****
 void PSDConnectToMainDB(void) {
-    PSDConnectToDB("postgres");
+    PSDConnectToDB(mainDB);
 }
 
 // NOTE: It must be paired with a PSDCloseConnection()

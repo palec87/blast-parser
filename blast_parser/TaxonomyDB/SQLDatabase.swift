@@ -23,6 +23,7 @@ final class SQLDatabase {
             superkingdom varchar(100),
             comments varchar(50)
         """
+    let bufferSize = Int(kPSDMaxBufferSize)
     
     init(database:String, table:String?) {
         self.database = database
@@ -45,5 +46,14 @@ final class SQLDatabase {
         let table = self.table ?? "taxonomy"
         PSDCopyToDB(table, pathToCSVFile)
         Console.writeToStdOut("Table \"\(table)\" exported successfully.")
+    }
+    
+    func queryDatabase(sql:String) -> String {
+        PSDBegin(database)
+        var reply = [CChar](repeating: 0, count: bufferSize)
+        PSDQuery(table, sql, &reply)
+        let result = String(cString: reply)
+        PSDEnd()
+        return result
     }
 }

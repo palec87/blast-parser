@@ -11,5 +11,6 @@
 #include <stdio.h>
 
 bool PSDParseBool(PGresult *result);
+void PSDParseString(PGresult *result, char *stringResult);
 
 #endif /* parser_h */

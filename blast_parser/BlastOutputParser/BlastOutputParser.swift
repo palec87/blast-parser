@@ -7,26 +7,6 @@
 
 import Foundation
 
-struct BlastASV: CustomStringConvertible {
-    let asv:KrakenASV
-    let taxonomy:String?
-    let hit:BlastHit
-    
-    init(asv: KrakenASV, taxonomy: String?, hit: BlastHit) {
-        self.asv = asv
-        self.taxonomy = taxonomy
-        self.hit = hit
-    }
-    
-    var description:String {
-        if let taxonomy = self.taxonomy {
-            return "\(asv)\t\(taxonomy)\t\(hit)"
-        } else {
-            return "\(asv)\t\(hit)"
-        }
-    }
-}
-
 final class BlastOutputParser: FileParser {
     let asvsParser:KrakenParsedASVParser
     var taxonomyParser:KrakenTaxonomyParser? = nil
@@ -35,6 +15,8 @@ final class BlastOutputParser: FileParser {
     var blastASVs = [BlastASV]()
     var hitsPerASV = 1
     let defaultReportFilename:String = "blast-report.tsv"
+    var taxonomyDatabase:String = "taxonomy_ncbi"
+    var taxonomyTable:String = "taxonomy"
     
     /// Initializer for a parser that will merge the output files of the parse
     /// subcommand with the BLASTn output file which should have the following
@@ -145,6 +127,11 @@ final class BlastOutputParser: FileParser {
         
         try taxonomyParser?.parse()
         
+        // Initialize the object that will connect to the PostgresSQL
+        // database containing the whole NCBI taxonomic lineages
+        let taxonomyDatabase = SQLDatabase(database: taxonomyDatabase,
+                                           table: taxonomyTable)
+        
         // We get the current ìndex to make the search faster in the ASVs table
         // and avoid searching the same hits all over again for each ASV as we
         // assume that the BLAST hits are in the same order as the ASV table
@@ -162,9 +149,10 @@ final class BlastOutputParser: FileParser {
                 guard let bestHits = bin.bestHits(hitsPerASV) else { continue }
                 for hit in bestHits {
                     let taxonomy = taxonomyParser?.getTaxonomy(for: asv)
-                    let blastASV = BlastASV(asv: asv,
+                    var blastASV = BlastASV(asv: asv,
                                             taxonomy: taxonomy,
                                             hit: hit)
+                    blastASV.setBlastTaxonomy(database: taxonomyDatabase)
                     blastASVs.append(blastASV)
                 }
             }
