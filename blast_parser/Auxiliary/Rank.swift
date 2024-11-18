@@ -32,12 +32,11 @@ struct Rank: RawRepresentable {
     var rank:String = ""
     var taxonName:String = ""
     
-    /// Initializer - Pass 0 to get a default "Unclassified" rank
-    ///
+    
+    /// - Parameter rawValue: a raw value representing a main taxonomic rank
     /// Pass a value between 0 and 9, where the latter is the species rank.
     /// See the `ranks` and `abbreviations` arrays to see what values you can use.
-    ///
-    /// - Parameter rawValue: a raw value representing a main taxonomic rank
+    /// Pass 0 to get a default "Unclassified" rank
     init?(rawValue:Int) {
         self.rawValue = rawValue
         guard rawValue >= 0 && rawValue <= 9 else { return nil }
@@ -45,14 +44,12 @@ struct Rank: RawRepresentable {
         rank = Rank.ranks[rawValue]
     }
     
-    /// Initializer - use an abbreviation to initialize a Rank object
-    ///
+    /// Initializer that uses an abbreviation to initialize a Rank object
+    /// - Parameter rankCodeString: abbreviation obtained from a line of a Kraken2 report
     /// Pass one of the values in the `abbreviations` array into rank.
     /// This initializer also accepts abbreviations containing a number (e.g., D2).
     /// In the latter case, the abbreviation and the number are used to initialize
     /// the `abbreviation` and `variant` instance variables, respectively.
-    ///
-    /// - Parameter rankCodeString: abbreviation obtained from a line of a Kraken2 report
     init?(rankCodeString:String) {
         if rankCodeString.count == 1 {
             if let index = Rank.abbreviations.firstIndex(of: rankCodeString) {
@@ -81,11 +78,10 @@ struct Rank: RawRepresentable {
     }
     
     // MARK: static methods
-    /// Returns an unclassified Rank object
-    ///
     /// It does not add an "Unclassified" rank to the Hierarchy.current because
     /// it assumes that the first line is always such a rank, which is the
     /// default when a Hierachy object is initialized
+    /// - returns: An unclassified Rank object
     static func unclassified() -> Rank {
         var rank = Rank(rawValue: 0)!
         rank.taxonName = rank.rank
@@ -99,8 +95,6 @@ struct Rank: RawRepresentable {
         return rank
     }
     
-    /// Returns a domain Rank object
-    ///
     /// It handles an oddity in Kraken2 reports in that a given rank can be
     /// classified as "D" or "Domain" even though it is not one of the recognized
     /// three domains of cellular organisms, namely "Archaea", "Bacteria" and "Eukaryota"
@@ -111,6 +105,7 @@ struct Rank: RawRepresentable {
     /// domains as mentioned above.
     ///
     /// Known limitation: it does not handle non-celullar entities such as viruses
+    /// - Returns: A domain Rank object
     static func domain(taxID:Int, name:String, hierarchy:Hierarchy) -> Rank {
         var rank = Rank(rawValue: 2)!
         switch taxID {
@@ -139,11 +134,12 @@ struct Rank: RawRepresentable {
         return rank
     }
     
+    /// - Returns: A general Rank object
     static func rank(abbreviation:String,
                      name:String) throws -> Rank {
         guard var rank = Rank(rankCodeString: abbreviation)
             else { throw RankError.invalid }
-        rank.taxonName = name
+        rank.taxonName = name.isEmpty ? "Incertae Sedis" : name
         return rank
     }
 }
