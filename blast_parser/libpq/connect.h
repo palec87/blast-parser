@@ -13,8 +13,6 @@
 #include <stdio.h>
 #include "libpq-fe.h"
 
-#define mainDB "postgres"
-
 const char* PSDGetCurrentDB(void);
 void PSDConnectToMainDB(void);
 void PSDConnectToDB(const char *database);

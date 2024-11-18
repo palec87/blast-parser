@@ -14,7 +14,7 @@
 #include "parser.h"
 
 #pragma mark **** private constants ****
-size_t bufferSize = maxBufferSize;
+size_t bufferSize = kPSDMaxBufferSize;
 
 #pragma mark **** private functions ****
 #pragma mark **** connect / disconnect ****
@@ -57,7 +57,7 @@ void PSDCreateDatabase(const char *database,
 }
 
 void PSDDeleteDatabase(const char *database) {
-    if (strcmp(database, mainDB) != 0) {
+    if (strcmp(database, kPSDMainDB) != 0) {
         size_t maxLength = bufferSize - 1;
         char command[bufferSize];
         const char *fmt = "DROP DATABASE %s;";

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include "globals-bp.h"
 #include "connect.h"
 
 #pragma mark **** private vars ****
@@ -24,7 +25,7 @@ const char* PSDGetCurrentDB(void) {
 
 #pragma mark **** Connection to the database ****
 void PSDConnectToMainDB(void) {
-    PSDConnectToDB(mainDB);
+    PSDConnectToDB(kPSDMainDB);
 }
 
 // NOTE: It must be paired with a PSDCloseConnection()

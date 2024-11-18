@@ -12,5 +12,6 @@
 #define kPSDMaxBufferSize 2048
 #define kPSDQueryFieldNumber 11
 #define kPSDQueryResultSeparator ";"
+#define kPSDMainDB "postgres"
 
 #endif /* globals_bp_h */
