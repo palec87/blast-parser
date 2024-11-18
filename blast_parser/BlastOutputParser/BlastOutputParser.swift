@@ -131,8 +131,9 @@ final class BlastOutputParser: FileParser {
         // database containing the whole NCBI taxonomic lineages
         let taxonomyDatabase = SQLDatabase(database: taxonomyDatabase,
                                            table: taxonomyTable)
+        taxonomyDatabase.connect()
         
-        // We get the current ìndex to make the search faster in the ASVs table
+        // We get the current index to make the search faster in the ASVs table
         // and avoid searching the same hits all over again for each ASV as we
         // assume that the BLAST hits are in the same order as the ASV table
         // regarding the query sequence IDs
@@ -165,5 +166,7 @@ final class BlastOutputParser: FileParser {
                 index = bins.index(after: index)
             }
         }
+        
+        taxonomyDatabase.disconnect()
     }
 }

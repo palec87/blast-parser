@@ -30,6 +30,14 @@ final class SQLDatabase {
         self.table = table
     }
     
+    func connect() {
+        PSDBegin(database)
+    }
+    
+    func disconnect() {
+        PSDEnd()
+    }
+    
     func createDatabase() {
         PSDBeginWithDefaultDB();
         if PSDDoesExist(database) == true {
@@ -49,11 +57,9 @@ final class SQLDatabase {
     }
     
     func queryDatabase(sql:String) -> String {
-        PSDBegin(database)
         var reply = [CChar](repeating: 0, count: bufferSize)
         PSDQuery(table, sql, &reply)
         let result = String(cString: reply)
-        PSDEnd()
         return result
     }
 }
