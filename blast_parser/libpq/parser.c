@@ -40,18 +40,22 @@ void PSDParseString(PGresult *result, char *stringResult) {
     nTuples = PQntuples(result);
     
     const char* header = PQgetvalue(result, 0, 0);
-    size_t length = strlen(header) + 1; /* + 1 for terminating NULL */
-    strncat(stringResult, header, length);
-    
-    if (nFields == kPSDQueryFieldNumber && nTuples == 1 && stringResult != NULL) {
-        for(int i=1; i < kPSDQueryFieldNumber; i++) {
-            const char* value = PQgetvalue(result, 0, i);
-            length += strlen(value) + 1; /* + 1 for the separator */
-            strncat(stringResult, kPSDQueryResultSeparator, length);
-            strncat(stringResult, value, length);
+    if (header != NULL) {
+        size_t length = strlen(header) + 1; /* + 1 for terminating NULL */
+        strncat(stringResult, header, length);
+        
+        if (nFields == kPSDQueryFieldNumber && nTuples == 1 && stringResult != NULL) {
+            for(int i=1; i < kPSDQueryFieldNumber; i++) {
+                const char* value = PQgetvalue(result, 0, i);
+                if (value != NULL) {
+                    length += strlen(value) + 1; /* + 1 for the separator */
+                    strncat(stringResult, kPSDQueryResultSeparator, length);
+                    strncat(stringResult, value, length);
+                }
+            }
         }
     }
-    
+
     PQclear(result);
 }
 

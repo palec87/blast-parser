@@ -29,6 +29,10 @@ struct Hierarchy {
         }
     }
     
+    init(rank:Rank) {
+        ranks.append(rank)
+    }
+    
     mutating func addRank(_ rank:Rank) {
         ranks.append(rank)
     }

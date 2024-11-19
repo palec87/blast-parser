@@ -118,7 +118,7 @@ void PSDCopyToDB(const char *table, const char* pathToCSVFile) {
 
 #pragma mark **** query the db ****
 void PSDQuery(const char *table, const char *query, char *result) {
-    const char *fmt = "SELECT * FROM %s WHERE '%s'";
+    const char *fmt = "SELECT * FROM %s WHERE %s";
     size_t maxLength = bufferSize - 1;
     char command[bufferSize];
     int charNumber = snprintf(command, maxLength, fmt, table, query);
@@ -126,7 +126,7 @@ void PSDQuery(const char *table, const char *query, char *result) {
         PSDHandleFatalError();
     }
     PGresult *pg_result = PSDExecuteWithResult(command);
-    if (result != NULL) {
+    if (pg_result != NULL) {
         PSDParseString(pg_result, result);
     }
 }

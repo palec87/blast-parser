@@ -7,11 +7,15 @@
 
 import Foundation
 
+enum BlastASVError: Error {
+    case invalidLineage
+}
+
 struct BlastASV: CustomStringConvertible {
     let asv:KrakenASV
     let hit:BlastHit
     let krakenTaxonomy:String?
-    var blastTaxonomy:Hierarchy? = nil
+    var blastTaxonomy = Hierarchy()
     
     init(asv: KrakenASV, taxonomy: String?, hit: BlastHit) {
         self.asv = asv
@@ -20,47 +24,49 @@ struct BlastASV: CustomStringConvertible {
     }
     
     mutating func setBlastTaxonomy(database:SQLDatabase) {
-        let taxID = self.asv.taxonomy.taxID
+        let taxID = self.hit.taxID
         do {
             if let lineage = NCBILineage(database: database, taxID: taxID) {
-                blastTaxonomy = Hierarchy()
-                let kingdom = try Rank.rank(abbreviation: "D",
-                                            name: lineage.superkingdom)
-                blastTaxonomy!.addRank(kingdom)
+                blastTaxonomy = Hierarchy(rank: try .rank(abbreviation: "D",
+                                                          name: lineage.superkingdom))
                 let phylum = try Rank.rank(abbreviation: "P",
                                            name: lineage.phylum)
-                blastTaxonomy!.addRank(phylum)
+                blastTaxonomy.addRank(phylum)
                 let `class` = try Rank.rank(abbreviation: "C",
                                             name: lineage.class)
-                blastTaxonomy!.addRank(`class`)
+                blastTaxonomy.addRank(`class`)
                 let order = try Rank.rank(abbreviation: "O",
                                           name: lineage.order)
-                blastTaxonomy!.addRank(order)
+                blastTaxonomy.addRank(order)
                 let family = try Rank.rank(abbreviation: "F",
                                            name: lineage.family)
-                blastTaxonomy!.addRank(family)
+                blastTaxonomy.addRank(family)
                 let genus = try Rank.rank(abbreviation: "G",
                                           name: lineage.genus)
-                blastTaxonomy!.addRank(genus)
+                blastTaxonomy.addRank(genus)
                 let species = try Rank.rank(abbreviation: "S",
                                             name: lineage.species)
-                blastTaxonomy!.addRank(species)
+                blastTaxonomy.addRank(species)
+            } else if taxID != 0 {
+                // if taxID == 0 then blastTaxonomy is already inited
+                // with an "Unclassified" Rank, so we do nothing, but
+                // otherwise any other taxID is an error.
+                throw BlastASVError.invalidLineage
             }
         }
         
         catch {
             Console.writeToStdErr("ERROR: Invalid taxonomy for tax_id = \(taxID)")
-            blastTaxonomy = nil
         }
     }
     
     var description:String {
-        if let blastTaxonomy = self.blastTaxonomy?.getRanks(),
+        if blastTaxonomy.getRanks().isEmpty == false,
             let krakenTaxonomy = self.krakenTaxonomy {
             return "\(asv)\t\(krakenTaxonomy)\t\(hit)\t\(blastTaxonomy)"
         } else if let krakenTaxonomy = self.krakenTaxonomy {
             return "\(asv)\t\(krakenTaxonomy)\t\(hit)"
-        } else if let blastTaxonomy = self.blastTaxonomy?.getRanks() {
+        } else if blastTaxonomy.getRanks().isEmpty == false {
             return "\(asv)\t\(hit)\t\(blastTaxonomy)"
         } else {
             return "\(asv)\t\(hit)"
