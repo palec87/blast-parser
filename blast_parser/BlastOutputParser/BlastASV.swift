@@ -44,8 +44,10 @@ struct BlastASV: CustomStringConvertible {
                 let genus = try Rank.rank(abbreviation: "G",
                                           name: lineage.genus)
                 blastTaxonomy.addRank(genus)
+                
+                let name = lineage.species.isEmpty ? hit.scientificName : lineage.species
                 let species = try Rank.rank(abbreviation: "S",
-                                            name: lineage.species)
+                                            name: name)
                 blastTaxonomy.addRank(species)
             } else if taxID != 0 {
                 // if taxID == 0 then blastTaxonomy is already inited
@@ -61,13 +63,14 @@ struct BlastASV: CustomStringConvertible {
     }
     
     var description:String {
-        if blastTaxonomy.getRanks().isEmpty == false,
+        let blastRanks = blastTaxonomy.getRanks()
+        if blastRanks.isEmpty == false,
             let krakenTaxonomy = self.krakenTaxonomy {
-            return "\(asv)\t\(krakenTaxonomy)\t\(hit)\t\(blastTaxonomy)"
+            return "\(asv)\t\(krakenTaxonomy)\t\(hit)\t\(blastRanks)"
         } else if let krakenTaxonomy = self.krakenTaxonomy {
             return "\(asv)\t\(krakenTaxonomy)\t\(hit)"
-        } else if blastTaxonomy.getRanks().isEmpty == false {
-            return "\(asv)\t\(hit)\t\(blastTaxonomy)"
+        } else if blastRanks.isEmpty == false {
+            return "\(asv)\t\(hit)\t\(blastRanks)"
         } else {
             return "\(asv)\t\(hit)"
         }
