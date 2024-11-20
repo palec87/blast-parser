@@ -10,7 +10,8 @@
 
 /* globals common to C and Swift */
 #define kPSDMaxBufferSize 2048
-#define kPSDQueryFieldNumber 11
+#define kPSDQueryFieldNumber 10
+#define kPSDQueryRealFieldNumber (kPSDQueryFieldNumber + 1)
 #define kPSDQueryResultSeparator ";"
 #define kPSDMainDB "postgres"
 

@@ -44,7 +44,7 @@ void PSDParseString(PGresult *result, char *stringResult) {
         size_t length = strlen(header) + 1; /* + 1 for terminating NULL */
         strncat(stringResult, header, length);
         
-        if (nFields == kPSDQueryFieldNumber && nTuples == 1 && stringResult != NULL) {
+        if (nFields == kPSDQueryRealFieldNumber && nTuples == 1 && stringResult != NULL) {
             for(int i=1; i < kPSDQueryFieldNumber; i++) {
                 const char* value = PQgetvalue(result, 0, i);
                 if (value != NULL) {
