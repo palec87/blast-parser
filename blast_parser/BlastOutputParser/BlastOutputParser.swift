@@ -64,9 +64,12 @@ final class BlastOutputParser: FileParser {
         for blastASV in blastASVs {
             dataWriter.write(line: blastASV.description)
         }
+        Console.writeToStdOut("Written merged Kraken2 and BLASTn output to file...")
     }
     
     private func parseBlastOutput() throws {
+        Console.writeToStdOut("Parsing BLASTn output...")
+        
         for line in readStream {
             let items = line.components(separatedBy: "\t")
             guard items.count == 13 else
@@ -96,6 +99,7 @@ final class BlastOutputParser: FileParser {
     /// Parses the BLASTn output into bins with the same sequenceID
     /// Assumes the hits are sorted by their sequenceIDs
     private func parseBins(criterion:BlastHit.SortCriterion) throws {
+        Console.writeToStdOut("Parsing BLASTn output into bins...")
         var previousID = String()
         for hit in hits {
             if hit.querySequenceID != previousID {
@@ -116,6 +120,8 @@ final class BlastOutputParser: FileParser {
     /// Merge Kraken ASVs with BLASTn best hit(s) of each bin
     /// depending upon the `hitsPerASV` instance variable
     private func merge() throws {
+        Console.writeToStdOut("Merging Kraken ASVs with BLASTn output...")
+        
         guard hits.isEmpty == false else {
             throw RuntimeError("ERROR: Unable to merge BLAST hits with the ASVs table because no BLAST hits were found.")
         }
