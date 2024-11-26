@@ -37,6 +37,7 @@ final class KrakenParser {
         self.sequenceParser = sequenceParser
     }
     
+    /// Parses a Kraken2 count report
     func parseReport() throws {
         do {
             try reportParser.parse()
@@ -51,18 +52,37 @@ final class KrakenParser {
         }
     }
     
-    func parseASVs() throws {
+    /// Parses a Kraken2 ASV report with the assigned taxonomy and places
+    /// each asv into a bin with the same classification
+    /// - Parameters:
+    ///     - asvFormat: use `standard` for the standard 5-column report or use `epi2me` for the 6-column report produced by the Epi2Me metagenomics package
+    func parseASVs(asvFormat:String? = nil) throws {
         reportParser.sort()
-        try asvParser.parse()
+        if let asvFormat {
+            switch asvFormat {
+            case "standard":
+                try asvParser.parse(format: .standard)
+            case "epi2me":
+                try asvParser.parse(format: .epi2me)
+            default:
+                throw RuntimeError("ERROR: Invalid ASV format.")
+            }
+        } else {
+            try asvParser.parse()
+        }
+       
         asvs = asvParser.binArray.getASVs(sequencesPerBin: sequencesPerBin)
     }
     
+    /// Retrieves the sequences with the IDs present in the asvs array
     func parseSequences() throws {
         guard let asvs = self.asvs
             else { throw RuntimeError("ERROR: Invalid ASV file.") }
         sequenceParser.parse(asvs: asvs)
     }
     
+    /// Writes a parsed report with the following format:
+    /// lineNumber percentage reads assignedReads rank.abbreviation rank-variant rank-name lineage"
     func printReport(to path:String? = nil) throws {
         let writer = FileWriter(path: path ?? reportParser.path,
                                 filename: defaultReportFilename)
@@ -72,6 +92,8 @@ final class KrakenParser {
         }
     }
     
+    /// Writes a parsed report with the following format:
+    /// sequenceID length assignedReads taxID taxonomy
     func printParsedClassification(to path:String? = nil) throws {
         guard let asvs = self.asvs
             else { throw RuntimeError("ERROR: Invalid ASV file.")}
@@ -84,6 +106,8 @@ final class KrakenParser {
         }
     }
     
+    /// Writes a parsed report with the selected sequences in fasta format
+    /// that will be searched by BLASTn
     func printParsedSequences(to path:String? = nil) throws {
         let writer = FileWriter(path: path ?? reportParser.path,
                                 filename: defaultSequenceFilename)

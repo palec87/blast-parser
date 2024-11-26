@@ -97,7 +97,7 @@ extension BlastParser {
     struct Parse: ParsableCommand {
         static let configuration = CommandConfiguration(
             abstract: "Parses a Kraken2 counts report to determine which sequences should be validated by BLASTN.",
-            usage: "blast_parser parse --report <report> --classification <classification> --sequences <sequences> [--output <output>] [--max-sequences-per-bin <max-sequences-per-bin>]",
+            usage: "blast_parser parse --report <report> --classification <classification> --sequences <sequences> [--output <output>] [--asvformart <asvformat>] [--max-sequences-per-bin <max-sequences-per-bin>]",
             aliases: ["prs"]
         )
         
@@ -111,8 +111,12 @@ extension BlastParser {
                 help: "Path to the Kraken2 taxonomic assignment file.")
         var classification:String
         
+        @Option(name: [.short, .customLong("asvformat")],
+                help: "ASV format file. It can be either standard (5 columns: U/C sequenceID taxon(taxID) length LCA) or epi2me (6 columns: U/C sequenceID taxID length LCA lineage). [OPTIONAL, default = standard]")
+        var asvFormat:String?
+        
         @Option(name: [.short, .customLong("sequences")],
-                help: "Path to the sample sequences file.")
+                help: "Path to the sample sequences file. It can be either a fasta file with the .fa or .fasta extension or a fastq file with the .fastq extension.")
         var sequences:String
         
         @Option(name: [.short, .customLong("output")],
@@ -136,7 +140,7 @@ extension BlastParser {
             
             try parser.parseReport()
             try parser.printReport(to: outputFile)
-            try parser.parseASVs()
+            try parser.parseASVs(asvFormat: asvFormat)
             try parser.printParsedClassification()
             try parser.parseSequences()
             try parser.printParsedSequences()

@@ -19,15 +19,29 @@ final class KrakenSequence {
 
 final class KrakenSequenceParser: FileParser {
     var sequences = [KrakenSequence]()
+    var separator = ">"
     
+    override init?(path:String) {
+        let fileExtension = URL(fileURLWithPath: path).pathExtension
+        switch fileExtension {
+        case "fastq":
+            separator = "@"
+        default:
+            return nil
+        }
+        super.init(path: path)
+    }
+    
+    /// Method to retrieve the sequences with the IDs present in the KrakenASV array
     func parse(asvs:[KrakenASV]) {
         getSequenceIDs(asvs: asvs)
         var sequenceID = String()
         let count = sequences.count
         var sequenceCount = 0
+        
         for line in readStream {
-            if line.firstIndex(of: ">") != nil {
-                sequenceID = line.replacingOccurrences(of: ">", with: "")
+            if line.firstIndex(of: Character(separator)) != nil {
+                sequenceID = line.replacingOccurrences(of: separator, with: "")
                 sequenceID = sequenceID.trimmingCharacters(in: .whitespacesAndNewlines)
             } else {
                 if let sequenceObj = match(sequenceID: sequenceID) {
