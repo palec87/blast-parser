@@ -141,9 +141,9 @@ extension BlastParser {
             try parser.parseReport()
             try parser.printReport(to: outputFile)
             try parser.parseASVs(asvFormat: asvFormat)
-            try parser.printParsedClassification()
+            try parser.printParsedClassification(to: outputFile)
             try parser.parseSequences()
-            try parser.printParsedSequences()
+            try parser.printParsedSequences(to: outputFile)
         }
     }
     

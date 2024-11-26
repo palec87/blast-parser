@@ -9,22 +9,19 @@ import Foundation
 
 struct FileWriter {
     let path:String
-    let outputURL: URL
+    let outputURL:URL
     
     /// Generates a data stream writer
     /// - Parameters:
     ///     - path: path to file to write data to
-    ///     - filename: if not empty, filename to replace the last component of `path`
-    init(path:String, filename:String = String()) {
+    ///     - suffix: suffix to add to filename, which will be based on the name of the parent directory
+    init(path:String, suffix:String) {
         self.path = path
-        
-        if filename.isEmpty {
-            outputURL = URL(fileURLWithPath: path, isDirectory: false)
-        } else {
-            let url = URL(fileURLWithPath: path, isDirectory: false)
-            let directoryURL = url.deletingLastPathComponent()
-            outputURL = directoryURL.appending(component: filename)
-        }
+        let url = URL(fileURLWithPath: path, isDirectory: false)
+        let directoryURL = url.deletingLastPathComponent()
+        let directoryName = directoryURL.lastPathComponent
+        let filename = "\(directoryName)_\(suffix)"
+        outputURL = directoryURL.appending(component: filename)
     }
     
     func makeDataWriter() throws -> DataStreamWriter {

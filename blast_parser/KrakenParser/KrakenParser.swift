@@ -13,9 +13,9 @@ final class KrakenParser {
     let reportParser:KrakenReportParser
     let asvParser:KrakenASVParser
     let sequenceParser:KrakenSequenceParser
-    let defaultReportFilename = "kraken2-parsed-output.tsv"
-    let defaultClassificationFilename = "kraken2-parsed-classification.tsv"
-    let defaultSequenceFilename = "kraken2-parsed-sequences.fasta"
+    let defaultReportSuffix = "parsed-output.tsv"
+    let defaultClassificationSuffix = "parsed-classification.tsv"
+    let defaultSequenceSuffix = "parsed-sequences.fasta"
     var sequencesPerBin = 10
     var asvs:[KrakenASV]?
     
@@ -85,11 +85,13 @@ final class KrakenParser {
     /// lineNumber percentage reads assignedReads rank.abbreviation rank-variant rank-name lineage"
     func printReport(to path:String? = nil) throws {
         let writer = FileWriter(path: path ?? reportParser.path,
-                                filename: defaultReportFilename)
+                                suffix: defaultReportSuffix)
         let dataWriter = try writer.makeDataWriter()
         for line in reportParser.lines {
             dataWriter.write(line: line.getLine())
         }
+        
+        Console.writeToStdOut("Written report to \(dataWriter.url.path).")
     }
     
     /// Writes a parsed report with the following format:
@@ -99,23 +101,27 @@ final class KrakenParser {
             else { throw RuntimeError("ERROR: Invalid ASV file.")}
         
         let writer = FileWriter(path: path ?? reportParser.path,
-                                filename: defaultClassificationFilename)
+                                suffix: defaultClassificationSuffix)
         let dataWriter = try writer.makeDataWriter()
         for asv in asvs {
             dataWriter.write(line: asv.description)
         }
+        
+        Console.writeToStdOut("Written parsed classification to \(dataWriter.url.path).")
     }
     
     /// Writes a parsed report with the selected sequences in fasta format
     /// that will be searched by BLASTn
     func printParsedSequences(to path:String? = nil) throws {
         let writer = FileWriter(path: path ?? reportParser.path,
-                                filename: defaultSequenceFilename)
+                                suffix: defaultSequenceSuffix)
         let dataWriter = try writer.makeDataWriter()
         for sequence in sequenceParser.sequences {
             dataWriter.write(line: ">" + sequence.sequenceID)
             dataWriter.write(line: sequence.sequence)
         }
+        
+        Console.writeToStdOut("Written sequences to \(dataWriter.url.path).")
     }
 }
 

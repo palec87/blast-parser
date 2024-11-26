@@ -14,9 +14,9 @@ final class BlastOutputParser: FileParser {
     var bins = [BlastHitBin]()
     var blastASVs = [BlastASV]()
     var hitsPerASV = 1
-    let defaultReportFilename:String = "blast-report.tsv"
-    var taxonomyDatabase:String = "taxonomy_ncbi"
-    var taxonomyTable:String = "taxonomy"
+    let defaultReportSuffix = "blast-report.tsv"
+    var taxonomyDatabase = "taxonomy_ncbi"
+    var taxonomyTable = "taxonomy"
     
     /// Initializer for a parser that will merge the output files of the parse
     /// subcommand with the BLASTn output file which should have the following
@@ -59,7 +59,7 @@ final class BlastOutputParser: FileParser {
     
     func print(to path:String? = nil) throws {
         let writer = FileWriter(path: path ?? asvsParser.path,
-                                filename: defaultReportFilename)
+                                suffix: defaultReportSuffix)
         let dataWriter = try writer.makeDataWriter()
         for blastASV in blastASVs {
             dataWriter.write(line: blastASV.description)
