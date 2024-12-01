@@ -22,15 +22,62 @@ struct Hierarchy {
         return ranks.count - 1
     }
     
-    /// init with an Unclassified rank
+    /// Initializer with an Unclassified rank
     init() {
         if let rank = Rank(rawValue: 0) {
             ranks.append(rank)
         }
     }
     
-    init(rank:Rank) {
-        ranks.append(rank)
+    /// Initializer with a NCBI lineage obtained from the
+    /// PostgresSQL database
+    init(lineage:NCBILineage) throws {
+        let domain = try Rank.rank(abbreviation: "D",
+                                   name: lineage.superkingdom)
+        ranks.append(domain)
+        
+        let kingdom = try Rank.rank(abbreviation: "K",
+                                    name: lineage.kingdom)
+        ranks.append(kingdom)
+        
+        let phylum = try Rank.rank(abbreviation: "P",
+                                   name: lineage.phylum)
+        ranks.append(phylum)
+        
+        let `class` = try Rank.rank(abbreviation: "C",
+                                   name: lineage.class)
+        ranks.append(`class`)
+        
+        let order = try Rank.rank(abbreviation: "O",
+                                  name: lineage.order)
+        ranks.append(order)
+        
+        let family = try Rank.rank(abbreviation: "F",
+                                   name: lineage.family)
+        ranks.append(family)
+        
+        let genus = try Rank.rank(abbreviation: "G",
+                                  name: lineage.genus)
+        ranks.append(genus)
+        
+        let species = try Rank.rank(abbreviation: "S",
+                                    name: lineage.species)
+        ranks.append(species)
+    }
+    
+    /// Initializer with a parsed string containing a
+    /// lineage as parsed by init(lineage:)
+    init(lineageString:String) throws {
+        let components = lineageString.split(separator: ";")
+        for component in components {
+            let rankComponents = component.split(separator: ":")
+            guard rankComponents.count == 2 else {
+                throw RuntimeError("ERROR: Invalid lineage string: \(component)")
+            }
+            let rank = try Rank.rank(abbreviation: String(rankComponents[0]),
+                                     name: String(rankComponents[1]))
+            ranks.append(rank)
+        }
     }
     
     mutating func addRank(_ rank:Rank) {

@@ -22,9 +22,9 @@ class BlastHitBin {
         var bestHits = [BlastHit]()
         var currentTaxID = -1
         for hit in hits {
-            if hit.taxID != currentTaxID {
+            if hit.ncbiBlastID != currentTaxID {
                 bestHits.append(hit)
-                currentTaxID = hit.taxID
+                currentTaxID = hit.ncbiBlastID
             }
         }
         

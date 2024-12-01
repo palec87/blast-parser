@@ -32,6 +32,7 @@
 		848FE5542C86B17D003A0C05 /* libpq.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 848FDF872C86B0D7003A0C05 /* libpq.5.dylib */; };
 		84A5B75A2CDFD4C5008FF917 /* FileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A5B7592CDFD4C5008FF917 /* FileWriter.swift */; };
 		84AF86802CAA0A1300986EB4 /* KrakenReportLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF867F2CAA0A1300986EB4 /* KrakenReportLine.swift */; };
+		84B010002CFB436800B87509 /* BlastAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B00FFF2CFB436800B87509 /* BlastAnalyzer.swift */; };
 		84CCF9C52C826D4B00034B4B /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CCF9C42C826D4B00034B4B /* Database.swift */; };
 		84CCF9CA2C827EEA00034B4B /* DataStreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */; };
 		84E55E022C9799C300A92C9A /* KrakenReportParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E55E012C9799C300A92C9A /* KrakenReportParser.swift */; };
@@ -2454,6 +2455,7 @@
 		848FE54A2C86B0D7003A0C05 /* sbom.spdx.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sbom.spdx.json; sourceTree = "<group>"; };
 		84A5B7592CDFD4C5008FF917 /* FileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileWriter.swift; sourceTree = "<group>"; };
 		84AF867F2CAA0A1300986EB4 /* KrakenReportLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KrakenReportLine.swift; sourceTree = "<group>"; };
+		84B00FFF2CFB436800B87509 /* BlastAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlastAnalyzer.swift; sourceTree = "<group>"; };
 		84CCF9C42C826D4B00034B4B /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		84CCF9C92C827EEA00034B4B /* DataStreamReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStreamReader.swift; sourceTree = "<group>"; };
 		84E55E012C9799C300A92C9A /* KrakenReportParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KrakenReportParser.swift; sourceTree = "<group>"; };
@@ -9504,6 +9506,7 @@
 				84AF867E2CA8197E00986EB4 /* TaxonomyDB */,
 				84AF867D2CA8195700986EB4 /* KrakenParser */,
 				844073B72CD7D42600D7EFB8 /* BlastOutputParser */,
+				84B00FFE2CFB433500B87509 /* BlastAnalyzer */,
 				84AF867C2CA8188000986EB4 /* DataStream */,
 				84CCF9C72C826D9B00034B4B /* PostGresSQL */,
 				8463FE0F2CCE5CEC000208EF /* Auxiliary */,
@@ -12441,6 +12444,14 @@
 				844A2C3D2CEABD12004B56F0 /* NCBILineage.swift */,
 			);
 			path = TaxonomyDB;
+			sourceTree = "<group>";
+		};
+		84B00FFE2CFB433500B87509 /* BlastAnalyzer */ = {
+			isa = PBXGroup;
+			children = (
+				84B00FFF2CFB436800B87509 /* BlastAnalyzer.swift */,
+			);
+			path = BlastAnalyzer;
 			sourceTree = "<group>";
 		};
 		84CCF9C72C826D9B00034B4B /* PostGresSQL */ = {
@@ -19767,6 +19778,7 @@
 				842DD5312C8303F80028D7DE /* DataStreamWriter.swift in Sources */,
 				8483F15D2C40A1CC0075794B /* KrakenParser.swift in Sources */,
 				84E55E022C9799C300A92C9A /* KrakenReportParser.swift in Sources */,
+				84B010002CFB436800B87509 /* BlastAnalyzer.swift in Sources */,
 				8462AC692C84A80400104505 /* SQLDatabase.swift in Sources */,
 				84162EDB2C83756200ED0B5E /* BlastParser.swift in Sources */,
 				844A2C3E2CEABD12004B56F0 /* NCBILineage.swift in Sources */,
