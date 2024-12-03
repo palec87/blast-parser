@@ -22,15 +22,18 @@ struct Hierarchy {
         return ranks.count - 1
     }
     
-    /// Initializer with an Unclassified rank
+    /// Default initializer with an Unclassified rank
     init() {
         if let rank = Rank(rawValue: 0) {
             ranks.append(rank)
         }
     }
     
-    /// Initializer with a NCBI lineage obtained from the
-    /// PostgresSQL database
+    /// Initializer with a NCBI lineage
+    /// - parameters:
+    ///   - lineage: NCBI taxonomic lineage obtained from the
+    ///    PostgresSQL database obtained by the `import` and `export`
+    ///    subcommands.
     init(lineage:NCBILineage) throws {
         let domain = try Rank.rank(abbreviation: "D",
                                    name: lineage.superkingdom)
@@ -65,8 +68,9 @@ struct Hierarchy {
         ranks.append(species)
     }
     
-    /// Initializer with a parsed string containing a
-    /// lineage as parsed by init(lineage:)
+    /// Initializer with a parsed string
+    /// - parameters:
+    ///   - lineageString: string containing a lineage as parsed by `init(lineage:)`
     init(lineageString:String) throws {
         let components = lineageString.split(separator: ";")
         for component in components {
