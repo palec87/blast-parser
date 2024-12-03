@@ -69,10 +69,27 @@ struct BlastASV: CustomStringConvertible {
         self.hit = try BlastHit(parsedLine: blastLine)
     }
     
+    /// Sets Kraken2 taxonomy:
+    /// - parameters:
+    ///   - taxonomy: string containing a parser-subcommand parsed lineage
+    ///   If `taxonomy` is nil, it does nothing
     mutating func setKrakenTaxonomy(_ taxonomy:String?) {
+        do {
+            if let taxonomy {
+                blastTaxonomy = try Hierarchy(lineageString: taxonomy)
+            }
+        }
         
+        catch {
+            Console.writeToStdErr("ERROR: Invalid taxonomy for sequence \(asv.sequenceID)")
+        }
     }
     
+    /// Sets BLASTn taxonomy:
+    /// - parameters:
+    ///   - database: SQLDatabase object that handles all calls
+    ///   to the PostgresSQL taxonomic database imported by the `import` and
+    ///   `export` subcommands.
     mutating func setBlastTaxonomy(database:SQLDatabase) {
         let taxID = self.hit.ncbiTaxID
         do {
