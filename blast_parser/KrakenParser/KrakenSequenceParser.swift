@@ -38,12 +38,14 @@ final class KrakenSequenceParser: FileParser {
         var sequenceID = String()
         let count = sequences.count
         var sequenceCount = 0
+        var matchedID = false
         
         for line in readStream {
-            if line.firstIndex(of: Character(separator)) != nil {
+            if line.first == Character(separator) {
                 sequenceID = line.replacingOccurrences(of: separator, with: "")
                 sequenceID = sequenceID.trimmingCharacters(in: .whitespacesAndNewlines)
-            } else {
+                matchedID = true
+            } else if matchedID {
                 if let sequenceObj = match(sequenceID: sequenceID) {
                     sequenceObj.sequence = line.trimmingCharacters(in: .newlines)
                     sequenceCount += 1
@@ -51,6 +53,7 @@ final class KrakenSequenceParser: FileParser {
                         break
                     }
                 }
+                matchedID = false
             }
         }
     }
