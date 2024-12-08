@@ -64,7 +64,7 @@ final class BlastOutputParser: FileParser {
         for blastASV in blastASVs {
             dataWriter.write(line: blastASV.description)
         }
-        Console.writeToStdOut("Written merged Kraken2 and BLASTn output to file...")
+        Console.writeToStdOut("Written merged Kraken2 and BLASTn output to file at \(dataWriter.url.path)")
     }
     
     private func parseBlastOutput() throws {
@@ -127,7 +127,7 @@ final class BlastOutputParser: FileParser {
         for asv in asvs {
             guard index < bins.endIndex else { break }
             let bin = bins[index]
-            guard var queryID = bin.sequenceID else {
+            guard let queryID = bin.sequenceID else {
                 throw RuntimeError("ERROR: Unable to merge BLAST hits with the ASVs table because at least one BLAST hit does not have a sequence ID.")
             }
             
@@ -141,14 +141,14 @@ final class BlastOutputParser: FileParser {
                     blastASV.setBlastTaxonomy(database: taxonomyDatabase)
                     blastASVs.append(blastASV)
                 }
-            }
-            
-            // ignore the following hits with the same sequenceID
-            while queryID == asv.sequenceID && index < bins.endIndex {
-                if let seqID = bins[index].sequenceID {
-                    queryID = seqID
-                }
                 index = bins.index(after: index)
+            } else {
+                // no BLAST hit was found for this ASV, so generate and
+                // append an "Unclassified" BlastHit
+                let taxonomy = taxonomyParser?.getTaxonomy(for: asv)
+                var blastASV = BlastASV(asv: asv, hit: BlastHit())
+                blastASV.setKrakenTaxonomy(taxonomy)
+                blastASVs.append(blastASV)
             }
         }
         

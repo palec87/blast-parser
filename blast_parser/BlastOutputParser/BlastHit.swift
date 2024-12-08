@@ -116,6 +116,16 @@ struct BlastHit: CustomStringConvertible {
                   ncbiTaxID: Int(items[4]) ?? 0,
                   scientificName: String(items[5]))
     }
+    
+    /// Fallback to initialize an empty BlastHit object
+    init() {
+        self.init(subjectSequenceID: "",
+                  percentageIdentity: 0.0,
+                  bitscore: 0,
+                  eValue: 0,
+                  ncbiTaxID: 0,
+                  scientificName: "Unclassified")
+    }
 }
 
 extension BlastHit {

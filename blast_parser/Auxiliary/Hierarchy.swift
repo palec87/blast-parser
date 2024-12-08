@@ -75,12 +75,14 @@ struct Hierarchy {
         let components = lineageString.split(separator: ";")
         for component in components {
             let rankComponents = component.split(separator: ":")
-            guard rankComponents.count == 2 else {
-                throw RuntimeError("ERROR: Invalid lineage string: \(component)")
+            if rankComponents.count == 2 {
+                let rank = try Rank.rank(abbreviation: String(rankComponents[0]),
+                                         name: String(rankComponents[1]))
+                ranks.append(rank)
+            } else {
+                ranks.append(Rank.unclassified())
+                break
             }
-            let rank = try Rank.rank(abbreviation: String(rankComponents[0]),
-                                     name: String(rankComponents[1]))
-            ranks.append(rank)
         }
     }
     
