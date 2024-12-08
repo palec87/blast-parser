@@ -131,7 +131,7 @@ extension BlastParser {
             guard let parser = KrakenParser(report: report,
                                             classification: classification,
                                             sequences: sequences) else {
-                throw RuntimeError("ERROR: Invalid path to an input file.")
+                throw RuntimeError("Invalid path to an input file.")
             }
             
             if let sequencesPerBin = maxSequencesPerBin {

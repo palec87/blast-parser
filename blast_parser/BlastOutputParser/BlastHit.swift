@@ -75,7 +75,7 @@ struct BlastHit: CustomStringConvertible {
     init(line:String) throws {
         let items = line.components(separatedBy: "\t")
         guard items.count == 13 else
-            { throw RuntimeError("ERROR: Invalid BLASTn output format.") }
+            { throw RuntimeError("Invalid BLASTn output format.") }
         let qSeqID = items[0].trimmingCharacters(in: .whitespaces)
         let sSeqID = items[7].trimmingCharacters(in: .whitespaces)
         let pIdentity = Double(items[1].trimmingCharacters(in: .whitespaces)) ?? 0.0
@@ -108,7 +108,7 @@ struct BlastHit: CustomStringConvertible {
     init(parsedLine:String) throws {
         let items = parsedLine.split(separator: "\t")
         guard items.count == 6 else
-            { throw RuntimeError("ERROR: Invalid BLASTn output format.") }
+            { throw RuntimeError("Invalid BLASTn output format.") }
         self.init(subjectSequenceID: String(items[0]),
                   percentageIdentity: Double(items[1]) ?? 0.0,
                   bitscore: Int(items[2]) ?? 0,

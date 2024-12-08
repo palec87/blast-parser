@@ -48,7 +48,7 @@ final class KrakenParser {
         }
         
         catch {
-            throw RuntimeError("ERROR: Unknown error while trying to parse Kraken2 counts report.")
+            throw RuntimeError("Unknown error while trying to parse Kraken2 counts report.")
         }
     }
     
@@ -65,7 +65,7 @@ final class KrakenParser {
             case "epi2me":
                 try asvParser.parse(format: .epi2me)
             default:
-                throw RuntimeError("ERROR: Invalid ASV format.")
+                throw RuntimeError("Invalid ASV format.")
             }
         } else {
             try asvParser.parse()
@@ -77,7 +77,7 @@ final class KrakenParser {
     /// Retrieves the sequences with the IDs present in the asvs array
     func parseSequences() throws {
         guard let asvs = self.asvs
-            else { throw RuntimeError("ERROR: Invalid ASV file.") }
+            else { throw RuntimeError("Invalid ASV file.") }
         sequenceParser.parse(asvs: asvs)
     }
     
@@ -98,7 +98,7 @@ final class KrakenParser {
     /// sequenceID length assignedReads taxID taxonomy
     func printParsedClassification(to path:String? = nil) throws {
         guard let asvs = self.asvs
-            else { throw RuntimeError("ERROR: Invalid ASV file.")}
+            else { throw RuntimeError("Invalid ASV file.")}
         
         let writer = FileWriter(path: path ?? reportParser.path,
                                 suffix: defaultClassificationSuffix)

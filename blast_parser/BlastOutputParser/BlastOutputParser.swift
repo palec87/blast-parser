@@ -91,7 +91,7 @@ final class BlastOutputParser: FileParser {
                 if let previousBin = bins.last {
                     previousBin.append(hit: hit)
                 } else {
-                    throw RuntimeError("ERROR: Unable to append BLAST hit to bin.")
+                    throw RuntimeError("Unable to append BLAST hit to bin.")
                 }
             }
         }
@@ -103,12 +103,12 @@ final class BlastOutputParser: FileParser {
         Console.writeToStdOut("Merging Kraken ASVs with BLASTn output...")
         
         guard hits.isEmpty == false else {
-            throw RuntimeError("ERROR: Unable to merge BLAST hits with the ASVs table because no BLAST hits were found.")
+            throw RuntimeError("Unable to merge BLAST hits with the ASVs table because no BLAST hits were found.")
         }
         
         let asvs = try asvsParser.parse()
         guard asvs.isEmpty == false else {
-            throw RuntimeError("ERROR: Unable to merge BLAST hits with the ASVs table because no ASVs were found.")
+            throw RuntimeError("Unable to merge BLAST hits with the ASVs table because no ASVs were found.")
         }
         
         try taxonomyParser?.parse()
@@ -128,7 +128,7 @@ final class BlastOutputParser: FileParser {
             guard index < bins.endIndex else { break }
             let bin = bins[index]
             guard let queryID = bin.sequenceID else {
-                throw RuntimeError("ERROR: Unable to merge BLAST hits with the ASVs table because at least one BLAST hit does not have a sequence ID.")
+                throw RuntimeError("Unable to merge BLAST hits with the ASVs table because at least one BLAST hit does not have a sequence ID.")
             }
             
             if queryID == asv.sequenceID {

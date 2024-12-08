@@ -81,7 +81,7 @@ struct BlastASV: CustomStringConvertible {
         }
         
         catch {
-            Console.writeToStdErr("ERROR: Invalid taxonomy for sequence \(asv.sequenceID)")
+            Console.writeToStdErr("Invalid taxonomy for sequence \(asv.sequenceID)")
         }
     }
     
@@ -111,7 +111,7 @@ struct BlastASV: CustomStringConvertible {
         }
         
         catch {
-            Console.writeToStdErr("ERROR: Invalid taxonomy for tax_id = \(taxID)")
+            Console.writeToStdErr("Invalid taxonomy for tax_id = \(taxID)")
         }
     }
     

@@ -23,7 +23,7 @@ final class KrakenTaxonomyParser: FileParser {
         for line in readStream {
             let items = line.components(separatedBy: "\t")
             guard items.count == 9 else {
-                throw RuntimeError("ERROR: Invalid Kraken taxonomy file")
+                throw RuntimeError("Invalid Kraken taxonomy file")
             }
             
             let reads = Int(items[3].trimmingCharacters(in: .whitespaces)) ?? 0

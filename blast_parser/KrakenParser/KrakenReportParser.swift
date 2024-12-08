@@ -21,7 +21,7 @@ final class KrakenReportParser: FileParser {
         for line in readStream {
             let items = line.components(separatedBy: "\t")
             guard items.count == 6 else
-                { throw RuntimeError("ERROR: Invalid Kraken2 report.") }
+                { throw RuntimeError("Invalid Kraken2 report.") }
             var reportLine = KrakenReportLine()
             reportLine.lineNumber = i
             let percentageString = items[0].trimmingCharacters(in: .whitespaces)
