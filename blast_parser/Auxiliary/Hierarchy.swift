@@ -89,7 +89,7 @@ struct Hierarchy {
     }
     
     mutating func dropLastRank() {
-        _ = ranks.dropLast()
+        ranks = ranks.dropLast(1)
     }
     
     mutating func equalizeWithParent(of rank:Rank) {
