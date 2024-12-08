@@ -82,7 +82,7 @@ final class KrakenParser {
     }
     
     /// Writes a parsed report with the following format:
-    /// lineNumber percentage reads assignedReads rank.abbreviation rank-variant rank-name lineage"
+    /// lineNumber percentage reads assignedReads rank.abbreviation rank-variant rank-name taxID lineage"
     func printReport(to path:String? = nil) throws {
         let writer = FileWriter(path: path ?? reportParser.path,
                                 suffix: defaultReportSuffix)
