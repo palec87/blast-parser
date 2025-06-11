@@ -1,5 +1,5 @@
 //
-//  BlastQiimeMerge.swift
+//  BlastQiimeOutputParser.swift
 //  blast_parser
 //
 //  Created by Catarina Alexandre on 29/05/2025.
@@ -11,7 +11,7 @@ final class BlastQiimeOutputParser: BlastOutputParser{
 	let taxonomyParser: QiimeParser? = nil
 	var blastASVs = [BlastQASV]()
 	
-	init?(path:String, asvs: String, taxonomy: String?) {
+	init?(path:String, asvs: String) {
 		guard let asvsParser = QiimeParser(path: asvs)
 		else { return nil }
 		
@@ -25,14 +25,13 @@ final class BlastQiimeOutputParser: BlastOutputParser{
 		try merge()
 	}
 	
-	func print(to path:String? = nil) throws {
-		let writer = FileWriter(path: path ?? asvsParser.path,
-								suffix: defaultReportSuffix)
+	func print(_ path:String) throws{
+		let writer = FileWriter(path:path)
 		let dataWriter = try writer.makeDataWriter()
 		for blastASV in blastASVs {
 			dataWriter.write(line: blastASV.description)
 		}
-		Console.writeToStdOut("Written merged Qiime 2 and BLASTn output to file at \(dataWriter.url.path)")
+		Console.writeToStdOut("Written merged Kraken2 and BLASTn output to file at \(dataWriter.url.path)")
 	}
 	
 	private func parseBlastOutput() throws {
@@ -100,9 +99,7 @@ final class BlastQiimeOutputParser: BlastOutputParser{
 				// retrieve the best hit(s)
 				guard let bestHits = bin.bestHits(hitsPerASV) else { continue }
 				for hit in bestHits {
-					let taxonomy = taxonomyParser?.getTaxonomy(for: asv)
-					var blastASV = BlastQASV(asv: asv, hit: hit)
-					blastASV.QiimeTaxonomy(taxonomy)
+					let blastASV = BlastQASV(asv: asv, hit: hit)
 					blastASV.setBlastTaxonomy(database: taxonomyDatabase)
 					blastASVs.append(blastASV)
 				}
@@ -110,9 +107,7 @@ final class BlastQiimeOutputParser: BlastOutputParser{
 			} else {
 				// no BLAST hit was found for this ASV, so generate and
 				// append an "Unclassified" BlastHit
-				let taxonomy = taxonomyParser?.getTaxonomy(for: asv)
-				var blastASV = BlastQASV(asv: asv, hit: BlastHit())
-				blastASV.QiimeTaxonomy(taxonomy)
+				let blastASV = BlastQASV(asv: asv, hit: BlastHit())
 				blastASVs.append(blastASV)
 			}
 		}

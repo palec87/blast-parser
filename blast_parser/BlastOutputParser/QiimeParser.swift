@@ -33,39 +33,33 @@ struct QiimeASV: CustomStringConvertible {
 final class QiimeParser: FileParser {
 	var lines = [QiimeASV]()
 	func parse() throws -> [QiimeASV] {
-	for line in readStream {
-		let items = line.components(separatedBy: "\t")
-		let count: Int = items.count
-		guard let header = line.components(separatedBy: .newlines).first , header.contains("id") , header.contains("Taxon") , header.contains("Confidence") else {
-			throw RuntimeError("Invalid Qiime 2 merged file")
+		var index = 0
+		for line in readStream {
+			if index == 0 {
+				// validation
+				let header = line.replacingOccurrences(of: "-", with: "CN").components(separatedBy: "\t")
+				guard header.contains("id"), header.contains("Taxon"),
+					  header.contains("Confidence") else
+					{ throw RuntimeError("Invalid Qiime 2 merged file") }
+				
+				let asv = getASV(line: header, count: header.count)
+				lines.append(asv)
+			} else if index > 1 {
+				let items = line.components(separatedBy: "\t")
+				let asv = getASV(line: items, count: items.count)
+				lines.append(asv)
 			}
-		//change any "-" to "CN" for Negative Control (Controlo Negativo)
-		var sampleName = Array(items[1..<(count - 2)])
-			sampleName = sampleName.map { $0.replacingOccurrences(of: "-", with: "CN") }
-		
-
-		let lineID = items[0].trimmingCharacters(in: .whitespaces)
-		let samples = Array(items[1..<(count-2)]).map { $0.trimmingCharacters(in: .whitespaces)}
-		let taxon = items[count - 2].trimmingCharacters(in: .whitespaces)
-		let confidence = items[count-1].trimmingCharacters(in: .whitespaces)
-		let qLine = QiimeASV(featureID: lineID, samples: samples, taxonomy: taxon, confidence: confidence)
-		
-		lines.append(qLine)
-		
-		//removes 2nd line "#q2:types"
-		lines.remove(at:1)
+			index += 1
 		}
 		return lines
 	}
-	func getTaxonomy(for asv:QiimeASV) -> String? {
-		for line in lines {
-			if asv.taxonomy == line.taxonomy {
-				return line.taxonomy
-			}
-		}
-		return nil
+	
+	private func getASV(line:[String], count:Int) -> QiimeASV {
+		let lineID = line[0].trimmingCharacters(in: .whitespaces)
+		let samples = Array(line[1..<(count-2)]).map { $0.trimmingCharacters(in: .whitespaces)}
+		let taxon = line[count - 2].trimmingCharacters(in: .whitespaces)
+		let confidence = line[count-1].trimmingCharacters(in: .whitespaces)
+		return QiimeASV(featureID: lineID, samples: samples, taxonomy: taxon, confidence: confidence)
 	}
 	
 }
-
-

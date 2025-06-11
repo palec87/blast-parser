@@ -8,10 +8,18 @@
 import Foundation
 
 struct FileWriter {
-    let path:String
-    let outputURL:URL
+	let path:String
+	let outputURL:URL
+	
+	/// Generates a data stream writer without any changes to the path
+	/// - Parameters:
+	///     - path: path to file to write data to
+	init(path: String){
+		self.path = path
+		self.outputURL = URL(fileURLWithPath: path, isDirectory: false)
+	}
     
-    /// Generates a data stream writer
+    /// Generates a data stream writer where the path will be edited by adding  a suffix
     /// - Parameters:
     ///     - path: path to file to write data to
     ///     - suffix: suffix to add to filename, which will be based on the name of the sequence output directory (2 levels up)

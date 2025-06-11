@@ -143,23 +143,6 @@ class BlastQASV: BlastASV {
 		super.init(hit: hit)
 	}
 	
-	
-	/// Sets Qiime2 taxonomy:
-	/// - parameters:
-	///   - taxonomy: string containing a parser-subcommand parsed lineage
-	///   If `taxonomy` is nil, it does nothing
-	func QiimeTaxonomy(_ taxonomy:String?) {
-		do {
-			if let taxonomy {
-				blastTaxonomy = try Hierarchy(lineageString: taxonomy)
-			}
-		}
-		
-		catch {
-			Console.writeToStdErr("Invalid taxonomy for sequence \(asv.featureID)")
-		}
-	}
-	
 	/// Sets BLASTn taxonomy:
 	/// - parameters:
 	///   - database: SQLDatabase object that handles all calls
@@ -189,6 +172,8 @@ class BlastQASV: BlastASV {
 			Console.writeToStdErr("Invalid taxonomy for tax_id = \(taxID)")
 		}
 	}
+	
+	
 	
 	override var description:String {
 		let blastRanks = blastTaxonomy.getRanks()
