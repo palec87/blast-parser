@@ -181,7 +181,6 @@ class BlastQASV: BlastASV {
 		items.insert(blastRanks, at: 1)
 	}
 	
-	
 	override var description:String {
 		let blastRanks = blastTaxonomy.getRanks()
 		if blastRanks.isEmpty == false {

@@ -141,7 +141,7 @@ final class BlastKrakenOutputParser: BlastOutputParser {
                 guard let bestHits = bin.bestHits(hitsPerASV) else { continue }
                 for hit in bestHits {
                     let taxonomy = taxonomyParser?.getTaxonomy(for: asv)
-                    var blastASV = BlastKASV(asv: asv, hit: hit)
+                    let blastASV = BlastKASV(asv: asv, hit: hit)
                     blastASV.setKrakenTaxonomy(taxonomy)
                     blastASV.setBlastTaxonomy(database: taxonomyDatabase)
                     blastASVs.append(blastASV)
@@ -151,7 +151,7 @@ final class BlastKrakenOutputParser: BlastOutputParser {
                 // no BLAST hit was found for this ASV, so generate and
                 // append an "Unclassified" BlastHit
                 let taxonomy = taxonomyParser?.getTaxonomy(for: asv)
-                var blastASV = BlastKASV(asv: asv, hit: BlastHit())
+                let blastASV = BlastKASV(asv: asv, hit: BlastHit())
                 blastASV.setKrakenTaxonomy(taxonomy)
                 blastASVs.append(blastASV)
             }
