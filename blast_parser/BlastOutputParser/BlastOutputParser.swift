@@ -7,16 +7,21 @@
 
 import Foundation
 
-final class BlastOutputParser: FileParser {
+class BlastOutputParser: FileParser{
+	var hits = [BlastHit]()
+	var bins = [BlastHitBin]()
+	var hitsPerASV = 1
+	let defaultReportSuffix = "blast-report.tsv"
+	var taxonomyDatabase = "taxonomy_ncbi"
+	var taxonomyTable = "taxonomy"
+	
+}
+
+final class BlastKrakenOutputParser: BlastOutputParser {
     let asvsParser:KrakenParsedASVParser
     var taxonomyParser:KrakenTaxonomyParser? = nil
-    var hits = [BlastHit]()
-    var bins = [BlastHitBin]()
-    var blastASVs = [BlastASV]()
-    var hitsPerASV = 1
-    let defaultReportSuffix = "blast-report.tsv"
-    var taxonomyDatabase = "taxonomy_ncbi"
-    var taxonomyTable = "taxonomy"
+    var blastASVs = [BlastKASV]()
+
     
     /// Initializer for a parser that will merge the output files of the parse
     /// subcommand with the BLASTn output file which should have the following
@@ -136,7 +141,7 @@ final class BlastOutputParser: FileParser {
                 guard let bestHits = bin.bestHits(hitsPerASV) else { continue }
                 for hit in bestHits {
                     let taxonomy = taxonomyParser?.getTaxonomy(for: asv)
-                    var blastASV = BlastASV(asv: asv, hit: hit)
+                    var blastASV = BlastKASV(asv: asv, hit: hit)
                     blastASV.setKrakenTaxonomy(taxonomy)
                     blastASV.setBlastTaxonomy(database: taxonomyDatabase)
                     blastASVs.append(blastASV)
@@ -146,7 +151,7 @@ final class BlastOutputParser: FileParser {
                 // no BLAST hit was found for this ASV, so generate and
                 // append an "Unclassified" BlastHit
                 let taxonomy = taxonomyParser?.getTaxonomy(for: asv)
-                var blastASV = BlastASV(asv: asv, hit: BlastHit())
+                var blastASV = BlastKASV(asv: asv, hit: BlastHit())
                 blastASV.setKrakenTaxonomy(taxonomy)
                 blastASVs.append(blastASV)
             }
@@ -155,3 +160,4 @@ final class BlastOutputParser: FileParser {
         taxonomyDatabase.disconnect()
     }
 }
+

@@ -11,10 +11,21 @@ enum BlastASVError: Error {
     case invalidLineage
 }
 
-struct BlastASV: CustomStringConvertible {
+class BlastASV: CustomStringConvertible{
+	var hit: BlastHit
+	var blastTaxonomy = Hierarchy()
+	
+	var description: String{
+		return "\(hit)\t\(blastTaxonomy)"
+	}
+	
+	init(hit: BlastHit) {
+		self.hit = hit
+	}
+}
+
+class BlastKASV: BlastASV {
     let asv:KrakenASV
-    let hit:BlastHit
-    var blastTaxonomy = Hierarchy()
     
     /// Initializer to merge a parsed Kraken2 ASV and a BLASTn hit
     /// used by BlastOutputParser
@@ -25,7 +36,7 @@ struct BlastASV: CustomStringConvertible {
     /// of the BLASTn hit
     init(asv: KrakenASV, hit: BlastHit) {
         self.asv = asv
-        self.hit = hit
+		super.init(hit:hit)
     }
 
     /// Initializer to parse an already merged ASV and BLASTn hit
@@ -44,7 +55,7 @@ struct BlastASV: CustomStringConvertible {
     ///         - ncbiTaxID:Int             (BlastHit)
     ///         - scientificName:String     (BlastHit)
     ///         - blastTaxonomy:Hierarchy   (optional)
-    init(line:String, asvFormat:ASVFormat) throws {
+	init(line:String, asvFormat:ASVFormat, hit:BlastHit) throws {
         let components = line.components(separatedBy: "\t")
         let count = components.count
         guard count == 11 || count == 12  else {
@@ -66,14 +77,15 @@ struct BlastASV: CustomStringConvertible {
             blastLine.append("\t")
         }
         blastLine.append(components[range.upperBound])
-        self.hit = try BlastHit(parsedLine: blastLine)
+		super.init(hit:hit)
+		self.hit = try BlastHit(parsedLine: blastLine)
     }
     
     /// Sets Kraken2 taxonomy:
     /// - parameters:
     ///   - taxonomy: string containing a parser-subcommand parsed lineage
     ///   If `taxonomy` is nil, it does nothing
-    mutating func setKrakenTaxonomy(_ taxonomy:String?) {
+    func setKrakenTaxonomy(_ taxonomy:String?) {
         do {
             if let taxonomy {
                 blastTaxonomy = try Hierarchy(lineageString: taxonomy)
@@ -90,7 +102,7 @@ struct BlastASV: CustomStringConvertible {
     ///   - database: SQLDatabase object that handles all calls
     ///   to the PostgresSQL taxonomic database imported by the `import` and
     ///   `export` subcommands.
-    mutating func setBlastTaxonomy(database:SQLDatabase) {
+    func setBlastTaxonomy(database:SQLDatabase) {
         let taxID = self.hit.ncbiTaxID
         do {
             if let lineage = NCBILineage(database: database, taxID: taxID) {
@@ -115,7 +127,7 @@ struct BlastASV: CustomStringConvertible {
         }
     }
     
-    var description:String {
+    override var description:String {
         let blastRanks = blastTaxonomy.getRanks()
         if blastRanks.isEmpty == false {
             return "\(asv)\t\(hit)\t\(blastRanks)"
@@ -124,3 +136,68 @@ struct BlastASV: CustomStringConvertible {
         }
     }
 }
+class BlastQASV: BlastASV {
+	let asv: QiimeASV
+	init(asv: QiimeASV, hit: BlastHit) {
+		self.asv = asv
+		super.init(hit: hit)
+	}
+	
+	
+	/// Sets Qiime2 taxonomy:
+	/// - parameters:
+	///   - taxonomy: string containing a parser-subcommand parsed lineage
+	///   If `taxonomy` is nil, it does nothing
+	func QiimeTaxonomy(_ taxonomy:String?) {
+		do {
+			if let taxonomy {
+				blastTaxonomy = try Hierarchy(lineageString: taxonomy)
+			}
+		}
+		
+		catch {
+			Console.writeToStdErr("Invalid taxonomy for sequence \(asv.featureID)")
+		}
+	}
+	
+	/// Sets BLASTn taxonomy:
+	/// - parameters:
+	///   - database: SQLDatabase object that handles all calls
+	///   to the PostgresSQL taxonomic database imported by the `import` and
+	///   `export` subcommands.
+	func setBlastTaxonomy(database:SQLDatabase) {
+		let taxID = self.hit.ncbiTaxID
+		do {
+			if let lineage = NCBILineage(database: database, taxID: taxID) {
+				blastTaxonomy = try Hierarchy(lineage: lineage)
+				
+				if lineage.species.isEmpty {
+					let species = try Rank.rank(abbreviation: "S",
+												name: hit.scientificName)
+					blastTaxonomy.dropLastRank()
+					blastTaxonomy.addRank(species)
+				}
+			} else if taxID != 0 {
+				// if taxID == 0 then blastTaxonomy is already inited
+				// with an "Unclassified" Rank, so we do nothing, but
+				// otherwise any other taxID is an error.
+				throw BlastASVError.invalidLineage
+			}
+		}
+		
+		catch {
+			Console.writeToStdErr("Invalid taxonomy for tax_id = \(taxID)")
+		}
+	}
+	
+	override var description:String {
+		let blastRanks = blastTaxonomy.getRanks()
+		if blastRanks.isEmpty == false {
+			return "\(asv)\t\(hit)\t\(blastRanks)"
+		} else {
+			return "\(asv)\t\(hit)"
+		}
+	}
+}
+
+
