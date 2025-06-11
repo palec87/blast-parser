@@ -138,8 +138,10 @@ class BlastKASV: BlastASV {
 }
 class BlastQASV: BlastASV {
 	let asv: QiimeASV
+	var items: [String]
 	init(asv: QiimeASV, hit: BlastHit) {
 		self.asv = asv
+		self.items = asv.description.components(separatedBy: "\t")
 		super.init(hit: hit)
 	}
 	
@@ -172,7 +174,12 @@ class BlastQASV: BlastASV {
 			Console.writeToStdErr("Invalid taxonomy for tax_id = \(taxID)")
 		}
 	}
-	
+	func merge() throws{
+		let blastRanks = blastTaxonomy.getRanks()
+		items.insert(String(hit.eValue), at: 1)
+		items.insert(String(hit.bitscore), at: 1)
+		items.insert(blastRanks, at: 1)
+	}
 	
 	
 	override var description:String {
