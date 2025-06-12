@@ -101,6 +101,7 @@ final class BlastQiimeOutputParser: BlastOutputParser{
 				for hit in bestHits {
 					let blastASV = BlastQASV(asv: asv, hit: hit)
 					blastASV.setBlastTaxonomy(database: taxonomyDatabase)
+					try blastASV.merge()
 					blastASVs.append(blastASV)
 				}
 				index = bins.index(after: index)

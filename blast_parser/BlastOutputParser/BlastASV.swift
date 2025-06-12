@@ -182,13 +182,6 @@ class BlastQASV: BlastASV {
 	}
 	
 	override var description:String {
-		let blastRanks = blastTaxonomy.getRanks()
-		if blastRanks.isEmpty == false {
-			return "\(asv)\t\(hit)\t\(blastRanks)"
-		} else {
-			return "\(asv)\t\(hit)"
-		}
+		return items.joined(separator: "\t")
 	}
 }
-
-

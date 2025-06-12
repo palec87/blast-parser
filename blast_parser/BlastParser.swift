@@ -172,7 +172,7 @@ extension BlastParser {
 				help: "Name of the output file. [OPTIONAL]")
 		var outputFile:String?
 		
-		@Option(name: [.short, .customLong("hits-per-asv")],
+		@Option(name: [.customLong("hits-per-asv")],
 				help: "Maximum number of sequences per bin. [OPTIONAL, default = 10]")
 		var hitsPerAsv:Int?
 		
@@ -226,7 +226,7 @@ extension BlastParser {
 				help: "Name of the output file. [OPTIONAL, default = (original name)_output.tsv]")
 		var outputFile:String? = nil
 		
-		@Option(name: [.short, .customLong("hits-per-asv")],
+		@Option(name: [.customLong("hits-per-asv")],
 				help: "Maximum number of sequences per bin. [OPTIONAL, default = 10]")
 		var hitsPerAsv:Int?
 		
