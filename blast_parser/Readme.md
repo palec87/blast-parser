@@ -75,32 +75,13 @@ However, if we want to solve this problem right now, we need to find alternative
 ### A possible alternative strategy
 In spite of the inaccuracy found in the assignments made by Kraken2, I could find that most sequences assigned to a specific (wrong) taxon, when validated by submitting them to the NCBI eukaryotic database using BLASTN, the correct taxon assignment was often the same (**but not always!**). Therefore, it seems as though Kraken2 can be used as an intermediate step to cluster the sequences into "bins" of closely related sequences. In a second step, several sequences of each bin can be blasted to confirm the assignment made, accelerating the process of validating the assignment using different tools and databases. If the assignment is correct, it should be internally and phylogenetically consistent.
 
-## The challenge
 
-Build a tool that is able to do the following:
+## BLAST-PARSER: What it does
 
-1. Parse a Kraken2 table containing taxonomic assignments and respective read counts (treat each row as a bin of sequences)
-2. Sort the taxonomic assignments by decreasing importance, i.e., decreasing read counts
-3. In the file containing the sequence ID of assigned sequences, retrieve a sub-sample of sequences assigned to that taxon
-4. Submit these sequences to the NCBI nt or its eukaryotic sub-database using BLASTN and validate the assignment given by BLASTN
+BLAST-PARSER is a tool Catarina Alexandre and I started writing in Swift and C, which runs natively on MacOS. A possible port to Linux might be considered. This tool does the following:
 
-This challenge involves the following problems:
-
-1. You need to install locally a BLAST database of eukaryotic sequences available at [NCBI FTP page](https://ftp.ncbi.nlm.nih.gov/blast/db/). You can download the whole nt database, but I do not recommend it as that is even a larger database that will slow you down. Use rather the nt_euk database instead. However, beware that this database can take several Gbytes of space on your hard disk.
-2. You need to install a local repository of the NCBI tools from [here](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/). Only MacOS and Linux tools are supported out of the box.
-3. Download a [sample](https://filesender.fccn.pt/?s=download&token=6739d09e-113b-457f-8457-d4cea07cdaad) containing the original Nanopore sequences, a file containing already the trimmed sequences for maximizing their quality and proper size, tables containing the assignments made by Kraken2, including the one containing the read counts per taxon, and a file containing the sequence-ids for each taxonomic assignment.
-4. Write the requested tool that can be run on Linux and MacOS that is able to parse the Kraken2 read count table as indicated above, cluster sequences with the same assignment and then validate the assignment of sub-sample of sequences from each bin with BLASTN.
-5. Beware that BLASTN does not yield automatically an output containing taxonomic data; please read the documentation at NCBI to properly format the output so that taxonomic data can be retrieved. Very often, only the tax IDs will be given but these should be converted to the full lineage.
-
-
-## BLAST-PARSER: What it does and it does not do
-
-BLAST-PARSER is a tool I started writing in Swift and C, which runs natively on MacOS. This tool does the following:
-
-1. It imports the new [taxonomy database](https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/) from NCBI containing the full lineages of each taxon from domain to species from the file `rankedlineage.dmp` into a CSV file.
-2. It re-exports the imported CSV file into a PostGresSQL database using the lipq library.
-This database can then be queried using the generated taxID from the BLASTN output in order to generate the full taxonomic lineage.
-
-What it does not do as yet:
-
-1. The capabilities raised by this challenge
+1. It imports the new [taxonomy database](https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/) from NCBI containing the full lineages of each taxon from domain to species from the file `rankedlineage.dmp` into a CSV file using the ìmport`subcommand.
+2. It re-exports the imported CSV file into a PostGresSQL database using the lipq library using the `export` subcommand.
+This database can then be queried using the generated taxID from the BLASTn output in order to generate the full taxonomic lineage.
+3. It merges a Kraken 2 counts report with a BLASTn output table using the -outfmt option "6 qsedid pident length evalue bitscore score nident saccver stitle qcovs staxids sscinames sskingdoms" using the `merge` subcommand
+4. It merges a Qiime 2 output table containing the denoised ASVs table together with its assigned taxonomy with a BLASTn output table where `-outfmt` = "6 qsedid pident length evalue bitscore score nident saccver stitle qcovs staxids sscinames sskingdoms" by using the `merge-qiime` subcommand
